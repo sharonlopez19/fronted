@@ -1,0 +1,53 @@
+<app-menu></app-menu>
+
+<div class="layout">
+  <div class="contenido-principal">
+    <div class="row">
+      <!-- Columna izquierda: listado de vacantes -->
+      <div class="col-lg-8 col-md-12 pe-lg-4">
+        <div class="vacantes-list">
+          <div 
+            class="vacante-item" 
+            *ngFor="let vacante of vacantes"
+            (click)="seleccionarVacante(vacante)"
+            [class.active]="vacanteSeleccionada?.id === vacante.id">
+            
+            <div class="d-flex align-items-center flex-grow-1">
+              <div class="vacante-avatar me-3">
+                <img [src]="vacante.imagen" alt="{{ vacante.titulo }}" class="rounded-circle">
+              </div>
+              <div class="vacante-info">
+                <h5 class="mb-1">{{ vacante.titulo }}</h5>
+                <p class="mb-0">{{ vacante.salario }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Columna derecha: detalles de vacante seleccionada -->
+      <div class="col-lg-4 col-md-12">
+        <div class="detalles-panel">
+          <h4 class="detalles-title text-center mb-4">{{ vacanteSeleccionada?.titulo }}</h4>
+
+          <div class="detalles-section">
+            <h5 class="section-title">Descripción</h5>
+            <p>{{ vacanteSeleccionada?.descripcion }}</p>
+          </div>
+
+          <div class="detalles-section">
+            <h5 class="section-title">Salario</h5>
+            <p class="salary">{{ vacanteSeleccionada?.salario }}</p>
+          </div>
+
+          <div class="detalles-section">
+            <h5 class="section-title">Requisitos</h5>
+            <ul class="requirements-list">
+              <li *ngFor="let req of vacanteSeleccionada?.requisitos">{{ req }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

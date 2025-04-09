@@ -1,12 +1,14 @@
-<aside class="sidebar" [class.sidebar-collapsed]="isCollapsed">
+<div class="layout">
+  <!-- Sidebar / Menú lateral -->
+  <aside class="sidebar" [class.sidebar-collapsed]="isCollapsed">
     <div class="logo-container">
-      <img src="https://i.postimg.cc/BnHG09W1/logo.png" alt="Logo Desktop" class="logo-desktop" routerLink="/inicio" routerLinkActive="active">
+      <img src="https://i.postimg.cc/BnHG09W1/logo.png" alt="Logo Desktop" class="logo-desktop" routerLink="/home" routerLinkActive="active">
       <img src="assets/logo.png" alt="Logo Mobile" class="logo-mobile">
     </div>
-  
+
     <nav class="nav">
       <div class="nav-section">
-        <a class="nav-link " routerLink="/directorio" routerLinkActive="active">
+        <a class="nav-link" routerLink="/directorio" routerLinkActive="active">
           <i class="fas fa-address-book"></i>
           <span>Directorio</span>
         </a>
@@ -31,12 +33,8 @@
           <span>Notificaciones</span>
         </a>
       </div>
-  
+
       <div class="nav-section mt-auto">
-        <!-- <a class="nav-link" routerLink="/settings" routerLinkActive="active">
-          <i class="fas fa-cog"></i>
-          <span>Configuración</span>
-        </a> -->
         <a class="nav-link logout" (click)="logout()">
           <i class="fas fa-sign-out-alt"></i>
           <span>Cerrar Sesión</span>
@@ -52,3 +50,9 @@
       </div>
     </nav>
   </aside>
+
+  <!-- Contenido dinámico cargado con router -->
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+</div>
