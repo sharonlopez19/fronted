@@ -7,6 +7,6 @@ import { appRouting } from './app/app.routes';
 bootstrapApplication(AppComponent, {
   providers: [
     provideHttpClient(),
-    appRouting // ✅ Usa directamente `appRouting` que ya hace provideRouter(routes)
+    appRouting 
   ]
 }).catch(err => console.error(err));

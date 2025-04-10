@@ -71,4 +71,6 @@ export class DirectorioComponent {
     console.log('Vacante editada:', this.vacante);
     // Aquí puedes guardar los cambios si estás haciendo persistencia
   }
+
+  
 }

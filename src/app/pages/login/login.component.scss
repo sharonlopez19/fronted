@@ -1,331 +1,161 @@
-:host {
-  display: block;
-}
-
-.main-container {
-  min-height: 100vh;
-  background-color: #000000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+.login-container {
   position: relative;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.42); // ← Opacidad aquí
+    z-index: -1;
   }
 }
 
-.card {
-  width: 768px;
-  max-width: 100%;
-  min-height: 480px;
+.login-card {
+  display: flex;
+  width: 900px;
+  height: 550px;
   border-radius: 20px;
-  background: rgba(63, 63, 63, 0.479);
-  border: 5px solid rgb(0, 0, 0);
-  position: relative;
-  z-index: 1;
-  box-shadow: 0 8px 32px rgb(0, 0, 0);
-
-  .sign-in {
-    .btn-primary,
-    h1,
-    .social-icons,
-    span,
-    .form-floating,
-    .olvidar {
-      opacity: 1;
-      visibility: visible;
-      transition: opacity 0.4s ease-in-out, visibility 0.4s ease-in-out;
-    }
-  }
-
-  .sign-up {
-    .btn-primary,
-    h1,
-    .social-icons,
-    span,
-    .form-floating {
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
-    }
-  }
-
-  &.active {
-    .sign-in {
-      transform: translateX(100%);
-      z-index: 1;
-
-      .btn-primary,
-      h1,
-      .social-icons,
-      span,
-      .form-floating,
-      .olvidar {
-        opacity: 0;
-        visibility: hidden;
-        transition-delay: 0s;
-      }
-    }
-
-    .sign-up {
-      transform: translateX(100%);
-      opacity: 1;
-      z-index: 5;
-      animation: move 0.6s;
-
-      .btn-primary,
-      h1,
-      .social-icons,
-      span,
-      .form-floating {
-        opacity: 1;
-        visibility: visible;
-      }
-    }
-
-    .toggle-container {
-      transform: translateX(-100%);
-      border-radius: 0 100px 100px 0;
-    }
-
-    .toggle {
-      transform: translateX(50%);
-    }
-
-    .toggle-left {
-      transform: translateX(0);
-    }
-
-    .toggle-right {
-      transform: translateX(200%);
-    }
-  }
-}
-
-.form-container {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  transition: all 0.6s ease-in-out;
-  width: 50%;
-}
-
-.sign-in {
-  left: 0;
-  z-index: 2;
-}
-
-.sign-up {
-  left: 0;
-  opacity: 0;
-  z-index: 1;
-
-  .text-muted.small.mb-3 {
-    display: none !important;
-  }
-
-  .olvidar {
-    visibility: hidden;
-    opacity: 0;
-    z-index: 1;
-  }
-}
-
-.form-control {
-  background: transparent !important;
-  border: none !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
-  border-radius: 0 !important;
-  color: white !important;
-  padding: 0.75rem 0 !important;
-  transition: all 0.3s ease;
-
-  &:focus {
-    background: transparent !important;
-    border-bottom-color: #3b82f6 !important;
-    box-shadow: none !important;
-  }
-
-  &::placeholder {
-    color: rgba(255, 255, 255, 0.5) !important;
-  }
-}
-
-.form-floating {
-  width: 100%;
-  max-width: 300px;
-  margin-bottom: 1.5rem;
-  position: relative;
-
-  label {
-    color: rgba(255, 255, 255, 0.6) !important;
-    padding: 0.75rem 0 !important;
-    height: auto !important;
-    transform-origin: left !important;
-    transition: all 0.3s ease !important;
-    background: transparent !important;
-
-    &::after {
-      display: none !important;
-    }
-  }
-
-  & > .form-control:focus ~ label,
-  & > .form-control:not(:placeholder-shown) ~ label {
-    transform: translateY(-1.5rem) scale(0.85) !important;
-    color: #3b82f6 !important;
-    opacity: 1;
-  }
-}
-
-.toggle-container {
-  position: absolute;
-  left: 50%;
-  width: 50%;
-  height: 100%;
   overflow: hidden;
-  transition: all 0.6s ease-in-out;
-  z-index: 1000;
-  border-radius: 100px 0 0 100px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  flex-direction: row;
 }
 
-.toggle {
-  background: linear-gradient(to right, rgba(45, 84, 206, 0.9), rgba(37, 207, 243, 0.9));
-  position: relative;
-  left: -100%;
-  height: 100%;
-  width: 200%;
-  transform: translateX(0);
-  transition: all 0.6s ease-in-out;
+.form-section {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.246);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.welcome-section {
+  flex: 1;
+  background: linear-gradient(
+    to right,
+    rgba(45, 84, 206, 0.9),
+    rgba(37, 207, 243, 0.9)
+  );
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.welcome-section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
 }
 
 .social-icons {
   display: flex;
   gap: 10px;
-  margin: 20px 0;
+  justify-content: center;
 }
 
-.social-icon {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.8);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-  }
+.social-icon i {
+  font-size: 1.5rem;
+  color: #0056d2;
+  transition: 0.3s;
 }
 
-.toggle-panel {
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  padding: 0 30px;
-  text-align: center;
+.social-icon:hover i {
+  color: #69b9e8;
+}
+
+.login-fondo {
+  position: fixed;
   top: 0;
-  transform: translateX(0);
-  transition: all 0.6s ease-in-out;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  filter: blur(6px);
+  z-index: -1;
 }
 
-.toggle-left {
-  transform: translateX(-200%);
-}
-
-.toggle-right {
-  right: 0;
-  transform: translateX(0);
-}
-
-@keyframes move {
-  0%,
-  49.99% {
-    opacity: 0;
-    z-index: 1;
-  }
-  50%,
-  100% {
-    opacity: 1;
-    z-index: 5;
-  }
-}
-
-h1 {
+.form-section h1 {
   color: white;
-  margin-bottom: 1rem;
 }
 
-p,
-span {
-  color: rgba(255, 255, 255, 0.7);
-}
 
-.btn-primary {
-  background: #3b82f6 !important;
-  border: none !important;
-  border-radius: 4px !important;
-  padding: 0.75rem 1.5rem !important;
-  font-weight: 500 !important;
+a.olvidar {
+  color: #ffffff; 
+  transition: 0.3s;
 
   &:hover {
-    background: #2563eb !important;
+    color: #a1d8ff; 
+    text-decoration: underline;
   }
 }
 
-.btn-outline-light {
-  border: 1px solid rgba(255, 255, 255, 0.2);
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.355);
-    color: rgb(13, 122, 181);
-  }
+.welcome-section p {
+  color: #ffffff7c; 
+  font-size: 1rem;
 }
 
-a {
-  color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-
-  &:hover {
-    color: white;
-  }
+.welcome-section h2 {
+  color: #ffffff; 
+  font-size: 2.5rem;
 }
 
-.text-muted {
-  color: rgba(255, 255, 255, 0.6) !important;
-}
-
-// NUEVO: mensaje debajo del botón de ofertas laborales
-.text-white-50.small {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
+.welcome-section .btn-ofertas {
+  background: linear-gradient(to right, #29c3fd, #2360ff);
+  color: white;
+  border: none;
+  padding: 0.6rem 1.5rem;
+  border-radius: 30px;
+  font-weight: bold;
+  transition: 0.3s;
   
-    a.text-white {
-      color: #ffffff;
-      font-weight: 500;
-      text-decoration: underline;
-  
-      &:hover {
-        color: #d1d5db; // un blanco más suave
-      }
-    }
+
+  &:hover {
+    background: linear-gradient(to right, #2360ff, #29c3fd);
+    transform: scale(1.05);
   }
+}
+
+span.text-muted {
+  color: #fafdff !important; // Cambia el color a blanco u otro si prefieres
+  font-size: 0.9rem; // Puedes ajustar el tamaño
+  font-weight: 500; // Opcional, para que se vea más definido
+  letter-spacing: 0.5px; // Ligero espaciado para más elegancia
+  margin-top: -5px;
+  
+}
+
+
+
+/* Responsive */
+@media (max-width: 768px) {
+  .login-card {
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+  }
+
+  .form-section,
+  .welcome-section {
+    flex: none;
+    width: 100%;
+    padding: 1.5rem;
+  }
+
+  .welcome-section h2 {
+    font-size: 1.5rem;
+  }
+}

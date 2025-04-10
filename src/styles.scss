@@ -10,6 +10,9 @@
   
 }
 
-body{
-  background-color: #202940;
+body.login-background {
+  background-image: url('assets/login-fondo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
