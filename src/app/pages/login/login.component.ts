@@ -1,53 +1,33 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  imports: [CommonModule, FormsModule, HttpClientModule, RouterModule],
+  templateUrl: './login.component.html'
 })
 export class LoginComponent {
-  @ViewChild('container', { static: false }) container!: ElementRef;
-
   email = '';
   password = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
-  toggleRegister(): void {
-    this.container.nativeElement.classList.add('active');
-  }
+  login() {
+    const data = { email: this.email, password: this.password };
 
-  toggleLogin(): void {
-    this.container.nativeElement.classList.remove('active');
-  }
-
-  login(): void {
-    console.log('Login con:', this.email, this.password);
-    this.authService.login({ email: this.email, password: this.password }).subscribe({
+    this.http.post<any>('http://localhost:8000/api/login', data).subscribe({
       next: (res) => {
-        console.log('Token recibido:', res.token);
-
-        // ✅ Guarda el token para que el guard funcione
         localStorage.setItem('token', res.token);
-
         this.router.navigate(['/home']);
       },
       error: (err) => {
-        console.error('Error al loguear:', err);
-        alert('Credenciales incorrectas');
+        alert('Error en el inicio de sesión');
+        console.error(err);
       }
-    });
-  }
-
-  onVacantes(): void {
-    console.log('Ir a vacantes');
-    this.router.navigate(['/register']);
+    }); // 👈 aquí está el punto y coma que faltaba
   }
 }
