@@ -31,7 +31,9 @@ export class AuthService {
     localStorage.removeItem('token');
   }
 
+  // auth.service.ts
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    return !!token; // ❌ si no hay token, devuelve false
   }
 }

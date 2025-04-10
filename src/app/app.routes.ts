@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { Routes, provideRouter } from '@angular/router';
 
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -11,15 +11,34 @@ import { IncapacidadesComponent } from './pages/incapacidades/incapacidades.comp
 import { HorasExtraComponent } from './pages/horas-extra/horas-extra.component';
 import { NotificacionesComponent } from './pages/notificaciones/notificaciones.component';
 
+import { AuthGuard } from './guards/auth.guard';
+
 export const routes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'home', component: HomeComponent },
+  // 🔓 Rutas públicas
+  { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'menu', component: MenuComponent },
-  { path: 'directorio', component: DirectorioComponent },
-  { path: 'vacantes', component: VacantesComponent },
-  { path: 'vacaciones', component: VacacionesComponent },
-  { path: 'incapacidades', component: IncapacidadesComponent },
-  { path: 'horas-extra', component: HorasExtraComponent },
-  { path: 'notificaciones', component: NotificacionesComponent },
+
+  // 🔒 Rutas protegidas agrupadas bajo el guard
+  {
+    path: '',
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'home', component: HomeComponent },
+      { path: 'menu', component: MenuComponent },
+      { path: 'directorio', component: DirectorioComponent },
+      { path: 'vacantes', component: VacantesComponent },
+      { path: 'vacaciones', component: VacacionesComponent },
+      { path: 'incapacidades', component: IncapacidadesComponent },
+      { path: 'horas-extra', component: HorasExtraComponent },
+      { path: 'notificaciones', component: NotificacionesComponent }
+    ]
+  },
+
+  // 🔁 Redirección a login por defecto
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+  // 🚫 Ruta comodín para redirigir cualquier otra URL inválida
+  { path: '**', redirectTo: 'login' }
 ];
+
+export const appRouting = provideRouter(routes);
