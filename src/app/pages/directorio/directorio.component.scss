@@ -189,3 +189,35 @@ body, html {
   background-color: #c82333;
   border-color: #bd2130;
 }
+
+.modal-content {
+  background-color: #1e2131; 
+  border: none;
+  color: #ffffff;
+}
+
+.modal-content .form-control {
+  background-color: #292c3c;
+  border: 0,1px solid #d31a1a;
+  border-radius: 6px;
+  color: #ffffff;
+}
+
+.modal-content .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff00;
+  color: #ffffff;
+
+  &:hover {
+    background-color: #0069d9;
+    border-color: #0062cc;
+  }
+}
+
+.modal-dialog {
+  max-width: 500px; // igual que modal-lg de Bootstrap
+}
+
+.button .btn-close {
+  color: #0069d9;
+}

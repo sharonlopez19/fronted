@@ -2,12 +2,12 @@
 
 <div class="layout">
   <div class="contenido-principal">
-    <div class="container mt-4">
+    <div class="card">
       <div class="card">
         <div class="card-header header-vacaciones d-flex justify-content-between align-items-center">
           <h3 class="m-0 text-hover">Vacaciones</h3>
           <button class="btn btn-light btn-sm agregar-btn" (click)="agregarVacacion()">
-            <i class="bi bi-plus-circle"></i> Agregar
+            <i class="fas fa-plus-circle"></i> Agregar
           </button>
         </div>
         <div class="card-body">
@@ -30,12 +30,11 @@
                 <td>{{ vacacion.fechaInicio }}</td>
                 <td>{{ vacacion.fechaFin }}</td>
                 <td>
-                  <button class="btn btn-success btn-sm me-1" (click)="editarVacacion(vacacion)">
-                    <i class="fa fa-edit"></i>
+                  <button class="btn btn-link btn-acciones editar me-1" (click)="editarVacacion(vacacion)">
+                    <i class="fas fa-edit"></i>
                   </button>
-
-                  <button class="btn btn-danger btn-sm" (click)="eliminarVacacion(vacacion.id)">
-                    <i class="fa fa-trash"></i>
+                  <button class="btn btn-link btn-acciones eliminar" (click)="eliminarVacacion(vacacion.id)">
+                    <i class="fas fa-trash-alt"></i>
                   </button>
                 </td>
               </tr>
@@ -49,43 +48,83 @@
     </div>
   </div>
 
-  <!-- Modal de edición -->
   <div id="editModal" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Editar Vacación</h5>
-          <button type="button" class="btn-close" (click)="cerrarModal()"></button>
+          <button type="button" class="btn-close" (click)="cerrarModalEditar()"></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <label for="nombre" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombre" [(ngModel)]="vacacionEditada.nombre">
+            <label for="nombreEdit" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombreEdit" [(ngModel)]="vacacionEditada.nombre">
           </div>
           <div class="mb-3">
-            <label for="cargo" class="form-label">Cargo</label>
-            <input type="text" class="form-control" id="cargo" [(ngModel)]="vacacionEditada.cargo">
+            <label for="cargoEdit" class="form-label">Cargo</label>
+            <input type="text" class="form-control" id="cargoEdit" [(ngModel)]="vacacionEditada.cargo">
           </div>
           <div class="mb-3">
-            <label for="estado" class="form-label">Estado</label>
-            <select class="form-control" id="estado" [(ngModel)]="vacacionEditada.estado">
+            <label for="estadoEdit" class="form-label">Estado</label>
+            <select class="form-control" id="estadoEdit" [(ngModel)]="vacacionEditada.estado">
               <option value="Completado">Completado</option>
               <option value="Rechazado">Rechazado</option>
               <option value="Pendiente">Pendiente</option>
             </select>
           </div>
           <div class="mb-3">
-            <label for="fechaInicio" class="form-label">Fecha Inicio</label>
-            <input type="text" class="form-control" id="fechaInicio" [(ngModel)]="vacacionEditada.fechaInicio">
+            <label for="fechaInicioEdit" class="form-label">Fecha Inicio</label>
+            <input type="text" class="form-control" id="fechaInicioEdit" [(ngModel)]="vacacionEditada.fechaInicio">
           </div>
           <div class="mb-3">
-            <label for="fechaFin" class="form-label">Fecha Fin</label>
-            <input type="text" class="form-control" id="fechaFin" [(ngModel)]="vacacionEditada.fechaFin">
+            <label for="fechaFinEdit" class="form-label">Fecha Fin</label>
+            <input type="text" class="form-control" id="fechaFinEdit" [(ngModel)]="vacacionEditada.fechaFin">
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cerrar</button>
+          <button type="button" class="btn btn-secondary" (click)="cerrarModalEditar()">Cerrar</button>
           <button type="button" class="btn btn-primary" (click)="guardarEdicion()">Guardar cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="agregarModal" class="modal" tabindex="-1" role="dialog" *ngIf="mostrarAgregarModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Agregar Vacación</h5>
+          <button type="button" class="btn-close" (click)="cerrarAgregarModal()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="nombreAgregar" class="form-label">Nombre</label>
+            <input type="text" class="form-control" id="nombreAgregar" [(ngModel)]="nuevaVacacion.nombre">
+          </div>
+          <div class="mb-3">
+            <label for="cargoAgregar" class="form-label">Cargo</label>
+            <input type="text" class="form-control" id="cargoAgregar" [(ngModel)]="nuevaVacacion.cargo">
+          </div>
+          <div class="mb-3">
+            <label for="estadoAgregar" class="form-label">Estado</label>
+            <select class="form-control" id="estadoAgregar" [(ngModel)]="nuevaVacacion.estado">
+              <option value="Pendiente">Pendiente</option>
+              <option value="Completado">Completado</option>
+              <option value="Rechazado">Rechazado</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="fechaInicioAgregar" class="form-label">Fecha Inicio</label>
+            <input type="text" class="form-control" id="fechaInicioAgregar" [(ngModel)]="nuevaVacacion.fechaInicio">
+          </div>
+          <div class="mb-3">
+            <label for="fechaFinAgregar" class="form-label">Fecha Fin</label>
+            <input type="text" class="form-control" id="fechaFinAgregar" [(ngModel)]="nuevaVacacion.fechaFin">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cerrarAgregarModal()">Cerrar</button>
+          <button type="button" class="btn btn-primary" (click)="guardarNuevaVacacion()">Guardar</button>
         </div>
       </div>
     </div>

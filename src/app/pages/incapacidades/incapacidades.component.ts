@@ -1,27 +1,20 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';  // Importa FormsModule
+import { FormsModule } from '@angular/forms'; // Importa FormsModule
 import { MenuComponent } from "../menu/menu.component";
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'; // Importa FontAwesomeModule
+import { faPlusCircle, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'; // Importa los iconos
 
 @Component({
   selector: 'app-incapacidades',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent],  // Asegúrate de incluir FormsModule aquí
+  imports: [CommonModule, FormsModule, MenuComponent, FontAwesomeModule], // Asegúrate de incluir FontAwesomeModule
   templateUrl: './incapacidades.component.html',
   styleUrls: ['./incapacidades.component.scss']
 })
 export class IncapacidadesComponent {
   incapacidades = [
-    { id: 1, nombre: 'John Michael', cargo: 'Asesor', totalDias: 3, fechaInicio: '15/07/24', fechaFinal: '18/07/24' },
-    { id: 2, nombre: 'Laurent Perrier', cargo: 'Programador', totalDias: 5, fechaInicio: '17/07/24', fechaFinal: '22/07/24' },
-    { id: 3, nombre: 'Michael Clark', cargo: 'Asesor', totalDias: 8, fechaInicio: '18/07/24', fechaFinal: '26/07/24' },
-    { id: 4, nombre: 'Richard Owens', cargo: 'Director', totalDias: 1, fechaInicio: '30/12/24', fechaFinal: '31/12/24' },
-    { id: 5, nombre: 'Johana Castro', cargo: 'Asesor', totalDias: 30, fechaInicio: '10/09/24', fechaFinal: '09/10/24' },
-    { id: 6, nombre: 'Alexa Liras', cargo: 'Desarrollador', totalDias: 6, fechaInicio: '16/07/24', fechaFinal: '22/07/24' },
-    { id: 7, nombre: 'Diego Mahecha', cargo: 'Programador', totalDias: 15, fechaInicio: '18/07/24', fechaFinal: '02/08/24' },
-    { id: 8, nombre: 'Diana Betancourt', cargo: 'Analista', totalDias: 3, fechaInicio: '11/02/24', fechaFinal: '14/02/24' },
-    { id: 9, nombre: 'Carlos Yordan', cargo: 'Asesor', totalDias: 2, fechaInicio: '09/10/24', fechaFinal: '11/10/24' },
-    { id: 10, nombre: 'Alexander Gusman', cargo: 'Coordinador', totalDias: 18, fechaInicio: '01/12/24', fechaFinal: '19/12/24' }
+    { id: 1, nombre: 'John Michael', cargo: 'Asesor', totalDias: 3, fechaInicio: '2024-07-15', fechaFinal: '2024-07-18', estado: 'Aprobado' },
   ];
 
   incapacidadEditada: any = {
@@ -30,13 +23,41 @@ export class IncapacidadesComponent {
     cargo: '',
     totalDias: 0,
     fechaInicio: '',
-    fechaFinal: ''
+    fechaFinal: '',
+    estado: 'Pendiente'
   };
 
   modalAbierto: boolean = false;
+  mostrarAgregarModalIncapacidad: boolean = false;
+  nuevaIncapacidad: any = { 
+    nombre: '', 
+    cargo: '', 
+    totalDias: null, 
+    fechaInicio: '', 
+    fechaFinal: '' ,
+    estado: 'Pendiente'
+  };
+
+  // Iconos de Font Awesome
+  faPlusCircle = faPlusCircle;
+  faEdit = faEdit;
+  faTrash = faTrash;
 
   agregarIncapacidad() {
-    console.log('Agregar nueva incapacidad');
+    this.mostrarAgregarModalIncapacidad = true;
+    this.nuevaIncapacidad = { nombre: '', cargo: '', totalDias: null, fechaInicio: '', fechaFinal: '' }; // Resetear el formulario
+  }
+
+  cerrarAgregarModalIncapacidad() {
+    this.mostrarAgregarModalIncapacidad = false;
+  }
+
+  guardarNuevaIncapacidad() {
+    // Lógica para guardar la nueva incapacidad en tu array 'incapacidades' o backend
+    console.log('Guardar nueva incapacidad:', this.nuevaIncapacidad);
+    this.incapacidades = [...this.incapacidades, { id: this.incapacidades.length + 1, ...this.nuevaIncapacidad }]; // Ejemplo de agregar localmente
+    this.cerrarAgregarModalIncapacidad();
+    this.nuevaIncapacidad = { nombre: '', cargo: '', totalDias: null, fechaInicio: '', fechaFinal: '' }; // Limpiar el formulario después de guardar
   }
 
   editarIncapacidad(incapacidad: any) {
@@ -50,10 +71,12 @@ export class IncapacidadesComponent {
       this.incapacidades[index] = { ...this.incapacidadEditada };
     }
     this.modalAbierto = false;
+    this.incapacidadEditada = { id: null, nombre: '', cargo: '', totalDias: 0, fechaInicio: '', fechaFinal: '' }; // Limpiar el formulario
   }
 
   cancelarEdicion() {
     this.modalAbierto = false;
+    this.incapacidadEditada = { id: null, nombre: '', cargo: '', totalDias: 0, fechaInicio: '', fechaFinal: '' }; // Limpiar el formulario
   }
 
   eliminarIncapacidad(id: number) {
@@ -65,5 +88,6 @@ export class IncapacidadesComponent {
 
   generarReporte() {
     console.log('Generar reporte de incapacidades');
+    // Aquí puedes implementar la lógica para generar el reporte
   }
 }

@@ -12,119 +12,61 @@ import { FormsModule } from '@angular/forms';
 })
 export class VacacionesComponent {
   vacaciones = [
-    {
-      id: 1,
-      nombre: 'John Michael',
-      cargo: 'Asesor',
-      estado: 'Completado',
-      fechaInicio: '15/07/24',
-      fechaFin: '19/12/24'
-    },
-    {
-      id: 2,
-      nombre: 'Laurent Perrier',
-      cargo: 'Programador',
-      estado: 'Rechazado',
-      fechaInicio: '17/07/24',
-      fechaFin: '03/08/24'
-    },
-    {
-      id: 3,
-      nombre: 'Michael Clark',
-      cargo: 'Asesor',
-      estado: 'Completado',
-      fechaInicio: '18/07/24',
-      fechaFin: '19/12/24'
-    },
-    {
-      id: 4,
-      nombre: 'Richard Owens',
-      cargo: 'Director',
-      estado: 'Pendiente',
-      fechaInicio: '30/12/24',
-      fechaFin: '03/03/25'
-    },
-    {
-      id: 5,
-      nombre: 'Johana Castro',
-      cargo: 'Asesor',
-      estado: 'Completado',
-      fechaInicio: '10/09/24',
-      fechaFin: '05/10/24'
-    },
-    {
-      id: 6,
-      nombre: 'Alexa Liras',
-      cargo: 'Desarrollador',
-      estado: 'Pendiente',
-      fechaInicio: '16/07/24',
-      fechaFin: '31/09/24'
-    },
-    {
-      id: 7,
-      nombre: 'Diego Mahecha',
-      cargo: 'Programador',
-      estado: 'Completado',
-      fechaInicio: '18/07/24',
-      fechaFin: '25/09/24'
-    },
-    {
-      id: 8,
-      nombre: 'Diana Betancourt',
-      cargo: 'Analista',
-      estado: 'Rechazado',
-      fechaInicio: '11/02/24',
-      fechaFin: '30/02/24'
-    },
-    {
-      id: 9,
-      nombre: 'Carlos Yordan',
-      cargo: 'Asesor',
-      estado: 'Completado',
-      fechaInicio: '09/10/24',
-      fechaFin: '09/11/24'
-    },
-    {
-      id: 10,
-      nombre: 'Alexander Guzman',
-      cargo: 'Coordinador',
-      estado: 'Completado',
-      fechaInicio: '10/12/24',
-      fechaFin: '07/01/25'
-    }
+    { id: 1, nombre: 'John Michael', cargo: 'Asesor', estado: 'Completado', fechaInicio: '15/07/24', fechaFin: '19/12/24' },
+    { id: 2, nombre: 'Laurent Perrier', cargo: 'Programador', estado: 'Rechazado', fechaInicio: '17/07/24', fechaFin: '03/08/24' }
   ];
 
-  vacacionEditada: any = {};  // Objeto para almacenar la vacación que se va a editar
+  vacacionEditada: any = {};
+  nuevaVacacion: any = {};
+  mostrarAgregarModal: boolean = false;
 
   agregarVacacion(): void {
-    alert('Función para agregar una nueva vacación');
+    this.nuevaVacacion = { estado: 'Activo' }; // Establecer 'Activo' como estado por defecto
+    this.mostrarAgregarModal = true;
+    const modal = document.getElementById('agregarModal') as HTMLElement;
+    modal?.classList.add('show');
+    modal?.setAttribute('style', 'display: block;');
   }
 
-  // Método para abrir el modal y asignar los datos de la vacación a editar
   editarVacacion(vacacion: any): void {
-    this.vacacionEditada = { ...vacacion };  // Clonamos la vacación para editarla
+    this.vacacionEditada = { ...vacacion };
     const modal = document.getElementById('editModal') as HTMLElement;
     modal?.classList.add('show');
     modal?.setAttribute('style', 'display: block;');
   }
 
-  // Método para guardar los cambios de la vacación editada
+  guardarNuevaVacacion(): void {
+    if (this.nuevaVacacion.nombre && this.nuevaVacacion.cargo && this.nuevaVacacion.fechaInicio && this.nuevaVacacion.fechaFin && this.nuevaVacacion.estado) {
+      const nuevoId = this.vacaciones.length > 0 ? Math.max(...this.vacaciones.map(v => v.id)) + 1 : 1;
+      this.vacaciones = [...this.vacaciones, { id: nuevoId, ...this.nuevaVacacion }];
+      this.cerrarAgregarModal();
+    } else {
+      alert('Por favor, completa todos los campos.');
+    }
+  }
+
   guardarEdicion(): void {
     const index = this.vacaciones.findIndex(v => v.id === this.vacacionEditada.id);
     if (index !== -1) {
       this.vacaciones[index] = { ...this.vacacionEditada };
     }
-    this.cerrarModal();  // Cerramos el modal después de guardar los cambios
+    this.cerrarModalEditar();
   }
 
-  // Método para cerrar el modal
-  cerrarModal(): void {
+  cerrarModalEditar(): void {
     const modal = document.getElementById('editModal') as HTMLElement;
     modal?.classList.remove('show');
     modal?.setAttribute('style', 'display: none;');
   }
 
-  // Método para eliminar la vacación
+  cerrarAgregarModal(): void {
+    this.mostrarAgregarModal = false;
+    const modal = document.getElementById('agregarModal') as HTMLElement;
+    modal?.classList.remove('show');
+    modal?.setAttribute('style', 'display: none;');
+    this.nuevaVacacion = {};
+  }
+
   eliminarVacacion(id: number): void {
     const confirmado = confirm('¿Estás seguro de que deseas eliminar esta vacación?');
     if (confirmado) {
@@ -132,8 +74,8 @@ export class VacacionesComponent {
     }
   }
 
-  // Método para generar reporte
   generarReporte(): void {
     alert('Generando reporte de vacaciones...');
   }
 }
+
