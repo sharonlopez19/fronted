@@ -326,3 +326,45 @@
     background: var(--color-principal);
   }
 }
+
+.agregar-btn {
+  font-weight: 500;
+  i {
+    margin-right: 4px;
+  }
+}
+
+.card {
+  transition: transform 0.2s ease;
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
+
+  .btn-acciones {
+    color: #ffffffcc;
+    transition: color 0.2s ease;
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+
+    &.editar:hover {
+      color: #00bcd4;
+    }
+
+    &.eliminar:hover {
+      color: #f44336;
+    }
+  }
+}
+
+.modal-content {
+  border-radius: 1rem;
+}
+
+.form-label {
+  font-weight: 500;
+}

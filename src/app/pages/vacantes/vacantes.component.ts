@@ -110,4 +110,15 @@ export class VacantesComponent {
   seleccionarVacante(vacante: any): void {
     this.vacanteSeleccionada = vacante;
   }
+
+  editarVacante(vacante: any): void {
+    console.log('Editar vacante:', vacante);
+    // Aquí puedes abrir un modal, por ejemplo
+  }
+  
+  eliminarVacante(vacante: any): void {
+    console.log('Eliminar vacante:', vacante);
+    // Aquí puedes mostrar un SweetAlert2 de confirmación
+  }
+  
 }

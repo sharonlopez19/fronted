@@ -22,27 +22,46 @@ export interface Vacante {
   styleUrls: ['./directorio.component.scss']
 })
 export class DirectorioComponent {
-
-  vacante: Vacante = {
-    nombre: '', cargo: '', telefono: '', correo: '',
-    direccion: '', estado: '', foto: ''
-  };
-
   vacantes: Vacante[] = [
     { nombre: 'Emma Wilson', cargo: 'Data Analyst', telefono: '321 123 4567', correo: 'emma@company.com', direccion: 'Calle 100 #15-30, Bogotá', estado: 'ACTIVO', foto: 'https://randomuser.me/api/portraits/women/68.jpg' },
     { nombre: 'Noah Smith', cargo: 'UI/UX Designer', telefono: '322 234 5678', correo: 'noah@company.com', direccion: 'Carrera 7 #45-21, Bogotá', estado: 'ACTIVO', foto: 'https://randomuser.me/api/portraits/men/22.jpg' },
-    { nombre: 'Sofia Martinez', cargo: 'Marketing Manager', telefono: '323 345 6789', correo: 'sofia@company.com', direccion: 'Avenida 50 #12-10, Medellín', estado: 'INACTIVO', foto: 'https://randomuser.me/api/portraits/women/70.jpg' },
-    { nombre: 'James Brown', cargo: 'Software Engineer', telefono: '324 456 7890', correo: 'james@company.com', direccion: 'Calle 200 #10-15, Cali', estado: 'ACTIVO', foto: 'https://randomuser.me/api/portraits/men/5.jpg' },
-    { nombre: 'Isabella Garcia', cargo: 'HR Specialist', telefono: '325 567 8901', correo: 'isabella@company.com', direccion: 'Carrera 13 #20-25, Bogotá', estado: 'ACTIVO', foto: 'https://randomuser.me/api/portraits/women/30.jpg' },
-    { nombre: 'Mason Davis', cargo: 'Project Manager', telefono: '326 678 9012', correo: 'mason@company.com', direccion: 'Calle 300 #8-12, Barranquilla', estado: 'INACTIVO', foto: 'https://randomuser.me/api/portraits/men/33.jpg' },
-    { nombre: 'Ava Lopez', cargo: 'Business Analyst', telefono: '327 789 0123', correo: 'ava@company.com', direccion: 'Avenida 60 #22-30, Bogotá', estado: 'ACTIVO', foto: 'https://randomuser.me/api/portraits/women/42.jpg' },
-    { nombre: 'Liam Wilson', cargo: 'Full Stack Developer', telefono: '328 890 1234', correo: 'liam@company.com', direccion: 'Calle 400 #4-10, Medellín', estado: 'ACTIVO', foto: 'https://randomuser.me/api/portraits/men/60.jpg' },
-    { nombre: 'Olivia Rodriguez', cargo: 'Graphic Designer', telefono: '329 901 2345', correo: 'olivia@company.com', direccion: 'Carrera 8 #14-18, Bogotá', estado: 'ACTIVO', foto: 'https://randomuser.me/api/portraits/women/5.jpg' },
-    { nombre: 'Ethan Clark', cargo: 'Data Scientist', telefono: '330 012 3456', correo: 'ethan@company.com', direccion: 'Avenida 90 #18-25, Cali', estado: 'INACTIVO', foto: 'https://randomuser.me/api/portraits/men/11.jpg' }
+    // Puedes agregar más vacantes aquí
   ];
+
+  vacante: Vacante = this.getNuevaVacante();
+  editando: boolean = false;
+  vacanteIndex: number = -1;
+
+  getNuevaVacante(): Vacante {
+    return {
+      nombre: '', cargo: '', telefono: '', correo: '',
+      direccion: '', estado: 'ACTIVO', foto: ''
+    };
+  }
+
+  abrirModalAgregar() {
+    this.vacante = this.getNuevaVacante();
+    this.editando = false;
+  }
 
   editarVacante(vacante: Vacante, index: number) {
     this.vacante = { ...vacante };
+    this.vacanteIndex = index;
+    this.editando = true;
+  }
+
+  guardarCambios() {
+    if (this.editando) {
+      this.vacantes[this.vacanteIndex] = { ...this.vacante };
+    } else {
+      this.vacantes.push({ ...this.vacante });
+    }
+
+    const modal = document.getElementById(this.editando ? 'editarVacanteModal' : 'agregarVacanteModal');
+    if (modal) (modal as any).click(); // Forzar cierre con Bootstrap
+
+    this.vacante = this.getNuevaVacante();
+    this.editando = false;
   }
 
   confirmDelete(index: number) {
@@ -57,20 +76,9 @@ export class DirectorioComponent {
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.vacantes.splice(index, 1); // ✅ Eliminar vacante del arreglo
-        Swal.fire(
-          '¡Eliminado!',
-          'El elemento ha sido eliminado correctamente.',
-          'success'
-        );
+        this.vacantes.splice(index, 1);
+        Swal.fire('¡Eliminado!', 'La vacante ha sido eliminada.', 'success');
       }
     });
   }
-
-  onSubmit() {
-    console.log('Vacante editada:', this.vacante);
-    // Aquí puedes guardar los cambios si estás haciendo persistencia
-  }
-
-  
 }

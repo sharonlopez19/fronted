@@ -9,16 +9,25 @@
           <div 
             class="vacante-item" 
             *ngFor="let vacante of vacantes"
-            (click)="seleccionarVacante(vacante)"
             [class.active]="vacanteSeleccionada?.id === vacante.id">
             
-            <div class="d-flex align-items-center flex-grow-1">
-              <div class="vacante-avatar me-3">
-                <img [src]="vacante.imagen" alt="{{ vacante.titulo }}" class="rounded-circle">
-              </div>
-              <div class="vacante-info">
+            <div class="d-flex align-items-center justify-content-between w-100">
+              <!-- Información de la vacante -->
+              <div 
+                class="vacante-info flex-grow-1" 
+                (click)="seleccionarVacante(vacante)">
                 <h5 class="mb-1">{{ vacante.titulo }}</h5>
                 <p class="mb-0">{{ vacante.salario }}</p>
+              </div>
+
+              <!-- Botones de acción -->
+              <div class="d-flex gap-2 ms-3">
+                <button class="btn p-0" (click)="editarVacante(vacante)">
+                  <i class="bi bi-pencil-square text-primary fs-5"></i>
+                </button>
+                <button class="btn p-0" (click)="eliminarVacante(vacante)">
+                  <i class="bi bi-trash-fill text-danger fs-5"></i>
+                </button>
               </div>
             </div>
           </div>
