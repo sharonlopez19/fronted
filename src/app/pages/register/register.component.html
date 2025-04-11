@@ -1,4 +1,3 @@
-
 <div class="layout">
   <div class="contenido-principal">
     <div class="header-horas d-flex justify-content-between align-items-center">
@@ -9,10 +8,15 @@
       <!-- Lista de Vacantes -->
       <div class="col-lg-8 col-md-12 pe-lg-4">
         <div class="vacantes-list">
-          <div class="vacante-item" *ngFor="let vacante of vacantes" (click)="seleccionarVacante(vacante)" [class.active]="vacanteSeleccionada?.titulo === vacante.titulo">
+          <div
+            class="vacante-item"
+            *ngFor="let vacante of vacantes"
+            (click)="seleccionarVacante(vacante)"
+            [class.active]="vacanteSeleccionada?.titulo === vacante.titulo"
+          >
             <div class="d-flex align-items-center flex-grow-1">
               <div class="vacante-avatar me-3">
-                <img [src]="vacante.imagen" [alt]="vacante.titulo" class="rounded-circle">
+                <img [src]="vacante.imagen" [alt]="vacante.titulo" class="rounded-circle" />
               </div>
               <div class="vacante-info">
                 <h5 class="mb-1">{{ vacante.titulo }}</h5>
@@ -46,7 +50,12 @@
           </div>
 
           <div class="boton-postularme">
-            <button type="button" class="btn btn-postularme" data-bs-toggle="modal" data-bs-target="#postulacionModal">
+            <button
+              type="button"
+              class="btn btn-postularme"
+              data-bs-toggle="modal"
+              data-bs-target="#postulacionModal"
+            >
               Regístrate para postularte
             </button>
           </div>
@@ -57,7 +66,13 @@
 </div>
 
 <!-- Modal de Postulación -->
-<div class="modal fade" id="postulacionModal" tabindex="-1" aria-labelledby="postulacionModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="postulacionModal"
+  tabindex="-1"
+  aria-labelledby="postulacionModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header">
@@ -65,26 +80,66 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form #registroForm="ngForm" (ngSubmit)="enviarFormulario()">
           <div class="mb-3">
             <label for="nombre" class="form-label">Nombre completo</label>
-            <input type="text" class="form-control" id="nombre" placeholder="Nombre completo" required>
+            <input
+              type="text"
+              class="form-control"
+              id="nombre"
+              name="nombre"
+              required
+              ngModel
+              placeholder="Nombre completo"
+            />
           </div>
           <div class="mb-3">
             <label for="email" class="form-label">Correo electrónico</label>
-            <input type="email" class="form-control" id="email" placeholder="ejemplo@correo.com" required>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              name="email"
+              required
+              ngModel
+              placeholder="ejemplo@correo.com"
+            />
           </div>
           <div class="mb-3">
             <label for="confirmEmail" class="form-label">Confirmar correo electrónico</label>
-            <input type="email" class="form-control" id="confirmEmail" placeholder="Repite tu correo" required>
+            <input
+              type="email"
+              class="form-control"
+              id="confirmEmail"
+              name="confirmEmail"
+              required
+              ngModel
+              placeholder="Repite tu correo"
+            />
           </div>
           <div class="mb-3">
             <label for="password" class="form-label">Contraseña</label>
-            <input type="password" class="form-control" id="password" placeholder="********" required>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              required
+              ngModel
+              placeholder="********"
+            />
           </div>
           <div class="mb-3">
             <label for="confirmPassword" class="form-label">Confirmar contraseña</label>
-            <input type="password" class="form-control" id="confirmPassword" placeholder="********" required>
+            <input
+              type="password"
+              class="form-control"
+              id="confirmPassword"
+              name="confirmPassword"
+              required
+              ngModel
+              placeholder="********"
+            />
           </div>
           <div class="text-center">
             <button type="submit" class="btn btn-success">Registrarme</button>

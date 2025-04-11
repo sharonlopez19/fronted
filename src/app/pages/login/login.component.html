@@ -9,7 +9,7 @@
           <a href="#" class="social-icon"><i class='bx bxl-linkedin'></i></a>
           <a href="#" class="social-icon"><i class='bx bxl-github'></i></a>
         </div>
-        
+
         <span class="text-muted small mb-3">Conoce nuestras Redes Sociales</span>
 
         <div class="form-floating mb-3 w-100">
@@ -46,10 +46,15 @@
         <button type="submit" class="btn btn-primary px-4 py-2">Iniciar Sesión</button>
       </form>
     </div>
+
+    <!-- Sección de bienvenida -->
     <div class="welcome-section">
       <h2>¡Bienvenido!</h2>
       <p>Impulsa tu potencial, construye tu futuro con nosotros.</p>
-      <button class="btn btn-outline-light mt-3">Ver Ofertas Laborales</button>
+      <!-- 🔗 Botón que redirige a /register -->
+      <button class="btn btn-outline-light mt-3" [routerLink]="['/register']">
+        Ver Ofertas Laborales
+      </button>
     </div>
   </div>
 </div>

@@ -1,14 +1,25 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common'; // ✅ Necesario para *ngFor y *ngIf
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
-  standalone: true, // ✅ Indica que es standalone
-  imports: [CommonModule], // ✅ Importamos CommonModule para usar *ngFor y *ngIf
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+  nombre: string = '';
+  email: string = '';
+  confirmarEmail: string = '';
+  password: string = '';
+  confirmarPassword: string = '';
+  mensaje: string = '';
+  registroExitoso: boolean = false;
+
   vacantes = [
     {
       titulo: 'Desarrollador Frontend',
@@ -63,7 +74,60 @@ export class RegisterComponent {
 
   vacanteSeleccionada: any = null;
 
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
   seleccionarVacante(vacante: any): void {
     this.vacanteSeleccionada = vacante;
+  }
+
+  enviarFormulario(): void {
+    if (this.email !== this.confirmarEmail) {
+      this.mensaje = '❗ Los correos electrónicos no coinciden.';
+      return;
+    }
+
+    if (this.password !== this.confirmarPassword) {
+      this.mensaje = '❗ Las contraseñas no coinciden.';
+      return;
+    }
+
+    const data = {
+      name: this.nombre,
+      email: this.email,
+      email_confirmation: this.confirmarEmail,         // 👈 Se agregó esta línea
+      password: this.password,
+      password_confirmation: this.confirmarPassword
+    };
+
+    this.authService.register(data).subscribe({
+      next: (res) => {
+        this.mensaje = '✅ Registro exitoso 🎉';
+        this.registroExitoso = true;
+        localStorage.setItem('token', res.token);
+        this.router.navigate([res.redirect || '/home']);
+        this.resetForm();
+      },
+      error: (err) => {
+        console.error(err);
+        if (err.status === 422 && err.error?.errors) {
+          const errores = Object.values(err.error.errors).flat().join(' ');
+          this.mensaje = `❌ ${errores}`;
+        } else {
+          this.mensaje = err.error?.message || '⚠️ Error en el registro.';
+        }
+        this.registroExitoso = false;
+      }
+    });
+  }
+
+  private resetForm(): void {
+    this.nombre = '';
+    this.email = '';
+    this.confirmarEmail = '';
+    this.password = '';
+    this.confirmarPassword = '';
   }
 }
