@@ -1,48 +1,43 @@
-/* Layout principal */
 .layout {
   display: flex;
-  height: 100vh; /* Ocupa toda la altura de la ventana */
-  flex-direction: row; /* Mantiene la barra lateral a la izquierda */
+  height: 100vh;
+  flex-direction: row;
   background-color: #202940;
 }
 
-/* Barra lateral */
 app-menu {
   box-sizing: border-box;
   position: fixed;
   left: 0;
   top: 0;
-  width: 16%; /* Ancho fijo para la barra lateral */
+  width: 16%;
   height: 100%;
   z-index: 100;
 }
 
-/* Contenido principal */
 .contenido-principal {
-  flex: 1; /* Ocupa el espacio restante */
-  margin-left: 14%; /* Para no solapar con la barra lateral */
+  flex: 1;
+  margin-left: 14%;
   display: flex;
-  flex-direction: column; /* Alinea los elementos verticalmente de arriba a abajo */
-  justify-content: flex-start; /* Alinea el contenido al inicio (arriba) */
-  align-items: center; /* Centra el contenido horizontalmente */
-  overflow: auto; /* Permite el scroll si el contenido es muy largo */
-  padding: 20px; /* Espacio alrededor del contenido */
-  box-sizing: border-box; /* Incluye el padding en el ancho y alto */
-  width: 100%; /* Asegura que el contenido principal ocupe todo el ancho disponible */
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: auto;
+  padding: 20px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
-/* Card */
 .card {
   border: none;
   background-color: rgba(0, 0, 0, 0);
   border-radius: 8px;
   overflow: hidden;
-  width: 95%; /* Ocupa la mayoría del ancho del contenido principal */
-  margin-bottom: 20px; /* Espacio entre las tarjetas si tienes varias */
+  width: 95%;
+  margin-bottom: 20px;
 }
 
-/* Header incapacidades (y otros headers) */
-.header-vacaciones { /* Reutilizamos el estilo del header de vacaciones */
+.header-vacaciones {
   background: linear-gradient(90deg, var(--color-principal), var(--active-color));
   padding: 15px 20px;
   border-radius: 8px;
@@ -50,7 +45,7 @@ app-menu {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%; /* Asegura que el header ocupe todo el ancho de la tarjeta */
+  width: 100%;
 
   h3 {
     color: var(--text-hover);
@@ -75,7 +70,6 @@ app-menu {
   }
 }
 
-/* Botón Agregar */
 .agregar-btn {
   background-color: var(--active-bg);
   border: none;
@@ -92,7 +86,6 @@ app-menu {
   color: var(--color-principal);
 }
 
-/* Tabla */
 .table-container {
   width: 100%;
   overflow-x: auto;
@@ -113,11 +106,10 @@ app-menu {
 .table th,
 .table td {
   padding: 12px 15px;
-  text-align: center; /* Centramos el texto en las celdas */
+  text-align: center;
   border-bottom: 1px solid #202940;
   background-color: #1e2131;
   color: white;
-  
 }
 
 .table th {
@@ -134,7 +126,6 @@ app-menu {
   background-color: #e9ecef;
 }
 
-/* Botones de acción en la tabla */
 .btn-acciones {
   background: none;
   border: none;
@@ -165,12 +156,11 @@ app-menu {
 
 .text-end {
   margin-top: 20px;
-  display: flex; /* Convertir en contenedor flexbox */
-  justify-content: center; /* Centrar horizontalmente el contenido */
-  width: 100%; /* Asegura que ocupe todo el ancho de la tarjeta */
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
-/* Modal de Edición */
 .modal.fade {
   transition: opacity 0.3s ease;
 }
@@ -190,10 +180,10 @@ app-menu {
 }
 
 .modal-dialog {
-  margin-top: 5%; /* Reduce el margen superior para que esté más arriba */
-  max-width: 700px; /* Aumenta el ancho máximo del modal si lo deseas */
+  margin-top: 5%;
+  max-width: 700px;
   margin-left: auto;
-  margin-right: auto; /* Centra el modal horizontalmente */
+  margin-right: auto;
 }
 
 .modal-content {
@@ -270,23 +260,14 @@ app-menu {
 }
 
 
-/* En tu archivo SCSS (por ejemplo, incapacidades.component.scss) */
-
-
-
-/* Agrandar el icono de editar (edit) */
 .fas.fa-edit {
-  font-size: 1.3em; /* Ajusta el tamaño según necesites */
+  font-size: 1.3em;
 }
 
-/* Agrandar el icono de eliminar (trash-alt) */
 .fas.fa-trash-alt {
-  font-size: 1.3em; /* Ajusta el tamaño según necesites */
+  font-size: 1.3em;
 }
 
-/* Puedes agregar más estilos si tienes otros iconos que quieras agrandar */
-
-/* En tu archivo SCSS */
 .badge {
   display: inline-block;
   padding: 0.35em 0.6em;
@@ -301,13 +282,13 @@ app-menu {
 }
 
 .badge-pendiente {
-  background-color: #ffc107; /* Amarillo */
+  background-color: #ffc107;
 }
 
 .badge-aprobado {
-  background-color: #28a745; /* Verde */
+  background-color: #28a745;
 }
 
 .badge-rechazado {
-  background-color: #dc3545; /* Rojo */
+  background-color: #dc3545;
 }

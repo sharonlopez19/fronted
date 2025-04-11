@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Importa FormsModule
+import { FormsModule } from '@angular/forms';
 import { MenuComponent } from "../menu/menu.component";
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'; // Importa FontAwesomeModule
-import { faPlusCircle, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'; // Importa los iconos
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faPlusCircle, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-incapacidades',
   standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent, FontAwesomeModule], // Asegúrate de incluir FontAwesomeModule
+  imports: [CommonModule, FormsModule, MenuComponent, FontAwesomeModule],
   templateUrl: './incapacidades.component.html',
   styleUrls: ['./incapacidades.component.scss']
 })
@@ -29,23 +29,22 @@ export class IncapacidadesComponent {
 
   modalAbierto: boolean = false;
   mostrarAgregarModalIncapacidad: boolean = false;
-  nuevaIncapacidad: any = { 
-    nombre: '', 
-    cargo: '', 
-    totalDias: null, 
-    fechaInicio: '', 
-    fechaFinal: '' ,
+  nuevaIncapacidad: any = {
+    nombre: '',
+    cargo: '',
+    totalDias: null,
+    fechaInicio: '',
+    fechaFinal: '',
     estado: 'Pendiente'
   };
 
-  // Iconos de Font Awesome
   faPlusCircle = faPlusCircle;
   faEdit = faEdit;
   faTrash = faTrash;
 
   agregarIncapacidad() {
     this.mostrarAgregarModalIncapacidad = true;
-    this.nuevaIncapacidad = { nombre: '', cargo: '', totalDias: null, fechaInicio: '', fechaFinal: '' }; // Resetear el formulario
+    this.nuevaIncapacidad = { nombre: '', cargo: '', totalDias: null, fechaInicio: '', fechaFinal: '', estado: 'Pendiente' };
   }
 
   cerrarAgregarModalIncapacidad() {
@@ -53,11 +52,10 @@ export class IncapacidadesComponent {
   }
 
   guardarNuevaIncapacidad() {
-    // Lógica para guardar la nueva incapacidad en tu array 'incapacidades' o backend
     console.log('Guardar nueva incapacidad:', this.nuevaIncapacidad);
-    this.incapacidades = [...this.incapacidades, { id: this.incapacidades.length + 1, ...this.nuevaIncapacidad }]; // Ejemplo de agregar localmente
+    this.incapacidades = [...this.incapacidades, { id: this.incapacidades.length + 1, ...this.nuevaIncapacidad }];
     this.cerrarAgregarModalIncapacidad();
-    this.nuevaIncapacidad = { nombre: '', cargo: '', totalDias: null, fechaInicio: '', fechaFinal: '' }; // Limpiar el formulario después de guardar
+    this.nuevaIncapacidad = { nombre: '', cargo: '', totalDias: null, fechaInicio: '', fechaFinal: '', estado: 'Pendiente' };
   }
 
   editarIncapacidad(incapacidad: any) {
@@ -71,12 +69,12 @@ export class IncapacidadesComponent {
       this.incapacidades[index] = { ...this.incapacidadEditada };
     }
     this.modalAbierto = false;
-    this.incapacidadEditada = { id: null, nombre: '', cargo: '', totalDias: 0, fechaInicio: '', fechaFinal: '' }; // Limpiar el formulario
+    this.incapacidadEditada = { id: null, nombre: '', cargo: '', totalDias: 0, fechaInicio: '', fechaFinal: '', estado: 'Pendiente' };
   }
 
   cancelarEdicion() {
     this.modalAbierto = false;
-    this.incapacidadEditada = { id: null, nombre: '', cargo: '', totalDias: 0, fechaInicio: '', fechaFinal: '' }; // Limpiar el formulario
+    this.incapacidadEditada = { id: null, nombre: '', cargo: '', totalDias: 0, fechaInicio: '', fechaFinal: '', estado: 'Pendiente' };
   }
 
   eliminarIncapacidad(id: number) {
@@ -88,6 +86,5 @@ export class IncapacidadesComponent {
 
   generarReporte() {
     console.log('Generar reporte de incapacidades');
-    // Aquí puedes implementar la lógica para generar el reporte
   }
 }

@@ -26,7 +26,7 @@ app-menu {
   align-items: flex-start;
   overflow: auto;
   padding: 20px;
-  width: calc(100% - 16%); /* Ocupa el 100% menos el ancho del menú lateral */
+  width: calc(100% - 16%);
 }
 
 /* Card */
@@ -35,8 +35,8 @@ app-menu {
   background-color: rgba(0, 0, 0, 0);
   border-radius: 8px;
   overflow: hidden;
-  width: 99%; /* Ocupa la gran mayoría del ancho del contenido principal */
-  margin-bottom: 20px; /* Espacio inferior si hay otros elementos */
+  width: 99%;
+  margin-bottom: 20px;
 }
 
 /* Header vacaciones */
@@ -97,7 +97,7 @@ app-menu {
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: #f0f8ff; /* Un color azul muy claro como ejemplo */
+  background-color: #f0f8ff;
   color: #333;
 }
 
@@ -111,21 +111,19 @@ app-menu {
 }
 
 .table th {
-  background-color: #01060a; /* Fondo gris claro para los encabezados */
+  background-color: #01060a;
   font-weight: bold;
   color: #ffffff;
 }
 
 .table tbody tr:nth-child(even) {
-  background-color: #f9f9f9; /* Fondo ligeramente gris para filas pares */
+  background-color: #f9f9f9;
 }
 
 .table tbody tr:hover {
-  background-color: #e9ecef; /* Fondo gris más claro al pasar el ratón */
+  background-color: #e9ecef;
 }
 
-/* Estilos específicos para las columnas (si es necesario) */
-/* Ejemplo: ajustar el ancho de la columna de "Acción" */
 .table th:last-child,
 .table td:last-child {
   text-align: center;
@@ -133,32 +131,31 @@ app-menu {
 
 .table .btn-acciones {
   margin: 0 5px;
-  padding: 0; /* Elimina el padding para que solo el icono sea visible */
+  padding: 0;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.9rem;
   transition: background-color 0.3s ease;
-  background-color: transparent; /* Fondo transparente para los iconos */
+  background-color: transparent;
 }
 
 .table .btn-acciones.editar {
-  color: #007bff; /* Azul */
+  color: #007bff;
 }
 
 .table .btn-acciones.eliminar {
-  color: #dc3545; /* Rojo */
+  color: #dc3545;
 }
 
 .table .btn-acciones.editar:hover {
-  background-color: rgba(0, 123, 255, 0.1); /* Un ligero fondo al pasar el ratón */
+  background-color: rgba(0, 123, 255, 0.1);
 }
 
 .table .btn-acciones.eliminar:hover {
-  background-color: rgba(220, 53, 69, 0.1); /* Un ligero fondo al pasar el ratón */
+  background-color: rgba(220, 53, 69, 0.1);
 }
 
-/* Estilos para los badges de estado */
 .badge {
   display: inline-block;
   padding: 0.35em 0.6em;
@@ -171,21 +168,20 @@ app-menu {
 }
 
 .badge-complete {
-  background-color: #28a745; /* Verde */
+  background-color: #28a745;
   color: white;
 }
 
 .badge-rechazado {
-  background-color: #dc3545; /* Rojo */
+  background-color: #dc3545;
   color: white;
 }
 
 .badge-pendiente {
-  background-color: #ffc107; /* Amarillo */
-  color: #212529; /* Texto oscuro para el amarillo */
+  background-color: #ffc107;
+  color: #212529;
 }
 
-/* Si tienes un contenedor para la tabla para controlar el scroll horizontal */
 .table-container {
   width: 100%;
   overflow-x: auto;
@@ -200,14 +196,13 @@ app-menu {
   align-self: center;
 }
 
-/* Modal de Desplazamiento Suave */
 .modal.fade {
   transition: opacity 0.3s ease;
 }
 
 .modal-slide-in {
-  transform: translateY(-100vh); /* El modal comienza fuera de la pantalla */
-  animation: slideIn 0.5s forwards; /* Animación para deslizar el modal hacia abajo */
+  transform: translateY(-100vh);
+  animation: slideIn 0.5s forwards;
 }
 
 @keyframes slideIn {
@@ -219,10 +214,9 @@ app-menu {
   }
 }
 
-/* Ajustes de Modal */
 .modal-dialog {
   margin-top: 10%;
-  max-width: 500px; /* igual que modal-lg de Bootstrap */
+  max-width: 500px;
 }
 
 .modal-content {
@@ -238,10 +232,10 @@ app-menu {
     color: #ffffff;
 
     &:focus {
-      background-color: #303343; /* Un poco más oscuro al enfocar */
-      border-color: #007bff; /* Borde azul al enfocar (estándar de Bootstrap) */
+      background-color: #303343;
+      border-color: #007bff;
       outline: 0;
-      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Sombra azul al enfocar */
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     }
   }
 
@@ -265,9 +259,9 @@ app-menu {
   padding: 1rem;
   border-bottom-left-radius: 0.3rem;
   border-bottom-right-radius: 0.3rem;
-  display: flex; /* Habilita flexbox para los elementos hijos */
-  justify-content: flex-end; /* Alinea los botones a la derecha */
-  gap: 2rem; /* Espacio entre los botones */
+  display: flex;
+  justify-content: flex-end;
+  gap: 2rem;
 }
 
 .btn {
@@ -285,7 +279,7 @@ app-menu {
 
 .btn-acciones.editar:hover i {
   transform: scale(1.15);
-  background-color: rgba(0, 123, 255, 0.1); /* Ligero fondo al pasar el ratón */
+  background-color: rgba(0, 123, 255, 0.1);
 }
 
 .btn-acciones.eliminar i {
@@ -297,5 +291,5 @@ app-menu {
 
 .btn-acciones.eliminar:hover i {
   transform: scale(1.15);
-  background-color: rgba(220, 53, 69, 0.1); /* Ligero fondo al pasar el ratón */
+  background-color: rgba(220, 53, 69, 0.1);
 }
