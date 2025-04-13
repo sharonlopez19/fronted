@@ -1,7 +1,18 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Necesario para el binding con ngModel
+import { FormsModule } from '@angular/forms';
 import { MenuComponent } from '../menu/menu.component';
+
+interface HoraExtra {
+  id: number;
+  nombre: string;
+  cargo: string;
+  fecha: string;
+  horaInicio: string;
+  horaFinal: string;
+  totalHoras: number;
+  estado: string;
+}
 
 @Component({
   selector: 'app-horas-extra',
@@ -11,100 +22,23 @@ import { MenuComponent } from '../menu/menu.component';
   styleUrls: ['./horas-extra.component.scss']
 })
 export class HorasExtraComponent {
-  horasExtras = [
-    {
-      id: 1,
-      nombre: 'John Michael',
-      cargo: 'Asesor',
-      fecha: '15/07/24',
-      horaInicio: '17:00',
-      horaFinal: '20:00',
-      totalHoras: 3,
-      estado: 'completado'
-    },
-    {
-      id: 2,
-      nombre: 'Laurent Perrier',
-      cargo: 'Programador',
-      fecha: '17/07/24',
-      horaInicio: '18:00',
-      horaFinal: '22:00',
-      totalHoras: 4,
-      estado: 'pendiente'
-    },
-    {
-      id: 3,
-      nombre: 'Michael Clark',
-      cargo: 'Desarrollador',
-      fecha: '18/07/24',
-      horaInicio: '16:00',
-      horaFinal: '21:00',
-      totalHoras: 5,
-      estado: 'completado'
-    },
-    {
-      id: 4,
-      nombre: 'Diana Betancourt',
-      cargo: 'Analista',
-      fecha: '19/07/24',
-      horaInicio: '17:30',
-      horaFinal: '20:30',
-      totalHoras: 3,
-      estado: 'rechazado'
-    },
-    {
-      id: 5,
-      nombre: 'Carlos Yordan',
-      cargo: 'Asesor',
-      fecha: '20/07/24',
-      horaInicio: '15:00',
-      horaFinal: '20:00',
-      totalHoras: 5,
-      estado: 'completado'
-    },
-    {
-      id: 6,
-      nombre: 'Alexa Liras',
-      cargo: 'Desarrollador',
-      fecha: '21/07/24',
-      horaInicio: '14:00',
-      horaFinal: '19:00',
-      totalHoras: 5,
-      estado: 'pendiente'
-    },
-    {
-      id: 7,
-      nombre: 'Richard Owens',
-      cargo: 'Director',
-      fecha: '22/07/24',
-      horaInicio: '16:30',
-      horaFinal: '21:30',
-      totalHoras: 5,
-      estado: 'completado'
-    },
-    {
-      id: 8,
-      nombre: 'Diego Mahecha',
-      cargo: 'Programador',
-      fecha: '23/07/24',
-      horaInicio: '17:00',
-      horaFinal: '20:00',
-      totalHoras: 3,
-      estado: 'pendiente'
-    }
+  horasExtras: HoraExtra[] = [
+    { id: 1, nombre: 'John Michael', cargo: 'Asesor', fecha: '2024-07-15', horaInicio: '17:00', horaFinal: '20:00', totalHoras: 3, estado: 'completado' },
+    { id: 2, nombre: 'Laurent Perrier', cargo: 'Programador', fecha: '2024-07-17', horaInicio: '18:00', horaFinal: '22:00', totalHoras: 4, estado: 'pendiente' }
   ];
 
-  // Variables para el modal de edición
   modalVisible: boolean = false;
-  horaExtraEditada: any = {};
+  horaExtraEditada: HoraExtra = {} as HoraExtra;
+  nuevaHoraExtra: HoraExtra = {} as HoraExtra;
+  mostrarAgregarModalIncapacidad: boolean = false;
 
   agregarHorasExtras(): void {
-    alert('Función para agregar horas extras');
+    this.nuevaHoraExtra = {} as HoraExtra;
+    this.mostrarAgregarModalIncapacidad = true;
   }
 
-  // Abre el modal para editar pasándole el objeto a editar
-  editarHorasExtras(horaExtra: any): void {
-    this.horaExtraEditada = { ...horaExtra }; // Clonamos el objeto para editar sin alterar el original inmediatamente
+  editarHorasExtras(horaExtra: HoraExtra): void {
+    this.horaExtraEditada = { ...horaExtra };
     this.modalVisible = true;
   }
 
@@ -120,7 +54,7 @@ export class HorasExtraComponent {
     this.modalVisible = false;
   }
 
-  eliminarHorasExtras(horaExtra: any): void {
+  eliminarHorasExtras(horaExtra: HoraExtra): void {
     const confirmado = confirm(`¿Estás seguro de eliminar las horas extras de ${horaExtra.nombre}?`);
     if (confirmado) {
       this.horasExtras = this.horasExtras.filter(h => h.id !== horaExtra.id);
@@ -129,5 +63,15 @@ export class HorasExtraComponent {
 
   generarReporte(): void {
     alert('Generando reporte de horas extras...');
+  }
+
+  guardarNuevaIncapacidad(): void {
+    this.horasExtras.push({ ...this.nuevaHoraExtra });
+    this.mostrarAgregarModalIncapacidad = false;
+    this.nuevaHoraExtra = {} as HoraExtra;
+  }
+
+  cerrarAgregarModalIncapacidad(): void {
+    this.mostrarAgregarModalIncapacidad = false;
   }
 }
