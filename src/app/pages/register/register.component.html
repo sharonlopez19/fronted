@@ -89,7 +89,7 @@
               id="nombre"
               name="nombre"
               required
-              ngModel
+              [(ngModel)]="nombre"
               placeholder="Nombre completo"
             />
           </div>
@@ -101,7 +101,7 @@
               id="email"
               name="email"
               required
-              ngModel
+              [(ngModel)]="email"
               placeholder="ejemplo@correo.com"
             />
           </div>
@@ -113,7 +113,7 @@
               id="confirmEmail"
               name="confirmEmail"
               required
-              ngModel
+              [(ngModel)]="confirmarEmail"
               placeholder="Repite tu correo"
             />
           </div>
@@ -125,7 +125,7 @@
               id="password"
               name="password"
               required
-              ngModel
+              [(ngModel)]="password"
               placeholder="********"
             />
           </div>
@@ -137,10 +137,18 @@
               id="confirmPassword"
               name="confirmPassword"
               required
-              ngModel
+              [(ngModel)]="confirmarPassword"
               placeholder="********"
             />
           </div>
+
+          <!-- Mensaje de estado -->
+          <div class="text-center mb-3" *ngIf="mensaje">
+            <span [ngClass]="{ 'text-success': registroExitoso, 'text-danger': !registroExitoso }">
+              {{ mensaje }}
+            </span>
+          </div>
+
           <div class="text-center">
             <button type="submit" class="btn btn-success">Registrarme</button>
           </div>

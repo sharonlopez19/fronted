@@ -81,6 +81,8 @@ export class RegisterComponent {
 
   seleccionarVacante(vacante: any): void {
     this.vacanteSeleccionada = vacante;
+    this.mensaje = '';
+    this.registroExitoso = false;
   }
 
   enviarFormulario(): void {
@@ -97,7 +99,7 @@ export class RegisterComponent {
     const data = {
       name: this.nombre,
       email: this.email,
-      email_confirmation: this.confirmarEmail,         // 👈 Se agregó esta línea
+      email_confirmation: this.confirmarEmail,
       password: this.password,
       password_confirmation: this.confirmarPassword
     };
@@ -107,7 +109,7 @@ export class RegisterComponent {
         this.mensaje = '✅ Registro exitoso 🎉';
         this.registroExitoso = true;
         localStorage.setItem('token', res.token);
-        this.router.navigate([res.redirect || '/home']);
+        this.router.navigate([res.redirect || '/directorio']);
         this.resetForm();
       },
       error: (err) => {
