@@ -10,6 +10,7 @@ import { VacacionesComponent } from './pages/vacaciones/vacaciones.component';
 import { IncapacidadesComponent } from './pages/incapacidades/incapacidades.component';
 import { HorasExtraComponent } from './pages/horas-extra/horas-extra.component';
 import { NotificacionesComponent } from './pages/notificaciones/notificaciones.component';
+import { FormvacacionesComponent} from './pages/formvacaciones/formvacaciones.component';
 
 import { AuthGuard } from './guards/auth.guard';
 
@@ -30,7 +31,8 @@ export const routes: Routes = [
       { path: 'vacaciones', component: VacacionesComponent },
       { path: 'incapacidades', component: IncapacidadesComponent },
       { path: 'horas-extra', component: HorasExtraComponent },
-      { path: 'notificaciones', component: NotificacionesComponent }
+      { path: 'notificaciones', component: NotificacionesComponent },
+      { path: 'formvacaciones', component: FormvacacionesComponent }
     ]
   },
 
