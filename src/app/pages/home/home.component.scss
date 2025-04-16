@@ -7,7 +7,6 @@
   display: flex;
   min-height: 100vh;
   background-color: #202940;
-  
 }
 
 app-menu {
@@ -15,7 +14,6 @@ app-menu {
   position: fixed;
   left: 0;
   top: 0;
-  // ... (tus estilos de app-menu) ...
 }
 
 .contenido-principal {
@@ -80,7 +78,7 @@ app-menu {
   margin-bottom: 20px;
 }
 
-.header-horas { // Cambiado a header-horas para coincidir con el HTML
+.header-horas {
   background: linear-gradient(90deg, var(--color-principal), var(--active-color));
   padding: 20px 20px;
   border-radius: 8px;
@@ -110,9 +108,9 @@ app-menu {
 
 .data-grid {
   display: flex;
-  flex-direction: column; /* Los elementos en lista vertical */
+  flex-direction: column;
   gap: 10px;
-  margin-bottom: 20px; /* Añadimos margen inferior para el botón */
+  margin-bottom: 20px;
 }
 
 .grid-item {
@@ -130,7 +128,7 @@ app-menu {
   margin-right: 15px;
   width: 150px;
   display: inline-block;
-  white-space: normal; /* Permitir envolver el texto */
+  white-space: normal;
   overflow-wrap: break-word;
 }
 
@@ -158,8 +156,8 @@ app-menu {
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 90%; /* Puedes mantener este valor o ajustarlo */
-  max-width: 95%; /* El modal ocupará hasta el 95% del ancho de la pantalla */
+  width: 90%;
+  max-width: 95%;
   overflow-y: auto;
   max-height: 80vh;
 }
@@ -174,7 +172,7 @@ app-menu {
 
 .modal-content form {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Esto crea dos columnas de igual ancho */
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
@@ -200,12 +198,12 @@ app-menu {
   box-sizing: border-box;
   font-size: 1rem;
   color: #d4cece;
-  background-color: #44444467; /* Este es el color de fondo actual de los campos de entrada */
+  background-color: #44444467;
 }
 
 .modal-buttons {
   display: flex;
-  flex-direction: row; /* Añade esto */
+  flex-direction: row;
   justify-content: flex-start;
   gap: 15px;
   margin-top: 25px;
@@ -241,7 +239,6 @@ app-menu {
   }
 }
 
-/* Estilo para el botón "Actualizar Información" en su nueva ubicación */
 .user-data > .btn-primary {
   background-color: var(--color-principal);
   color: white;
@@ -251,14 +248,14 @@ app-menu {
   padding: 12px 25px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  align-self: flex-end; /* Para que se alinee a la derecha */
-  margin-top: 20px; /* Espacio superior */
-  margin-bottom: 10px; /* Espacio inferior */
+  align-self: flex-end;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .profile-image {
-  width: 120px; /* Aumentamos el ancho */
-  height: 120px; /* Aumentamos la altura */
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   overflow: hidden;
   margin-right: 20px;
@@ -271,8 +268,8 @@ app-menu {
   border-radius: 50%;
   background: linear-gradient(90deg, var(--color-principal), var(--active-color));
   background-image: url('../../../assets//silueta.png');
-  background-size: cover; /* Asegúrate de que la imagen cubra el placeholder */
-  background-position: center; /* Centra la imagen */
+  background-size: cover;
+  background-position: center;
   background-size: cover;
   background-position: center;
   margin-right: 15px;
@@ -284,7 +281,7 @@ app-menu {
 }
 
 .profile-info {
-  background-color: #1e2131; /* Este es el color blanco actual */
+  background-color: #1e2131;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
@@ -292,5 +289,27 @@ app-menu {
 
 .profile-container {
   padding: 20px;
-  background-color: #3f9af500; /* Reemplaza #e9ecef con el color que desees */
+  background-color: #3f9af500;
+}
+
+@media (max-width: 767px) {
+  app-menu {
+    > * {
+      max-height: 200px !important;
+      overflow-y: auto !important;
+    }
+
+    overflow-y: auto !important;
+  }
+
+  .contenido-principal{
+    background-color: #1643b400;
+    width: 100vh;
+    margin-left: 15%;
+  }
+
+  .profile-image-placeholder {
+    width: 0px;
+    height: 0px;
+  }
 }
