@@ -8,9 +8,13 @@
 
     <nav class="nav">
       <div class="nav-section">
-        <a class="nav-link" routerLink="/directorio" routerLinkActive="active">
+        <a *ngIf="[1, 4].includes(usuario?.rol)" class="nav-link" routerLink="/directorio" routerLinkActive="active">
           <i class="fas fa-address-book"></i>
           <span>Directorio</span>
+        </a>
+        <a *ngIf="[1,2,3,4,5,6].includes(usuario?.rol)" class="nav-link" routerLink="/directorio" routerLinkActive="active">
+          <i class="fas fa-address-book"></i>
+          <span>Perfil</span>
         </a>
         <a class="nav-link" routerLink="/vacantes" routerLinkActive="active">
           <i class="fas fa-briefcase"></i>
@@ -43,8 +47,8 @@
         <div class="user-link bottom-section">
           <i class="fas fa-user"></i>
           <div class="user-info">
-            <p class="name">Juan Joven</p>
-            <p class="email">Administrador</p>
+            <p class="name">{{usuario.name}}</p>
+            <p class="email">{{usuario.email}}</p>
           </div>
         </div>
       </div>

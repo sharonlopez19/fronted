@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service'; 
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
@@ -10,14 +11,26 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent {
+export class MenuComponent implements OnInit{
   isCollapsed = false;
 
+  usuario: any ={};
   constructor(private router: Router) {}
-
+  
+  ngOnInit(): void {
+    const usuarioGuardado = localStorage.getItem('usuario');
+    if (usuarioGuardado) {
+      this.usuario = JSON.parse(usuarioGuardado);
+      console.log('Usuario cargado:', this.usuario);
+    } else {
+      console.log('No hay usuario en localStorage');
+    }
+  }
   logout(): void {
     localStorage.removeItem('token');
+    localStorage.removeItem('usuario'); // Limpia también el usuario
     this.router.navigate(['/login']);
+
   }
 
   toggleMenu(): void {

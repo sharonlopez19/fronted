@@ -101,6 +101,7 @@ export class RegisterComponent {
       email: this.email,
       email_confirmation: this.confirmarEmail,
       password: this.password,
+      rol: 5,
       password_confirmation: this.confirmarPassword
     };
 

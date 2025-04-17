@@ -1,8 +1,22 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { Routes } from '@angular/router';
+import { DirectorioComponent } from './pages/directorio/directorio.component';
+import { LoginComponent } from './pages/login/login.component';
+// importa tu guard:
+import { AuthGuard } from './guards/auth.guard';
 
-import { routes } from './app.routes';
+export const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+  {
+    path: 'directorio',
+    component: DirectorioComponent,
+    canActivate: [AuthGuard] // ✅ protegida
+  },
+  {
+    path: 'vacantes',
+    loadComponent: () => import('./pages/vacantes/vacantes.component').then(m => m.VacantesComponent),
+    canActivate: [AuthGuard] // ✅ protegida también
+  },
+  // puedes seguir agregando más rutas protegidas
+];
 
-export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes)]
-};

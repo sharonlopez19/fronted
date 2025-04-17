@@ -8,6 +8,16 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  getUsuario(): Observable<any> {
+    const token = localStorage.getItem('token');  // Obtener el token de autenticación desde el localStorage
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`  // Incluir el token en los encabezados de la solicitud
+    });
+
+    // Realizar la solicitud GET al backend de Laravel
+    return this.http.get<any>(`${this.apiUrl}/user`, { headers });
+  }
+  
   register(data: { name: string; email: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, data);
   }
