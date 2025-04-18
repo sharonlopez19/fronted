@@ -101,7 +101,7 @@ export class RegisterComponent {
       email: this.email,
       email_confirmation: this.confirmarEmail,
       password: this.password,
-      rol: 5,
+      rol: 5, // Asignar rol automáticamente como Proveedor
       password_confirmation: this.confirmarPassword
     };
 

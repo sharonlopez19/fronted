@@ -34,37 +34,29 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   login(): void {
     const data = { email: this.email, password: this.password };
-  
+
     this.http.post<any>('http://localhost:8000/api/login', data).subscribe({
-      next: (res) => {
-        console.log('Respuesta completa del login:', res); // <- Log #1
-  
-        if (res.token) {
-          localStorage.setItem('token', res.token);
-          console.log('Token guardado en localStorage'); // <- Log #2
-  
-          if (res.user) {
-            localStorage.setItem('usuario', JSON.stringify(res.user));
-            console.log('Usuario guardado en localStorage:', res.user); // <- Log #3
-          } else {
-            console.warn('res.user está undefined'); // <- Log #4
-          }
-          if(res.user.rol==1 || res.user.rol==4){
-            this.router.navigate(['/directorio']);
-          }else{
-            this.router.navigate(['/home']);
-          }
-          this.errorMessage = '';
-        } else {
-          this.errorMessage = 'Respuesta inválida del servidor.';
+        next: (res) => {
+            if (res.token) {
+                localStorage.setItem('token', res.token);
+                if (res.user) {
+                    localStorage.setItem('usuario', JSON.stringify(res.user));
+                }
+                if (res.user.rol == 1 || res.user.rol == 4) {
+                    this.router.navigate(['/directorio']);
+                } else {
+                    this.router.navigate(['/home']);
+                }
+                this.errorMessage = '';
+            } else {
+                this.errorMessage = 'Respuesta inválida del servidor.';
+            }
+        },
+        error: (err) => {
+            this.errorMessage = 'Correo o contraseña incorrectos.';
         }
-      },
-      error: (err) => {
-        console.error('Error en login:', err); // <- Log #5
-        this.errorMessage = 'Correo o contraseña incorrectos.';
-      }
     });
   }
-  
-  
+
+
 }
