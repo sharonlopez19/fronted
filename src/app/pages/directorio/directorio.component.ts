@@ -32,6 +32,13 @@ export class DirectorioComponent {
   editando: boolean = false;
   vacanteIndex: number = -1;
 
+  // 🆕 Para controlar qué vacante está expandida
+  expandedVacanteIndex: number | null = null;
+
+  toggleVacante(index: number): void {
+    this.expandedVacanteIndex = this.expandedVacanteIndex === index ? null : index;
+  }
+
   getNuevaVacante(): Vacante {
     return {
       nombre: '', cargo: '', telefono: '', correo: '',

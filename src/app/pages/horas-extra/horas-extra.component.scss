@@ -17,16 +17,20 @@ app-menu {
 
 .contenido-principal {
   flex: 1;
-  margin-left: 14%;
+  padding: 20px;
+  margin-right: 5%;
+  margin-bottom: 20px;
+  /* margin-left: 15%; */ /* <-- Comenta o elimina esta línea */
+  margin-left: 260px;   /* <-- Añade esta línea (Usa el ancho de tu menú + un pequeño espacio extra, ej: 10px) */
+  margin-top: 10px;
   display: flex;
   flex-direction: column;
+  background-color: #55555500;
   justify-content: flex-start;
-  align-items: center;
-  overflow: auto;
-  padding: 20px;
-  box-sizing: border-box;
-  width: 100%;
+  align-items: stretch;
+  overflow-y: auto; /* Mantenemos el scroll vertical si el contenido es largo */
 }
+
 
 .card {
   border: none;

@@ -3,130 +3,168 @@
 <div class="layout">
   <div class="contenido-principal">
     <div class="card">
-      <div class="card">
-        <div class="card-header header-vacaciones d-flex justify-content-between align-items-center">
-          <h3 class="m-0 text-hover">Vacaciones</h3>
-          <button class="btn btn-light btn-sm agregar-btn" (click)="agregarVacacion()">
-            <i class="fas fa-plus-circle"></i> Agregar
-          </button>
-        </div>
-        <div class="card-body">
+      <div class="card-header header-vacaciones d-flex justify-content-between align-items-center">
+        <h3 class="m-0 text-hover">Vacaciones</h3>
+        <button class="btn btn-light btn-sm agregar-btn" (click)="agregarVacacion()">
+          <i class="fas fa-plus-circle"></i> Agregar
+        </button>
+      </div>
+      <div class="card-body">
+
+        <div *ngIf="isLargeScreen">
           <table class="table text-center">
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Cargo</th>
-                <th>Estado</th>
-                <th>Fecha Inicio</th>
-                <th>Fecha Final</th>
-                <th>Acción</th>
+                <th>Nombre</th> <th *ngFor="let header of columnHeaders">{{ header.label }}</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let vacacion of vacaciones">
-                <td>{{ vacacion.nombre }}</td>
-                <td>{{ vacacion.cargo }}</td>
-                <td><span class="badge" [ngClass]="{ 'badge-complete': vacacion.estado === 'Completado', 'badge-rechazado': vacacion.estado === 'Rechazado', 'badge-pendiente': vacacion.estado === 'Pendiente' }">{{ vacacion.estado }}</span></td>
-                <td>{{ vacacion.fechaInicio }}</td>
-                <td>{{ vacacion.fechaFin }}</td>
-                <td>
-                  <button class="btn btn-link btn-acciones editar me-1" (click)="editarVacacion(vacacion)">
-                    <i class="fas fa-edit"></i>
-                  </button>
-                  <button class="btn btn-link btn-acciones eliminar" (click)="eliminarVacacion(vacacion.id)">
-                    <i class="fas fa-trash-alt"></i>
-                  </button>
+                <td>{{ vacacion.nombre }}</td> <td *ngFor="let header of columnHeaders">
+                  <ng-container *ngIf="header.key !== 'accion'">
+                    <ng-container *ngIf="header.key === 'estado'; else normalValue">
+                       <span class="badge" [ngClass]="getEstadoBadgeClass(vacacion.estado)">{{ vacacion.estado }}</span>
+                    </ng-container>
+                    <ng-template #normalValue>
+                      {{ getDataPropertyValue(vacacion, header.key) }}
+                    </ng-template>
+                  </ng-container>
+                  <ng-container *ngIf="header.key === 'accion'">
+                    <button class="btn btn-link btn-acciones editar me-1" (click)="editarVacacion(vacacion)">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-link btn-acciones eliminar" (click)="eliminarVacacion(vacacion.id)">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
+                  </ng-container>
                 </td>
               </tr>
             </tbody>
           </table>
-          <div class="text-end">
-            <button class="btn btn-primary" (click)="generarReporte()">Generar Reporte</button>
+        </div>
+
+        <div *ngIf="!isLargeScreen" class="accordion-container-simple">
+          <div *ngFor="let vacacion of vacaciones; let i = index" class="accordion-item-simple">
+            <div class="accordion-header-simple" (click)="toggleAccordion(vacacion)">
+              <div class="accordion-title-simple">{{ vacacion.nombre }}</div>
+              <span class="accordion-icon-simple">
+                  <i class="fas" [ngClass]="{'fa-chevron-down': !vacacion.isExpanded, 'fa-chevron-up': vacacion.isExpanded}"></i>
+              </span>
+            </div>
+
+            <div [class.expanded]="vacacion.isExpanded" class="accordion-body-simple">
+              <div *ngFor="let header of columnHeaders" class="accordion-row-simple">
+                 <div class="row-label-simple">{{ header.label }}:</div>
+                     <div class="row-value-simple">
+                         <ng-container *ngIf="header.key !== 'accion'; else accordionActions">
+                              <ng-container *ngIf="header.key === 'estado'; else simpleNormalValue">
+                                 <span class="badge" [ngClass]="getEstadoBadgeClass(vacacion.estado)">{{ vacacion.estado }}</span>
+                             </ng-container>
+                             <ng-template #simpleNormalValue>
+                                {{ getDataPropertyValue(vacacion, header.key) }}
+                             </ng-template>
+                         </ng-container>
+                         <ng-template #accordionActions>
+                             <button class="btn btn-link btn-acciones editar me-1" (click)="$event.stopPropagation(); editarVacacion(vacacion)">
+                               <i class="fas fa-edit"></i>
+                             </button>
+                             <button class="btn btn-link btn-acciones eliminar" (click)="$event.stopPropagation(); eliminarVacacion(vacacion.id)">
+                               <i class="fas fa-trash-alt"></i>
+                             </button>
+                         </ng-template>
+                     </div>
+                 </div>
+            </div>
           </div>
         </div>
+
+        <div class="text-end">
+          <button class="btn btn-primary" (click)="generarReporte()">Generar Reporte</button>
+        </div>
+
       </div>
     </div>
   </div>
 
   <div id="editModal" class="modal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Editar Vacación</h5>
-          <button type="button" class="btn-close" (click)="cerrarModalEditar()"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="nombreEdit" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombreEdit" [(ngModel)]="vacacionEditada.nombre">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Editar Vacación</h5>
+                  <button type="button" class="btn-close" (click)="cerrarModalEditar()"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="mb-3">
+                      <label for="nombreEdit" class="form-label">Nombre</label>
+                      <input type="text" class="form-control" id="nombreEdit" [(ngModel)]="vacacionEditada.nombre">
+                  </div>
+                  <div class="mb-3">
+                      <label for="cargoEdit" class="form-label">Cargo</label>
+                      <input type="text" class="form-control" id="cargoEdit" [(ngModel)]="vacacionEditada.cargo">
+                  </div>
+                  <div class="mb-3">
+                      <label for="estadoEdit" class="form-label">Estado</label>
+                      <select class="form-control" id="estadoEdit" [(ngModel)]="vacacionEditada.estado">
+                          <option value="Completado">Completado</option>
+                          <option value="Rechazado">Rechazado</option>
+                          <option value="Pendiente">Pendiente</option>
+                      </select>
+                  </div>
+                  <div class="mb-3">
+                      <label for="fechaInicioEdit" class="form-label">Fecha Inicio</label>
+                      <input type="text" class="form-control" id="fechaInicioEdit" [(ngModel)]="vacacionEditada.fechaInicio">
+                  </div>
+                  <div class="mb-3">
+                      <label for="fechaFinEdit" class="form-label">Fecha Fin</label>
+                      <input type="text" class="form-control" id="fechaFinEdit" [(ngModel)]="vacacionEditada.fechaFin">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" (click)="cerrarModalEditar()">Cerrar</button>
+                  <button type="button" class="btn btn-primary" (click)="guardarEdicion()">Guardar cambios</button>
+              </div>
           </div>
-          <div class="mb-3">
-            <label for="cargoEdit" class="form-label">Cargo</label>
-            <input type="text" class="form-control" id="cargoEdit" [(ngModel)]="vacacionEditada.cargo">
-          </div>
-          <div class="mb-3">
-            <label for="estadoEdit" class="form-label">Estado</label>
-            <select class="form-control" id="estadoEdit" [(ngModel)]="vacacionEditada.estado">
-              <option value="Completado">Completado</option>
-              <option value="Rechazado">Rechazado</option>
-              <option value="Pendiente">Pendiente</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="fechaInicioEdit" class="form-label">Fecha Inicio</label>
-            <input type="text" class="form-control" id="fechaInicioEdit" [(ngModel)]="vacacionEditada.fechaInicio">
-          </div>
-          <div class="mb-3">
-            <label for="fechaFinEdit" class="form-label">Fecha Fin</label>
-            <input type="text" class="form-control" id="fechaFinEdit" [(ngModel)]="vacacionEditada.fechaFin">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="cerrarModalEditar()">Cerrar</button>
-          <button type="button" class="btn btn-primary" (click)="guardarEdicion()">Guardar cambios</button>
-        </div>
       </div>
-    </div>
   </div>
 
   <div id="agregarModal" class="modal" tabindex="-1" role="dialog" *ngIf="mostrarAgregarModal">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Agregar Vacación</h5>
-          <button type="button" class="btn-close" (click)="cerrarAgregarModal()"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="nombreAgregar" class="form-label">Nombre</label>
-            <input type="text" class="form-control" id="nombreAgregar" [(ngModel)]="nuevaVacacion.nombre">
+     <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title">Agregar Vacación</h5>
+                  <button type="button" class="btn-close" (click)="cerrarAgregarModal()"></button>
+              </div>
+              <div class="modal-body">
+                  <div class="mb-3">
+                      <label for="nombreAgregar" class="form-label">Nombre</label>
+                      <input type="text" class="form-control" id="nombreAgregar" [(ngModel)]="nuevaVacacion.nombre">
+                  </div>
+                  <div class="mb-3">
+                      <label for="cargoAgregar" class="form-label">Cargo</label>
+                      <input type="text" class="form-control" id="cargoAgregar" [(ngModel)]="nuevaVacacion.cargo">
+                  </div>
+                  <div class="mb-3">
+                      <label for="estadoAgregar" class="form-label">Estado</label>
+                      <select class="form-control" id="estadoAgregar" [(ngModel)]="nuevaVacacion.estado">
+                          <option value="Pendiente">Pendiente</option>
+                          <option value="Completado">Completado</option>
+                          <option value="Rechazado">Rechazado</option>
+                      </select>
+                  </div>
+                  <div class="mb-3">
+                      <label for="fechaInicioAgregar" class="form-label">Fecha Inicio</label>
+                      <input type="text" class="form-control" id="fechaInicioAgregar" [(ngModel)]="nuevaVacacion.fechaInicio">
+                  </div>
+                  <div class="mb-3">
+                      <label for="fechaFinAgregar" class="form-label">Fecha Fin</label>
+                      <input type="text" class="form-control" id="fechaFinAgregar" [(ngModel)]="nuevaVacacion.fechaFin">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" (click)="cerrarAgregarModal()">Cerrar</button>
+                  <button type="button" class="btn btn-primary" (click)="guardarNuevaVacacion()">Guardar</button>
+              </div>
           </div>
-          <div class="mb-3">
-            <label for="cargoAgregar" class="form-label">Cargo</label>
-            <input type="text" class="form-control" id="cargoAgregar" [(ngModel)]="nuevaVacacion.cargo">
-          </div>
-          <div class="mb-3">
-            <label for="estadoAgregar" class="form-label">Estado</label>
-            <select class="form-control" id="estadoAgregar" [(ngModel)]="nuevaVacacion.estado">
-              <option value="Pendiente">Pendiente</option>
-              <option value="Completado">Completado</option>
-              <option value="Rechazado">Rechazado</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="fechaInicioAgregar" class="form-label">Fecha Inicio</label>
-            <input type="text" class="form-control" id="fechaInicioAgregar" [(ngModel)]="nuevaVacacion.fechaInicio">
-          </div>
-          <div class="mb-3">
-            <label for="fechaFinAgregar" class="form-label">Fecha Fin</label>
-            <input type="text" class="form-control" id="fechaFinAgregar" [(ngModel)]="nuevaVacacion.fechaFin">
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="cerrarAgregarModal()">Cerrar</button>
-          <button type="button" class="btn btn-primary" (click)="guardarNuevaVacacion()">Guardar</button>
-        </div>
       </div>
-    </div>
   </div>
 </div>

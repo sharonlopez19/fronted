@@ -16,14 +16,15 @@ app-menu {
   padding: 20px;
   margin-right: 5%;
   margin-bottom: 20px;
-  margin-left: 15%;
+  /* margin-left: 15%; */ /* <-- Comenta o elimina esta línea */
+  margin-left: 260px;   /* <-- Añade esta línea (Usa el ancho de tu menú + un pequeño espacio extra, ej: 10px) */
   margin-top: 10px;
   display: flex;
   flex-direction: column;
   background-color: #55555500;
   justify-content: flex-start;
   align-items: stretch;
-  overflow-y: auto;
+  overflow-y: auto; /* Mantenemos el scroll vertical si el contenido es largo */
 }
 
 body, html {
@@ -76,9 +77,7 @@ body, html {
   color: white;
 }
 
-.table-striped tbody tr:nth-child(odd) {
-  background-color: #f8f9fa;
-}
+
 
 .btn-acciones {
   border: none;
@@ -220,4 +219,188 @@ body, html {
 
 .button .btn-close {
   color: #0069d9;
+}
+
+.layout {
+  padding: 2rem;
+}
+
+.header-horas {
+  margin-bottom: 1rem;
+}
+
+.agregar-btn {
+  font-size: 14px;
+}
+
+.table {
+  font-size: 14px;
+}
+
+.badge {
+  color: white;
+  padding: 0.5em;
+  border-radius: 0.5rem;
+}
+
+/* --- Estilos para el Acordeón en Móvil --- */
+@media (max-width: 1045px) {
+
+  /* Ocultar la cabecera original de la tabla */
+  .table thead {
+    display: none;
+  }
+  
+  /* Forzar a que los elementos de la tabla se comporten como bloques */
+  .table,
+  .table tbody,
+  .table tr.accordion-row, // Apuntamos a nuestras filas específicas
+  .table td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .table tr.accordion-row {
+    margin-top: 12px;
+    margin-bottom: 15px; /* Espacio entre "cartas" del acordeón */
+    padding: 15px 15px 10px 15px; /* Padding interno de la "carta" */
+    border: 1px solid #3a3f5100; /* Borde para definir la "carta" */
+    border-radius: 5px; /* Bordes redondeados */
+    position: relative; /* Para posicionar el indicador +/- */
+    cursor: pointer;
+    background-color: #1e2131; /* Fondo original de las celdas */
+    
+
+    
+  }
+
+  /* Ocultar todas las celdas por defecto en modo acordeón */
+  .table td {
+    display: none;
+    border: none; /* Quitar bordes internos de celda */
+    padding: 8px 0; /* Espaciado vertical para los detalles */
+    text-align: left; /* Alinear texto a la izquierda */
+    color: #ffffff; /* Asegurar color de texto */
+    border-bottom: 1px solid #292c3c; /* Línea separadora sutil entre detalles */
+
+    &:last-child {
+        border-bottom: none; /* No poner línea en el último detalle */
+    }
+  }
+
+  /* Mostrar SIEMPRE la primera celda (Nombre) y darle estilo de cabecera */
+  .table tr.accordion-row td:first-child {
+    display: block;
+    font-weight: bold;
+    font-size: 1.1em; /* Hacer el nombre un poco más grande */
+    padding: 0 30px 10px 0; /* Espacio a la derecha para el +/- y abajo */
+    border-bottom: none; /* El nombre no necesita separador abajo */
+  }
+
+  /* Añadir el indicador +/- */
+   .table tr.accordion-row::before {
+     content: '+'; /* Icono por defecto (colapsado) */
+     position: absolute;
+     right: 15px;
+     top: 12px; /* Ajustar para centrar verticalmente */
+     font-size: 1.8em;
+     font-weight: bold;
+     color: #007bff; /* Color del indicador */
+     line-height: 1;
+   }
+
+   .table tr.accordion-row.expanded::before {
+     content: '-'; /* Icono para expandido */
+   }
+
+
+  /* Mostrar las celdas de detalle SÓLO cuando la fila está expandida */
+  .table tr.accordion-row.expanded td {
+    display: block; /* Mostrar todas las celdas */
+  }
+
+  /* Volver a mostrar el nombre (primera celda) incluso cuando está expandido */
+   .table tr.accordion-row.expanded td:first-child {
+     display: block;
+     margin-bottom: 10px; /* Espacio extra debajo del nombre cuando está expandido */
+   }
+
+
+  /* Usar el 'data-label' para mostrar la etiqueta antes del dato */
+  .table td[data-label]::before {
+    content: attr(data-label); /* Tomar el texto del atributo data-label */
+    font-weight: bold;
+    display: inline-block;
+    min-width: 90px; /* Ancho mínimo para alinear etiquetas */
+    margin-right: 10px; /* Espacio entre etiqueta y dato */
+    color: #a0a0a0; /* Color ligeramente diferente para la etiqueta */
+  }
+
+  /* --- Estilos específicos para los botones de acción en móvil --- */
+  .table td.actions-cell {
+     padding-top: 15px; /* Más espacio antes de los botones */
+     border-bottom: none; /* Sin línea separadora para las acciones */
+  }
+
+   .table td.actions-cell::before {
+       display: none; /* Ocultar la etiqueta "Acciones:" si se prefiere */
+   }
+
+  .table td.actions-cell button {
+    margin-right: 10px; /* Espacio entre botones */
+    margin-bottom: 5px; /* Espacio si se van a línea nueva */
+    /* Podrías hacerlos más grandes o con ancho completo si quieres */
+    // width: 100%;
+    // text-align: center;
+    // margin-bottom: 10px;
+  }
+
+  /* Ajustar badge de estado */
+  .table td[data-label="Estado:"] .badge {
+     vertical-align: middle; /* Alinear mejor el badge con el texto */
+  }
+
+} // Fin de @media (max-width: 1045px)
+
+@media (max-width: 768px) {
+  .contenido-principal {
+    margin-left: 10%; /* Elimina el margen izquierdo para pantallas pequeñas */
+    margin-right: 0; /* O ajusta el margen derecho si es necesario */
+    padding: 10px; /* Reduce el padding si es necesario */
+  }
+
+  .header-horas {
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+
+  .header-horas h3 {
+    font-size: 1.2rem;
+  }
+
+  .agregar-btn {
+    font-size: 12px;
+  }
+
+  .layout {
+    padding: 1rem; /* Reduce el padding general si es necesario */
+  }
+}
+
+
+@media (max-width: 535px) {
+  .contenido-principal {
+    margin-left: 15%; /* Elimina el margen izquierdo para pantallas pequeñas */
+    margin-right: 0; /* O ajusta el margen derecho si es necesario */
+    padding: 10px; /* Reduce el padding si es necesario */
+  }
+}
+
+@media (max-width: 55px) {
+  .contenido-principal {
+    margin-left: 15%; /* Elimina el margen izquierdo para pantallas pequeñas */
+    margin-right: 0; /* O ajusta el margen derecho si es necesario */
+    padding: 10px; /* Reduce el padding si es necesario */
+  }
 }
