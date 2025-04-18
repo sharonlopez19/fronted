@@ -18,23 +18,44 @@
         <span>Perfil</span>
       </a>
       
-        <a class="nav-link" routerLink="/vacantes" routerLinkActive="active">
+        <a class="nav-link" *ngIf="[2, 3 , 5].includes(usuario?.rol)" (click)="navigateTo('/vacantes')" [class.active]="isActive('/vacantes')">
           <i class="fas fa-briefcase"></i>
           <span>Vacantes</span>
+        </a>
+        <a class="nav-link" *ngIf="[1, 4].includes(usuario?.rol)" (click)="navigateTo('/vacantes-admin')" [class.active]="isActive('/vacantes-admin')">
+          <i class="fas fa-briefcase"></i>
+          <span>Vacantes</span>
+        </a>
+
+        <a class="nav-link" *ngIf="[1, 4].includes(usuario?.rol)" (click)="navigateTo('/vacaciones-admin')" [class.active]="isActive('/vacaciones-admin')">
+          <i class="fas fa-suitcase"></i>
+          <span>Vacaciones</span>
         </a>
         <a class="nav-link" *ngIf="[2, 3, 5].includes(usuario?.rol)" (click)="navigateTo('/vacaciones')" [class.active]="isActive('/vacaciones')">
           <i class="fas fa-suitcase"></i>
           <span>Vacaciones</span>
         </a>
-        <a class="nav-link" routerLink="/incapacidades" routerLinkActive="active">
+        <a class="nav-link" *ngIf="[2, 3, 5].includes(usuario?.rol)" (click)="navigateTo('/incapacidades')" [class.active]="isActive('/incapacidades')">
           <i class="fa-solid fa-heart-pulse"></i>
           <span>Incapacidades</span>
         </a>
-        <a class="nav-link" routerLink="/horas-extra" routerLinkActive="active">
+        <a class="nav-link" *ngIf="[1,4].includes(usuario?.rol)" (click)="navigateTo('/incapacidades-admin')" [class.active]="isActive('/incapacidades-admin')">
+          <i class="fa-solid fa-heart-pulse"></i>
+          <span>Incapacidades</span>
+        </a>
+        <a class="nav-link" *ngIf="[2, 3, 5].includes(usuario?.rol)" (click)="navigateTo('/horas-extra')" [class.active]="isActive('/horas-extra')">
           <i class="fas fa-calendar-plus"></i>
           <span>Horas extra</span>
         </a>
-        <a class="nav-link" routerLink="/notificaciones" routerLinkActive="active">
+        <a class="nav-link" *ngIf="[1, 4].includes(usuario?.rol)" (click)="navigateTo('/horas-extra-admin')" [class.active]="isActive('/horas-extra-admin')">
+          <i class="fas fa-calendar-plus"></i>
+          <span>Horas extra</span>
+        </a>
+        <a class="nav-link" *ngIf="[2, 3, 5].includes(usuario?.rol)" (click)="navigateTo('/notificaciones')" [class.active]="isActive('/vacaciones')">
+          <i class="fas fa-bell"></i>
+          <span>Notificaciones</span>
+        </a>
+        <a class="nav-link" *ngIf="[1, 4].includes(usuario?.rol)" (click)="navigateTo('/notificaciones-admin')" [class.active]="isActive('/vacaciones')">
           <i class="fas fa-bell"></i>
           <span>Notificaciones</span>
         </a>

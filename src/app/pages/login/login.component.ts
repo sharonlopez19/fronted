@@ -49,8 +49,11 @@ export class LoginComponent implements OnInit, OnDestroy {
           } else {
             console.warn('res.user está undefined'); // <- Log #4
           }
-  
-          this.router.navigate(['/home']);
+          if(res.user.rol==1 || res.user.rol==4){
+            this.router.navigate(['/directorio']);
+          }else{
+            this.router.navigate(['/home']);
+          }
           this.errorMessage = '';
         } else {
           this.errorMessage = 'Respuesta inválida del servidor.';
