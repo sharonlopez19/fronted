@@ -4,14 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { MenuComponent } from '../menu/menu.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-// Define la interfaz para la estructura de una notificación
+
 interface NotificationItem {
   id: number;
   name: string;
   description: string;
-  date: string; // O Date, si lo guardas como objeto Date
-  // Añadida la propiedad extraDetails
-  extraDetails?: any; // Añade esta línea. Usa 'any' si no sabes el tipo exacto, o define una sub-interfaz si es compleja.
+  date: string; 
+  extraDetails?: any; 
 }
 
 @Component({
@@ -72,23 +71,18 @@ export class NotificacionesAdminComponent {
 
   handleSearch(notification: NotificationItem): void {
     console.log('Lupa clickeada para la notificación:', notification);
-    // Implementa aquí la lógica real que quieras para la lupa
-    // Por ejemplo:
-    // - Redirigir a una página de búsqueda con los datos de la notificación
-    // - Filtrar la lista actual basándose en esta notificación
-    // - Mostrar un mensaje diferente, etc.
+    
 }
 
   aceptarNotificacion(notification: Notification): void {
     console.log('Notificación aceptada:', notification);
-    this.closeDetailsModal(); // Puedes cerrar el modal si lo deseas
-    // Aquí podrías agregar lógica como actualizar un estado o enviar a un servicio
+    this.closeDetailsModal(); 
   }
   
   rechazarNotificacion(notification: Notification): void {
     console.log('Notificación rechazada:', notification);
     this.closeDetailsModal();
-    // Lógica adicional si aplica
+    
   }
   
 

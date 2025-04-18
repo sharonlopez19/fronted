@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MenuComponent } from '../menu/menu.component'; // Ajusta la ruta si es necesario
+import { MenuComponent } from '../menu/menu.component'; 
 
 @Component({
   selector: 'app-notificaciones',
@@ -60,8 +60,7 @@ export class NotificacionesComponent {
 
   aceptarNotificacion(notification: Notification): void {
     console.log('Notificación aceptada:', notification);
-    this.closeDetailsModal(); // Puedes cerrar el modal si lo deseas
-    // Aquí podrías agregar lógica como actualizar un estado o enviar a un servicio
+    this.closeDetailsModal(); 
   }
   
   rechazarNotificacion(notification: Notification): void {

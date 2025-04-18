@@ -16,11 +16,10 @@ import { NotificacionesAdminComponent } from './pages/notificaciones-admin/notif
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  // 🔓 Rutas públicas
+  
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
-  // 🔒 Rutas protegidas agrupadas bajo el guard
   {
     path: '',
     canActivate: [AuthGuard],
@@ -38,10 +37,10 @@ export const routes: Routes = [
     ]
   },
 
-  // 🔁 Redirección a login por defecto
+  
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  // 🚫 Ruta comodín para redirigir cualquier otra URL inválida
+  
   { path: '**', redirectTo: 'login' }
 ];
 
