@@ -11,15 +11,15 @@ import { IncapacidadesComponent } from './pages/incapacidades/incapacidades.comp
 import { HorasExtraComponent } from './pages/horas-extra/horas-extra.component';
 import { NotificacionesComponent } from './pages/notificaciones/notificaciones.component';
 import { FormvacacionesComponent} from './pages/formvacaciones/formvacaciones.component';
+import { NotificacionesAdminComponent } from './pages/notificaciones-admin/notificaciones-admin.component';
 
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  // 🔓 Rutas públicas
+  
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
 
-  // 🔒 Rutas protegidas agrupadas bajo el guard
   {
     path: '',
     canActivate: [AuthGuard],
@@ -32,14 +32,15 @@ export const routes: Routes = [
       { path: 'incapacidades', component: IncapacidadesComponent },
       { path: 'horas-extra', component: HorasExtraComponent },
       { path: 'notificaciones', component: NotificacionesComponent },
+      { path: 'notificaciones-admin', component: NotificacionesAdminComponent },
       { path: 'formvacaciones', component: FormvacacionesComponent }
     ]
   },
 
-  // 🔁 Redirección a login por defecto
+  
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  // 🚫 Ruta comodín para redirigir cualquier otra URL inválida
+  
   { path: '**', redirectTo: 'login' }
 ];
 

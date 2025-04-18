@@ -4,6 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 
+import { AuthService } from '../../services/auth.service';
+
+
+
 export interface Vacante {
   nombre: string;
   cargo: string;
@@ -22,15 +26,35 @@ export interface Vacante {
   styleUrls: ['./directorio.component.scss']
 })
 export class DirectorioComponent {
+  
+ 
+  usuario: any = {};
+
+  constructor(public authService: AuthService) {
+    const raw = localStorage.getItem('usuario');
+    if (raw) {
+      this.usuario = JSON.parse(raw);
+    }
+    
+  }
+  
   vacantes: Vacante[] = [
     { nombre: 'Emma Wilson', cargo: 'Data Analyst', telefono: '321 123 4567', correo: 'emma@company.com', direccion: 'Calle 100 #15-30, Bogotá', estado: 'ACTIVO', foto: 'https://randomuser.me/api/portraits/women/68.jpg' },
     { nombre: 'Noah Smith', cargo: 'UI/UX Designer', telefono: '322 234 5678', correo: 'noah@company.com', direccion: 'Carrera 7 #45-21, Bogotá', estado: 'ACTIVO', foto: 'https://randomuser.me/api/portraits/men/22.jpg' },
     // Puedes agregar más vacantes aquí
   ];
 
+
   vacante: Vacante = this.getNuevaVacante();
   editando: boolean = false;
   vacanteIndex: number = -1;
+
+  // 🆕 Para controlar qué vacante está expandida
+  expandedVacanteIndex: number | null = null;
+
+  toggleVacante(index: number): void {
+    this.expandedVacanteIndex = this.expandedVacanteIndex === index ? null : index;
+  }
 
   getNuevaVacante(): Vacante {
     return {

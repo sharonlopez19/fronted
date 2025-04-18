@@ -1,15 +1,26 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MenuComponent } from '../menu/menu.component'; 
+import { FormsModule } from '@angular/forms';
+import { MenuComponent } from '../menu/menu.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
+
+interface NotificationItem {
+  id: number;
+  name: string;
+  description: string;
+  date: string; 
+  extraDetails?: any; 
+}
 
 @Component({
-  selector: 'app-notificaciones',
+  selector: 'app-notificaciones-admin',
   standalone: true,
-  imports: [CommonModule, MenuComponent],
-  templateUrl: './notificaciones.component.html',
-  styleUrls: ['./notificaciones.component.scss']
+  imports: [CommonModule, FormsModule, MenuComponent, FontAwesomeModule],
+  templateUrl: './notificaciones-admin.component.html',
+  styleUrls: ['./notificaciones-admin.component.scss']
 })
-export class NotificacionesComponent {
+export class NotificacionesAdminComponent {
   notifications = [
     {
       id: 1,
@@ -58,6 +69,11 @@ export class NotificacionesComponent {
   selectedNotification: any = null;
   modalVisible: boolean = false;
 
+  handleSearch(notification: NotificationItem): void {
+    console.log('Lupa clickeada para la notificación:', notification);
+    
+}
+
   aceptarNotificacion(notification: Notification): void {
     console.log('Notificación aceptada:', notification);
     this.closeDetailsModal(); 
@@ -66,7 +82,7 @@ export class NotificacionesComponent {
   rechazarNotificacion(notification: Notification): void {
     console.log('Notificación rechazada:', notification);
     this.closeDetailsModal();
-    // Lógica adicional si aplica
+    
   }
   
 
