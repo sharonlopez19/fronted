@@ -8,18 +8,16 @@
 
 
     <nav class="nav">
-      <div class="nav-section">
-        <a  class="nav-link" *ngIf="[1, 4].includes(usuario?.rol)" (click)="navigateTo('/directorio')" [class.active]="isActive('/directorio')">
-        
-
-          <i class="fas fa-address-book"></i>
-          <span>Directorio</span>
-        </a>
-        <a  class="nav-link" *ngIf="[2, 3, 5].includes(usuario?.rol)" (click)="navigateTo('/perfil')" [class.active]="isActive('/perfil')">
-          
-          <i class="fas fa-address-book"></i>
-          <span>Perfil</span>
-        </a>
+      <div class="nav-section"><a *ngIf="[1, 4].includes(usuario?.rol)" class="nav-link" (click)="navigateTo('/directorio')" [class.active]="isActive('/directorio')">
+        <i class="fas fa-address-book"></i>
+        <span>Directorio</span>
+      </a>
+      
+      <a *ngIf="[2, 3, 5].includes(usuario?.rol)" class="nav-link" (click)="navigateTo('/perfil')" [class.active]="isActive('/perfil')">
+        <i class="fas fa-user"></i>
+        <span>Perfil</span>
+      </a>
+      
         <a class="nav-link" routerLink="/vacantes" routerLinkActive="active">
           <i class="fas fa-briefcase"></i>
           <span>Vacantes</span>
