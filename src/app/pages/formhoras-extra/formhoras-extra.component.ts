@@ -3,12 +3,14 @@ import { MenuComponent } from "../menu/menu.component";
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
-interface SolicitudVacaciones {
+interface SolicitudHorasExtra {
   nombre: string;
   cargo: string;
-  fechaInicio: string;
-  fechaFin: string;
-  estado: 'pendiente' | 'rechazado' | 'aprobado';
+  fecha: string;
+  horaInicio: string;
+  horaFin: string;
+  cantidadHoras: number;
+  estado: 'Pendiente' | 'Completado' | 'Rechazado';
 }
 
 @Component({
@@ -18,40 +20,46 @@ interface SolicitudVacaciones {
   templateUrl: './formhoras-extra.component.html',
   styleUrls: ['./formhoras-extra.component.scss']
 })
-export class FormvacacionesComponent implements OnInit {
+export class FormhorasExtraComponent implements OnInit {
   nombre: string = '';
   cargo: string = '';
-  fechaInicio: string = '';
-  fechaFin: string = '';
+  fecha: string = '';
+  horaInicio: string = '';
+  horaFin: string = '';
+  cantidadHoras: number = 0;
 
-  solicitudesVacaciones: SolicitudVacaciones[] = [];
+  solicitudesHorasExtra: SolicitudHorasExtra[] = [];
 
   constructor() { }
 
   ngOnInit(): void {
-    // Puedes agregar lógica para cargar solicitudes previas aquí si es necesario
+    // Aquí podrías cargar solicitudes previas si es necesario
     // Por ejemplo, desde un servicio
   }
 
   enviarSolicitud(): void {
-    const nuevaSolicitud: SolicitudVacaciones = {
+    const nuevaSolicitud: SolicitudHorasExtra = {
       nombre: this.nombre,
       cargo: this.cargo,
-      fechaInicio: this.fechaInicio,
-      fechaFin: this.fechaFin,
-      estado: 'pendiente'
+      fecha: this.fecha,
+      horaInicio: this.horaInicio,
+      horaFin: this.horaFin,
+      cantidadHoras: this.cantidadHoras,
+      estado: 'Pendiente'
     };
 
-    this.solicitudesVacaciones.push(nuevaSolicitud);
-    console.log('Solicitudes de vacaciones:', this.solicitudesVacaciones);
+    this.solicitudesHorasExtra.push(nuevaSolicitud);
+    console.log('Solicitudes de horas extra:', this.solicitudesHorasExtra);
     this.limpiarFormulario();
-    alert('Solicitud de vacaciones enviada.');
+    alert('Solicitud de horas extra enviada.');
   }
 
   limpiarFormulario(): void {
     this.nombre = '';
     this.cargo = '';
-    this.fechaInicio = '';
-    this.fechaFin = '';
+    this.fecha = '';
+    this.horaInicio = '';
+    this.horaFin = '';
+    this.cantidadHoras = 0;
   }
 }
