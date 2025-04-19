@@ -3,13 +3,13 @@
 <div class="layout">
   <div class="contenido-principal">
     <div class="header-horas d-flex justify-content-between align-items-center">
-      <h3>Solicitud de Horas extra</h3>
+      <h3>Solicitud de Vacaciones</h3>
     </div>
 
     <div class="main-content">
       <div class="purple-container">
         <div class="formulario-vacaciones">
-          <h2>Formulario de Petición de Horas Extra</h2>
+          <h2>Formulario de Petición de Vacaciones</h2>
           <form class="vacaciones-form" (ngSubmit)="enviarSolicitud()">
             <div class="form-group">
               <label for="nombre">Nombre:</label>
@@ -22,23 +22,13 @@
             </div>
 
             <div class="form-group">
-              <label for="fecha">Fecha:</label>
-              <input type="date" id="fecha" name="fecha" [(ngModel)]="fecha" required>
+              <label for="fechaInicio">Fecha Inicio:</label>
+              <input type="date" id="fechaInicio" name="fechaInicio" [(ngModel)]="fechaInicio" required>
             </div>
 
             <div class="form-group">
-              <label for="horaInicio">Hora Inicio:</label>
-              <input type="time" id="horaInicio" name="horaInicio" [(ngModel)]="horaInicio" required>
-            </div>
-
-            <div class="form-group">
-              <label for="horaFin">Hora Final:</label>
-              <input type="time" id="horaFin" name="horaFin" [(ngModel)]="horaFin" required>
-            </div>
-
-            <div class="form-group">
-              <label for="cantidadHoras">Cantidad de Horas:</label>
-              <input type="number" id="cantidadHoras" name="cantidadHoras" [(ngModel)]="cantidadHoras" min="0" required>
+              <label for="fechaFin">Fecha Fin:</label>
+              <input type="date" id="fechaFin" name="fechaFin" [(ngModel)]="fechaFin" required>
             </div>
 
             <button type="submit" class="btn-submit">Enviar Solicitud</button>
@@ -48,15 +38,13 @@
         <div class="lista-solicitudes">
           <h2>Solicitudes Enviadas</h2>
           <ul class="solicitudes-lista">
-            <li *ngFor="let solicitud of solicitudesHorasExtra">
+            <li *ngFor="let solicitud of solicitudesVacaciones">
               <strong>Nombre:</strong> {{ solicitud.nombre }}<br>
               <strong>Cargo:</strong> {{ solicitud.cargo }}<br>
-              <strong>Fecha:</strong> {{ solicitud.fecha }}<br>
-              <strong>Hora Inicio:</strong> {{ solicitud.horaInicio }} | <strong>Hora Final:</strong> {{ solicitud.horaFin }}<br>
-              <strong>Cantidad de Horas:</strong> {{ solicitud.cantidadHoras }}<br>
-              <strong>Estado:</strong> <span [ngClass]="{'Completado': solicitud.estado === 'Completado', 'Pendiente': solicitud.estado === 'Pendiente', 'Rechazado': solicitud.estado === 'Rechazado' }">{{ solicitud.estado }}</span>
+              <strong>Inicio:</strong> {{ solicitud.fechaInicio }} | <strong>Fin:</strong> {{ solicitud.fechaFin }}<br>
+              <strong>Estado:</strong> <span [ngClass]="{'Pendiente': solicitud.estado === 'pendiente', 'rechazado': solicitud.estado === 'rechazado', 'aprobado': solicitud.estado === 'aprobado' }">{{ solicitud.estado }}</span>
             </li>
-            <li *ngIf="solicitudesHorasExtra.length === 0">
+            <li *ngIf="solicitudesVacaciones.length === 0">
               No hay solicitudes enviadas aún.
             </li>
           </ul>
