@@ -42,5 +42,11 @@ export class MenuComponent implements OnInit{
   isActive(path: string): boolean {
     return this.router.url === path;
   }
+  isSubmenuOpen = false;
+
+  toggleSubmenu(): void {
+    this.isSubmenuOpen = !this.isSubmenuOpen;
+  }
+
   
 }

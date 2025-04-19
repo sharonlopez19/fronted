@@ -191,9 +191,38 @@
       }
     }
   }
+  /* Submenú de "Directorio" */
+  .submenu {
+    padding-left: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .submenu .nav-link {
+    background-color: transparent;
+    font-size: 14px;
+    padding: 0.5rem 1rem !important;
+  }
+
+  .submenu .nav-link i {
+    font-size: 0.95rem;
+    margin-right: 10px;
+  }
+
+  /* Indicador de submenú (flecha) */
+  .submenu-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-right: 1rem;
+  }
+
 
   // Media queries para responsive
-  @media (max-width: 768px) {
+  @media (max-width: 945px) {
     .sidebar {
       width: 70px;
 

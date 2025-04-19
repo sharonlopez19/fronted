@@ -15,7 +15,7 @@
           <div 
             class="vacante-item" 
             *ngFor="let vacante of vacantes"
-            [class.active]="vacanteSeleccionada?.id === vacante.id">
+            [class.active]="vacanteSeleccionada.id === vacante.id">
             
             <div class="d-flex align-items-center justify-content-between w-100">
               <div 
@@ -40,16 +40,16 @@
 
       <div class="col-lg-4 col-md-12">
         <div class="detalles-panel">
-          <h4 class="detalles-title text-center mb-4">{{ vacanteSeleccionada?.titulo }}</h4>
+          <h4 class="detalles-title text-center mb-4">{{ vacanteSeleccionada.titulo }}</h4>
 
           <div class="detalles-section">
             <h5 class="section-title">Descripción</h5>
-            <p>{{ vacanteSeleccionada?.descripcion }}</p>
+            <p>{{ vacanteSeleccionada.descripcion }}</p>
           </div>
 
           <div class="detalles-section">
             <h5 class="section-title">Salario</h5>
-            <p class="salary">{{ vacanteSeleccionada?.salario }}</p>
+            <p class="salary">{{ vacanteSeleccionada.salario }}</p>
           </div>
 
           <div class="detalles-section">
