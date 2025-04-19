@@ -1,0 +1,143 @@
+<app-menu></app-menu>
+
+<div class="layout">
+  <div class="contenido-principal">
+    <div class="header-horas d-flex justify-content-between align-items-center">
+      <h3>Directorio Usuarios</h3>
+      <button
+        class="btn btn-light btn-sm agregar-btn"
+        data-bs-toggle="modal"
+        data-bs-target="#agregarusuariosModal"
+        *ngIf="[1, 4].includes(usuario?.rol)"
+      >
+        <i class="fas fa-plus-circle"></i> Agregar
+      </button>
+    </div>
+
+    <!-- Tabla: visible en pantallas grandes -->
+    <div class="table-responsive d-none d-md-block">
+      <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Nombre</th>
+            <th>Teléfono</th>
+            <th>Correo</th>
+            <th>Dirección</th>
+            <th>N° Documento</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuario; let i = index">
+            <td>{{ nombreCompleto(usuario) }}</td>
+            <td>{{ usuario.telefono }}</td>
+            <td>{{ usuario.email }}</td>
+            <td>{{ usuario.direccion }}</td>
+            <td>{{ usuario.numDocumento }}</td>
+            <td>
+              <button class="btn btn-link btn-acciones editar" data-bs-toggle="modal" data-bs-target="#editarusuariosModal" (click)="editarusuarios(usuario, i)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-link btn-acciones eliminar" (click)="confirmDelete(i)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tarjetas: visible en pantallas pequeñas -->
+    <div class="d-md-none">
+      <div class="row">
+        <div class="col-12 mb-3" *ngFor="let usuario of usuario; let i = index">
+          <div class="card">
+            <div class="card-body">
+              <p class="mb-2"><strong>Nombre:</strong> {{ nombreCompleto(usuario) }}</p>
+              <p class="mb-2"><strong>Teléfono:</strong> {{ usuario.telefono }}</p>
+              <p class="mb-2"><strong>Correo:</strong> {{ usuario.email }}</p>
+              <p class="mb-2"><strong>Dirección:</strong> {{ usuario.direccion }}</p>
+              <p class="mb-2"><strong>N° Documento:</strong> {{ usuario.numDocumento }}</p>
+            </div>
+
+            <div class="card-footer d-flex justify-content-end gap-2">
+              <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarusuariosModal" (click)="editarusuarios(usuario, i)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-outline-danger btn-sm" (click)="confirmDelete(i)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Agregar -->
+    <div class="modal fade" id="agregarusuariosModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Agregar usuario</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form >
+              <ng-container *ngTemplateOutlet="formulariousuarios"></ng-container>
+              <button type="submit" class="btn btn-primary">Agregar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Editar -->
+    <div class="modal fade" id="editarusuariosModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Editar usuario</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form >
+              <ng-container *ngTemplateOutlet="formulariousuarios"></ng-container>
+              <button type="submit" class="btn btn-primary">Guardar cambios</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulario reutilizable -->
+    <ng-template #formulariousuarios>
+      <div class="mb-3">
+        <label class="form-label">Teléfono</label>
+        <input
+          class="form-control"
+          [(ngModel)]="usuarioSeleccionado.telefono"
+          name="telefono"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Correo</label>
+        <input
+          class="form-control"
+          [(ngModel)]="usuarioSeleccionado.email"
+          name="correo"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Dirección</label>
+        <input
+          class="form-control"
+          [(ngModel)]="usuarioSeleccionado.direccion"
+          name="direccion"
+          required
+        />
+      </div>
+    </ng-template>
+  </div>
+</div>
