@@ -13,6 +13,8 @@ import { NotificacionesComponent } from './pages/notificaciones/notificaciones.c
 import { FormvacacionesComponent} from './pages/formvacaciones/formvacaciones.component';
 import { NotificacionesAdminComponent } from './pages/notificaciones-admin/notificaciones-admin.component';
 import { FormhorasExtraComponent} from './pages/formhoras-extra/formhoras-extra.component';
+// Importa el nuevo componente
+import { FormIncapacidadesComponent } from './pages/form-incapacidades/form-incapacidades.component';
 
 import { AuthGuard } from './guards/auth.guard';
 
@@ -35,7 +37,9 @@ export const routes: Routes = [
       { path: 'notificaciones', component: NotificacionesComponent },
       { path: 'notificaciones-admin', component: NotificacionesAdminComponent },
       { path: 'formvacaciones', component: FormvacacionesComponent },
-      { path: 'formhoras-extra', component: FormhorasExtraComponent }
+      { path: 'formhoras-extra', component: FormhorasExtraComponent },
+      // Agrega la ruta para el nuevo componente
+      { path: 'form-incapacidades', component: FormIncapacidadesComponent }
     ]
   },
 
