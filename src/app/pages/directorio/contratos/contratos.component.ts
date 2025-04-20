@@ -30,6 +30,7 @@ export class ContratosComponent implements OnInit{
   numDocumento: any[] = [];
   totalPages=5;
   archivoSeleccionado: File | null = null;
+  tiposContrato: any[] = [];
 
   contratoSeleccionado: Contratos = {
     numDocumento: 0, // ✅ ahora está correcto
@@ -57,7 +58,20 @@ export class ContratosComponent implements OnInit{
         console.log('contrato cargado:', this.contratos);
       }
     });
+    this.obtenerTiposContrato();
   }
+  obtenerTiposContrato(): void {
+    this.contratosService.obtenerTiposContrato().subscribe({
+      next: (data) => {
+        this.tiposContrato = data;
+        console.log('Tipos de documento cargados:', this.tiposContrato);
+      },
+      error: (error) => {
+        console.error('Error al cargar tipos de documento', error);
+      }
+    });
+  }
+  
   onFileSelected(event: any): void {
     this.archivoSeleccionado = event.target.files[0];
 
@@ -78,10 +92,6 @@ export class ContratosComponent implements OnInit{
   editarContrato(contrato: any, i: number) {
     this.contratoSeleccionado = { ...contrato };
   }
-  
-
-  
-
   confirmDelete(index: number): void {
     const contrato = this.contratos[index];
   
@@ -152,12 +162,26 @@ export class ContratosComponent implements OnInit{
   
     this.contratosService.agregarContrato(formData).subscribe({
       next: (res) => {
-        Swal.fire('¡Agregado!', 'El contrato ha sido guardado correctamente.', 'success');
+       Swal.fire({
+                 title: '¡OK!',
+                 text: 'El contrato fue creado exitosamente.',
+                 icon: 'success',
+                 confirmButtonText: 'Aceptar'
+               }).then(() => {
+                 location.reload(); // 👈 recarga la página cuando se cierre el alert
+               });
         this.cargarContratos();
       },
       error: (err) => {
         console.error('Error al guardar:', err);
-        Swal.fire('Error', 'No se pudo guardar el contrato.', 'error');
+        Swal.fire({
+                  title: '¡ERROR!',
+                  text: 'El usuario no se pudo crear.',
+                  icon: 'error',
+                  confirmButtonText: 'Aceptar'
+                }).then(() => {
+                  location.reload(); // 👈 recarga la página cuando se cierre el alert
+                });
       }
     });
   }
@@ -199,7 +223,14 @@ export class ContratosComponent implements OnInit{
       },
       error: (err) => {
         console.error('Error al actualizar contrato:', err);
-        Swal.fire('Error', 'No se pudo actualizar el contrato.', 'error');
+        Swal.fire({
+                  title: '¡Error!',
+                  text: 'Algo salio mal no se pudo actualizar.',
+                  icon: 'error',
+                  confirmButtonText: 'Aceptar'
+                }).then(() => {
+                  location.reload(); // 👈 recarga la página cuando se cierre el alert
+                });
       }
     });
     

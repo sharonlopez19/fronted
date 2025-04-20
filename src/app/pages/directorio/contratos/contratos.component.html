@@ -91,6 +91,14 @@
                 <p><strong>Estado:</strong> {{ contrato.estado }}</p>
                 <p><strong>Fecha Ingreso:</strong> {{ contrato.fechaIngreso }}</p>
                 <p><strong>Fecha Final:</strong> {{ contrato.fechaFinal }}</p>
+                <p><strong>Documento File:</strong><img 
+                  [src]="'http://localhost:8000/' + contrato.documento"
+                  alt="Documento"
+                  class="img-thumbnail border border-secondary shadow-sm"
+                  style="max-width: 5%; height: auto; object-fit: contain; cursor: pointer; margin-left: 2%;"
+                  (click)="abrirModalImagen(contrato.documento)"
+                />
+                </p>
               </div>
               <div class="card-footer d-flex justify-content-end gap-2">
                 <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarContratoModal" (click)="editarContrato(contrato, i)">
@@ -123,12 +131,26 @@
                 </div>
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Tipo de Contrato</label>
-                  <input class="form-control" [(ngModel)]="contratoSeleccionado.tipoContratoId" name="tipoContratoId" required />
+                  <select class="form-control" [(ngModel)]="contratoSeleccionado.tipoContratoId" name="tipoContratoId" required>
+                    <option [ngValue]="0">Seleccione Tipo de Contrato</option>
+                    <option *ngFor="let tipo of tiposContrato" [ngValue]="tipo.idTipoContrato">
+                      {{ tipo.nomTipoContrato }}
+                    </option>
+                  </select>
                 </div>
+                
+                
+                
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Estado</label>
-                  <input class="form-control" [(ngModel)]="contratoSeleccionado.estado" name="estado" required />
+                  <select class="form-control" [(ngModel)]="contratoSeleccionado.estado" name="estado" required>
+              
+                    <option [ngValue]="1">Activo</option>
+                    <option [ngValue]="2">Bloqueado</option>
+                    <option [ngValue]="3">Cancelado</option>
+                  </select>
                 </div>
+                
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Fecha Ingreso</label>
                   <input type="date" class="form-control" [(ngModel)]="contratoSeleccionado.fechaIngreso" name="fechaIngreso" required />
@@ -259,20 +281,20 @@
       />
     </div>
     <!-- Modal para mostrar imagen -->
-<div class="modal fade" id="modalImagen" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content bg-dark text-white">
-      <div class="modal-header">
-        <h5 class="modal-title">Vista previa</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body text-center">
-        <img [src]="imagenSeleccionada" alt="Documento" class="img-fluid rounded" />
+    <div class="modal fade" id="modalImagen" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content bg-dark text-white">
+          <div class="modal-header">
+            <h5 class="modal-title">Vista previa</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body text-center">
+            <img [src]="imagenSeleccionada" alt="Documento" class="img-fluid rounded" />
 
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
 
   </ng-template>

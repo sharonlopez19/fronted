@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     localStorage.setItem('usuario', JSON.stringify(res.user));
                 }
                 if (res.user.rol == 1 || res.user.rol == 4) {
-                    this.router.navigate(['/directorio']);
+                    this.router.navigate(['/directorio/usuarios']);
                 } else {
                     this.router.navigate(['/home']);
                 }
