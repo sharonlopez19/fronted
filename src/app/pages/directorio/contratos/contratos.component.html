@@ -4,7 +4,7 @@
   <div class="contenido-principal">
     <div class="header-horas d-flex justify-content-between align-items-center">
       <h3>Gestión de Contratos</h3>
-      <button class="btn btn-light btn-sm agregar-btn" data-bs-toggle="modal" data-bs-target="#agregarVacanteModal" *ngIf="[1, 4].includes(usuario?.rol)" (click)="abrirModalAgregar()">
+      <button class="btn btn-light btn-sm agregar-btn" data-bs-toggle="modal" data-bs-target="#agregarContratoModal" *ngIf="[1, 4].includes(usuario?.rol)" (click)="abrirModalAgregar()">
         <i class="fas fa-plus-circle"></i> Agregar
       </button>
     </div>
@@ -13,11 +13,15 @@
       <div class="mb-3">
         <input
           type="text"
-          class="form-control"
-          placeholder="Buscar por documento o fechas..."
+          class="form-control text-white border-0 py-2"
+          placeholder="Buscar por documento o estado..."
           [(ngModel)]="filtroNombre"
+          style="background-color: #1d2233; color: white; border: 1px solid #7a86a1;"
         />
       </div>
+      
+      
+      
 
       <!-- Tabla de contratos -->
       <div class="table-responsive d-none d-md-block">
@@ -29,6 +33,7 @@
               <th>Estado</th>
               <th>Fecha Ingreso</th>
               <th>Fecha Final</th>
+              <th>Documento file</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -40,10 +45,20 @@
               <td>{{ contrato.fechaIngreso }}</td>
               <td>{{ contrato.fechaFinal }}</td>
               <td>
-                <button class="btn btn-link editar" data-bs-toggle="modal" data-bs-target="#editarContratoModal" (click)="editarContrato(contrato, i)">
+                <img 
+                  [src]="'http://localhost:8000/'+contrato.documento"
+                  alt="Documento"
+                  class="img-thumbnail"
+                  style="max-width: 80px; cursor: pointer;"
+                  (click)="abrirModalImagen(contrato.documento)"
+                />
+              </td>
+              
+              <td>
+                <button class="btn btn-link btn-acciones editar" data-bs-toggle="modal" data-bs-target="#editarContratoModal" (click)="editarContrato(contrato, i)">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn btn-link eliminar" (click)="confirmDelete(i)">
+                <button class="btn btn-link btn-acciones eliminar" (click)="confirmDelete(i)">
                   <i class="fas fa-trash-alt"></i>
                 </button>
               </td>
@@ -99,7 +114,7 @@
             <h5 class="modal-title">Agregar Contrato</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
-          <form (ngSubmit)="agregarContrato()" #formAgregar="ngForm">
+          <form (ngSubmit)="agregarContrato()" #formAgregar="ngForm" enctype="multipart/form-data">
             <div class="modal-body">
               <div class="row">
                 <div class="col-md-6 mb-3">
@@ -124,7 +139,13 @@
                 </div>
                 <div class="col-md-6 mb-3">
                   <label class="form-label">Documento adjunto</label>
-                  <input class="form-control" [(ngModel)]="contratoSeleccionado.documento" name="documento" required />
+                  <input 
+                      type="file" 
+                      class="form-control text-light fw-semibold" 
+                      name="documento" 
+                      (change)="onFileSelected($event)" 
+                      required
+                      style="background-color: #1e2235; border: 1px solid #5a5f78; font-size: 1.1rem;" />
                 </div>
               </div>
             </div>
@@ -136,23 +157,7 @@
         </div>
       </div>
     </div>
-    <!-- Modal Agregar Contrato -->
-<div class="modal fade" id="agregarContratoModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Agregar Contrato</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <form (ngSubmit)="agregarContrato()">
-            <ng-container *ngTemplateOutlet="formularioContratoAgregar"></ng-container>
-            <button type="submit" class="btn btn-primary">Agregar</button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+    
   
     <!-- Modal Editar Contrato -->
     <div class="modal fade" id="editarContratoModal" tabindex="-1" aria-hidden="true">
@@ -179,7 +184,7 @@
     <ng-template #formularioContrato>
       <div class="mb-3">
         <label class="form-label">Estado</label>
-        <input class="form-control" [(ngModel)]="contratoSeleccionado.estado" name="estado" required />
+        <input type="number" class="form-control" [(ngModel)]="contratoSeleccionado.estado" name="estado" required />
       </div>
       <div class="mb-3">
         <label class="form-label">Fecha Ingreso</label>
@@ -190,8 +195,8 @@
         <input type="date" class="form-control" [(ngModel)]="contratoSeleccionado.fechaFinal" name="fechaFinal" required />
       </div>
       <div class="mb-3">
-        <label class="form-label">Documento</label>
-        <input class="form-control" [(ngModel)]="contratoSeleccionado.documento" name="documento" required />
+        <label class="form-label">Numero Documento</label>
+        <input type="number" class="form-control" [(ngModel)]="contratoSeleccionado.documento" name="numDocumento" required />
       </div>
     </ng-template>
   </div>
@@ -253,6 +258,23 @@
         required
       />
     </div>
+    <!-- Modal para mostrar imagen -->
+<div class="modal fade" id="modalImagen" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Vista previa</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img [src]="imagenSeleccionada" alt="Documento" class="img-fluid rounded" />
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
   </ng-template>
   
 <ng-template #sinPermiso>

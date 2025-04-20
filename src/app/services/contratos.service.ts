@@ -19,7 +19,7 @@ export interface Contratos {
 })
 export class ContratosService {
   
-  private apiUrl = 'http://localhost:8000/api/contratos';
+  private apiUrl = 'http://localhost:8000/api/contrato';
 
   constructor(private http: HttpClient) {}
   
@@ -32,8 +32,8 @@ export class ContratosService {
     );
   }
 
-  agregarContrato(contratos: any) {
-    return this.http.post<Contratos>('http://localhost:8000/api/contratos', contratos);
+  agregarContrato(contrato: any) {
+    return this.http.post<Contratos>('http://localhost:8000/api/contrato', contrato);
   }
   
   obtenerNacionalidades(): Observable<any[]> {
@@ -42,7 +42,7 @@ export class ContratosService {
     );
   }
   actualizarContratoParcial(id: number, datos: Partial<Contratos>): Observable<any> {
-    return this.http.patch<any>(`http://localhost:8000/api/contratos/${id}`, datos);
+    return this.http.patch<any>(`http://localhost:8000/api/contrato/${id}`, datos);
   }
   
   obtenerEps(): Observable<any[]> {
@@ -51,14 +51,14 @@ export class ContratosService {
     );
   }
   eliminarContrato(id: number): Observable<any> {
-    return this.http.delete<any>(`http://localhost:8000/api/contratos/${id}`);
+    return this.http.delete<any>(`http://localhost:8000/api/contrato/${id}`);
   }
   obtenerUsuarioPorDocumento(documento: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${documento}`);
   }
   
   obtenerContrato(id: number): Observable<any> {
-    return this.http.get<any>(`http://localhost:8000/api/contratos/${id}`);
+    return this.http.get<any>(`http://localhost:8000/api/contrato/${id}`);
   }
   
   obtenerGeneros(): Observable<any[]> {

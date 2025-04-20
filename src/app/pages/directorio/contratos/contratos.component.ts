@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import { Route } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FilterNombre } from './filter-nombre'; 
+declare var bootstrap: any;
 
 
 
@@ -18,6 +19,7 @@ import { FilterNombre } from './filter-nombre';
   templateUrl: './contratos.component.html',
   styleUrls: ['./contratos.component.scss']
 })
+
 export class ContratosComponent implements OnInit{
   contratos: Contratos[] = [];
   filtroNombre: string ="";
@@ -27,7 +29,8 @@ export class ContratosComponent implements OnInit{
   tipoContratoId: any[] = [];
   numDocumento: any[] = [];
   totalPages=5;
- 
+  archivoSeleccionado: File | null = null;
+
   contratoSeleccionado: Contratos = {
     numDocumento: 0, // ✅ ahora está correcto
     tipoContratoId: 1,
@@ -55,7 +58,11 @@ export class ContratosComponent implements OnInit{
       }
     });
   }
+  onFileSelected(event: any): void {
+    this.archivoSeleccionado = event.target.files[0];
 
+  }
+  
   cargarContratos(): void {
     this.contratosService.obtenerContratos().subscribe({
       next: (data) => {
@@ -130,37 +137,46 @@ export class ContratosComponent implements OnInit{
     }
   }
   agregarContrato(): void {
-    const contratoABase = {
-      idContrato: this.nuevocontrato.idCOntrato,
-      numDocumento: this.nuevocontrato.numDocumento,
-      tipoContratoId: this.nuevocontrato.tipoContratoId,
-      estado: this.nuevocontrato.estado,
-      fechaIngreso: this.nuevocontrato.fechaIngreso,
-      fechaFinal: this.nuevocontrato.fechaFinal,
-      documento: this.nuevocontrato.documento,
+    const formData = new FormData();
+  
+    formData.append('numDocumento', this.contratoSeleccionado.numDocumento.toString());
+    formData.append('tipoContratoId', this.contratoSeleccionado.tipoContratoId.toString());
+    formData.append('estado', this.contratoSeleccionado.estado.toString());
 
-    };
+    formData.append('fechaIngreso', this.contratoSeleccionado.fechaIngreso);
+    formData.append('fechaFinal', this.contratoSeleccionado.fechaFinal);
   
-    console.log('contrato a guardar:', contratoABase);
+    if (this.archivoSeleccionado) {
+      formData.append('documento', this.archivoSeleccionado);
+    }
   
-    // Simulamos el guardado
-    this.contratos.push(contratoABase);
-    this.nuevocontrato = {}; // limpiar formulario
-    this.contratosService.agregarContrato(contratoABase).subscribe({
-      next: (res: Contratos) => {
-        console.log('Guardado en base de datos:', res);
-        this.contratos.push(res); // opcional si el backend devuelve el contrato guardado
+    this.contratosService.agregarContrato(formData).subscribe({
+      next: (res) => {
         Swal.fire('¡Agregado!', 'El contrato ha sido guardado correctamente.', 'success');
-        this.nuevocontrato = {};
+        this.cargarContratos();
       },
       error: (err) => {
-        console.error('Error al guardar en base de datos:', err);
+        console.error('Error al guardar:', err);
         Swal.fire('Error', 'No se pudo guardar el contrato.', 'error');
       }
     });
-  
-    
   }
+  imagenSeleccionada: string = '';
+   
+
+  abrirModalImagen(url: string) {
+    this.imagenSeleccionada =  url;
+    setTimeout(() => {
+      const modalElement = document.getElementById('modalImagen');
+      if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+      } else {
+        console.error('Modal no encontrado en el DOM');
+      }
+    });
+  }
+
   actualizarContrato(): void {
     if (!this.contratoSeleccionado || !this.contratoSeleccionado.numDocumento) return;
   
@@ -186,6 +202,7 @@ export class ContratosComponent implements OnInit{
         Swal.fire('Error', 'No se pudo actualizar el contrato.', 'error');
       }
     });
+    
   }
   abrirModalAgregar(): void {
     this.nuevocontrato = {
