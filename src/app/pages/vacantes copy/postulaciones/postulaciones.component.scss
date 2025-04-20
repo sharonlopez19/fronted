@@ -100,11 +100,19 @@
      display: inline-flex;
      align-items: center;
      justify-content: center;
+     text-decoration: none; /* ** CORREGIDO: Quitar subrayado del enlace ** */
 
 
     i {
-      font-size: 1.4rem;
+      font-size: 1.4rem; // Tamaño por defecto de los iconos
+      color: white;
     }
+
+    /* Estilo específico para el icono del ojo (para hacerlo un poco más pequeño) */
+    i.fa-eye {
+        font-size: 1.2rem; /* ** CORREGIDO: Tamaño un poco más pequeño para el ojo ** */
+    }
+
 
     &.editar i {
       color: #0d6efd;

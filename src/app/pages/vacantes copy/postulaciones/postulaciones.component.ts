@@ -36,10 +36,9 @@ import { MenuComponent } from '../../menu/menu.component';
   // Si usas app-menu directamente aquí y no es standalone, impórtalo
   imports: [
     CommonModule,
-    FormsModule,
+    FormsModule, // Necesario para [(ngModel)] en el modal de edición
     MenuComponent,
     // NgxPaginationModule, // Descomentar si usas paginación
-    // No incluimos el pipe de filtro aquí por ahora
   ],
   templateUrl: './postulaciones.component.html', // Plantilla HTML que creamos
   styleUrls: ['./postulaciones.component.scss'] // Archivo SCSS que copiamos
@@ -52,6 +51,9 @@ export class PostulacionesComponent implements OnInit {
   filtroNombre: string = "";
 
   usuario: any = {}; // Variable para almacenar el usuario logueado (para verificaciones de rol)
+
+  // ** Añadido para manejar la postulación seleccionada para editar/ver detalles **
+  postulacionSeleccionada: Postulacion | null = null;
 
   // Constructor: inyecta los servicios necesarios
   constructor(
@@ -97,62 +99,82 @@ export class PostulacionesComponent implements OnInit {
       { id: 3, fechaPostulacion: '2023-10-24', estado: 'Rechazado', vacanteId: 1 },
       { id: 4, fechaPostulacion: '2023-10-23', estado: 'Pendiente', vacanteId: 3 },
       { id: 5, fechaPostulacion: '2023-10-22', estado: 'Aceptado', vacanteId: 4 },
+      { id: 6, fechaPostulacion: '2023-10-21', estado: 'Rechazado', vacanteId: 2 },
     ];
   }
 
-  // Método placeholder para editar una postulación (ajustar lógica según necesites)
+  // Método para preparar la postulación para editar el estado y abrir el modal
   editarPostulacion(postulacion: Postulacion, index: number): void {
-    console.log('Lógica para editar postulación:', postulacion);
-    // TODO: Implementar lógica para editar, quizás abrir un modal o navegar a otra vista
+    // Creamos una copia para no modificar el objeto original directamente antes de guardar
+    this.postulacionSeleccionada = { ...postulacion };
+    console.log('Editando estado de postulación:', postulacion);
+    // El modal se abre a través de data-bs-toggle en el HTML (#editarEstadoModal)
   }
 
-  // Método placeholder para confirmar la eliminación de una postulación (ajustar lógica)
+   // Método para preparar la postulación para ver detalles y abrir el modal
+  verDetalles(postulacion: Postulacion): void {
+      // Asignamos la postulación seleccionada para mostrarla en el modal
+      this.postulacionSeleccionada = postulacion;
+      console.log('Viendo detalles de postulación:', postulacion);
+      // El modal se abre a través de data-bs-toggle en el HTML (#verDetallesModal)
+  }
+
+
+  // Método para guardar el estado de la postulación (llamado desde el modal de edición)
+  guardarEstadoPostulacion(): void {
+    // Validar si hay una postulación seleccionada y tiene ID para actualizar
+    if (!this.postulacionSeleccionada || this.postulacionSeleccionada.id === undefined) {
+      Swal.fire('Error', 'No se ha seleccionado una postulación válida para actualizar.', 'error');
+      return;
+    }
+
+    // ** CORREGIDO: Asignamos a una variable local para ayudar a TypeScript con la inferencia de nulidad **
+    const selectedPostulacion = this.postulacionSeleccionada;
+
+
+    console.log('Intentando guardar estado de postulación:', selectedPostulacion); // Usamos la variable local
+
+    // TODO: Llama a tu servicio para actualizar solo el estado de la postulación
+    // Esto requeriría un método en tu servicio que pueda actualizar parcialmente la postulación
+    // Usa selectedPostulacion.id y selectedPostulacion.estado
+    // this.postulacionesService.actualizarEstadoPostulacion(selectedPostulacion.id, selectedPostulacion.estado).subscribe({
+    //   next: (res) => {
+    //     console.log('Estado de postulación actualizado en backend:', res);
+    //     // Actualiza la lista localmente si el backend devuelve el objeto actualizado
+    //     const index = this.postulaciones.findIndex(p => p.id === res.id); // Asumiendo que res tiene el ID
+    //      if (index !== -1) {
+    //         this.postulaciones[index].estado = res.estado; // Solo actualiza el estado en la lista local
+    //      }
+
+    //     Swal.fire('¡Actualizado!', 'Estado de postulación guardado correctamente.', 'success');
+    //     // TODO: Cierra el modal de edición de estado manualmente si no usas data-bs-dismiss en el botón de submit
+    //   },
+    //   error: (err) => {
+    //     console.error('Error al actualizar estado de postulación:', err);
+    //     Swal.fire('Error', 'No se pudo guardar el estado de postulación.', 'error');
+    //   }
+    // });
+
+    // TODO: Elimina o reemplaza esta simulación cuando implementes tu servicio real
+    console.log('Simulando guardado de estado:', selectedPostulacion.estado); // Usamos la variable local
+     const index = this.postulaciones.findIndex(p => p.id === selectedPostulacion.id); // Usamos la variable local
+     if (index !== -1) {
+        this.postulaciones[index].estado = selectedPostulacion.estado; // Actualiza el estado en el array local
+     }
+    Swal.fire('¡Actualizado!', 'Estado de postulación guardado correctamente (simulado).', 'success');
+     // TODO: Cierra el modal de edición de estado si es necesario
+     this.postulacionSeleccionada = null; // Limpia la selección
+  }
+
+
+  // Esta función ya no se llama directamente desde el botón con el icono de ojo.
+  // Si necesitas lógica de eliminación para postulaciones, deberías añadir otro botón dedicado a eliminar
+  // (quizás dentro del modal de detalles o como un botón separado en la vista de tarjeta).
   confirmDeletePostulacion(index: number): void {
-    const postulacion = this.postulaciones[index];
-    Swal.fire({
-      title: `¿Eliminar la postulación #${postulacion.id}?`,
-      text: 'Esta acción no se puede deshacer.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar',
-      customClass: {
-        confirmButton: 'btn btn-danger',
-        cancelButton: 'btn btn-secondary'
-      },
-      buttonsStyling: false
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log(`Simulando eliminación de postulación con ID: ${postulacion.id}`);
-        // TODO: Llama a tu servicio para eliminar la postulación
-        // if (postulacion.id === undefined) {
-        //   console.error('ID de postulación no disponible para eliminar.');
-        //   Swal.fire('Error', 'No se pudo eliminar la postulación (ID no disponible).', 'error');
-        //   return;
-        // }
-        // this.postulacionesService.eliminarPostulacion(postulacion.id).subscribe({
-        //   next: (res) => {
-        //     Swal.fire({
-        //       title: 'Eliminada',
-        //       text: `La postulación #${postulacion.id} fue eliminada correctamente.`,
-        //       icon: 'success',
-        //       confirmButtonText: 'Aceptar'
-        //     }).then(() => {
-        //       this.cargarPostulaciones(); // Recargar la lista
-        //     });
-        //   },
-        //   error: (err) => {
-        //     console.error('Error al eliminar postulación:', err);
-        //     Swal.fire('Error', 'No se pudo eliminar la postulación.', 'error');
-        //   }
-        // });
+       console.warn("La función confirmDeletePostulacion no se llama directamente desde el HTML con el icono de ojo. Si necesitas eliminar, añade un botón de eliminar separado.");
+       // Implementa aquí la lógica de eliminación si la necesitas, llamando a tu servicio.
+   }
 
-        // TODO: Elimina o reemplaza esta simulación
-        this.postulaciones.splice(index, 1); // Elimina del array local
-        Swal.fire('¡Eliminada!', `La postulación #${postulacion.id} fue eliminada correctamente (simulado).`, 'success');
-      }
-    });
-  }
 
   // TODO: Si necesitas la funcionalidad de filtrado, puedes:
   // 1. Reintroducir un pipe de filtro (ajustado para las propiedades de Postulacion)
@@ -161,7 +183,7 @@ export class PostulacionesComponent implements OnInit {
   //   if (!this.filtroNombre) {
   //     return this.postulaciones;
   //   }
-  //   // Ejemplo de filtro por ID o VacanteId (adapta según necesites filtrar)
+  //   // Ejemplo de filtro por ID, VacanteId o Estado (adapta según necesites filtrar)
   //   return this.postulaciones.filter(postulacion =>
   //     postulacion.id?.toString().includes(this.filtroNombre) ||
   //     postulacion.vacanteId.toString().includes(this.filtroNombre) ||
