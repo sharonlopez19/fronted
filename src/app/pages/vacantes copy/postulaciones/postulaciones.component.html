@@ -1,1 +1,60 @@
-<p>postulaciones works!</p>
+<app-menu *ngIf="authService.isAuthenticated()"></app-menu>
+
+<div class="layout">
+  <div class="contenido-principal">
+    <div class="header-horas d-flex justify-content-between align-items-center">
+      <h3>Postulaciones</h3>
+      </div>
+
+    <div class="mb-3">
+      <input type="text" class="form-control" placeholder="Buscar..." [(ngModel)]="filtroNombre">
+    </div>
+    <div *ngIf="[1, 4].includes(usuario?.rol); else sinPermiso">
+
+      <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Id</th>
+            <th>Fecha de postulación</th>
+            <th>Estado</th>
+            <th>Vacantes Id</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let postulacion of postulaciones; let i = index">
+            <td data-label="Id">{{ postulacion.id }}</td>
+            <td data-label="Fecha de postulación">{{ postulacion.fechaPostulacion }}</td>
+            <td data-label="Estado">
+              <span
+                [class.bg-success]="postulacion.estado === 'Aceptado'"
+                [class.bg-danger]="postulacion.estado === 'Rechazado'"
+                [class.bg-warning]="postulacion.estado === 'Pendiente'"
+                class="badge"
+              >
+                {{ postulacion.estado }}
+              </span>
+            </td>
+            <td data-label="Vacantes Id">{{ postulacion.vacanteId }}</td>
+            <td data-label="Acciones">
+              <button class="btn btn-link btn-acciones editar" title="Editar" (click)="editarPostulacion(postulacion, i)">
+                <i class="fas fa-edit"></i>
+              </button>
+
+              <button class="btn btn-link btn-acciones eliminar" title="Eliminar" (click)="confirmDeletePostulacion(i)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+    <ng-template #sinPermiso>
+      <div class="alert alert-warning">
+        No tienes permiso para ver esta información.
+      </div>
+    </ng-template>
+
+    </div>
+</div>
