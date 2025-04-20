@@ -16,10 +16,12 @@ import { AreaComponent } from './pages/directorio/area/area.component';
 import { UsuariosComponent } from './pages/directorio/usuarios/usuarios.component';
 import { TrazabilidadComponent } from './pages/directorio/trazabilidad/trazabilidad.component';
 import { ContratosComponent } from './pages/directorio/contratos/contratos.component';
+import { CategoriaVacantesComponent } from './pages/vacantes copy/categoria-vacantes/categoria-vacantes.component';
 
 //import { FormhorasExtraComponent} from './pages/formhoras-extra/formhoras-extra.component';
 
 import { AuthGuard } from './guards/auth.guard';
+
 
 export const routes: Routes = [
   
@@ -44,6 +46,7 @@ export const routes: Routes = [
       { path: 'directorio/usuarios', component: UsuariosComponent},
       { path: 'directorio/contratos', component: ContratosComponent},
       { path: 'directorio/trazabilidad', component: TrazabilidadComponent},
+      { path: 'vacantes copy/categoria-vacantes', component: CategoriaVacantesComponent},
       //{ path: 'formhoras-extra', component: FormhorasExtraComponent}
     ]
   },
