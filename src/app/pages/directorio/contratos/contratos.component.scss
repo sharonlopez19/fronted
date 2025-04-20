@@ -172,6 +172,15 @@
       transform: scale(1.2);
     }
   }
+  .algo {
+    .subclase {
+      color: red;
+    }
+  
+    & {
+      overflow-y: auto; // ✅ esta es la forma futura segura
+    }
+  }
   
   
   

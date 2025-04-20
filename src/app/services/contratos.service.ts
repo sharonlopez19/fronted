@@ -35,6 +35,12 @@ export class ContratosService {
   agregarContrato(contrato: any) {
     return this.http.post<Contratos>('http://localhost:8000/api/contrato', contrato);
   }
+  obtenerTiposContrato(): Observable<any[]> {
+    return this.http.get<any>('http://localhost:8000/api/tipocontrato').pipe(
+      map(res => res.tipocontrato) // 👈 coincide con la respuesta del backend
+    );
+  }
+  
   
   obtenerNacionalidades(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/nacionalidad').pipe(
