@@ -4,7 +4,7 @@
   <div class="contenido-principal">
     <div class="header-horas d-flex justify-content-between align-items-center">
       <h3>Postulaciones</h3>
-    </div>
+      </div>
 
     <div class="mb-3">
       <input type="text" class="form-control" placeholder="Buscar..." [(ngModel)]="filtroNombre">
@@ -23,7 +23,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let postulacion of postulaciones; let i = index">
+          <tr *ngFor="let postulacion of postulaciones | filterPostulacion : filtroNombre; let i = index">
             <td data-label="Id">{{ postulacion.id }}</td>
             <td data-label="Fecha de postulación">{{ postulacion.fechaPostulacion }}</td>
             <td data-label="Estado">
@@ -64,58 +64,58 @@
     </ng-template>
 
     <div class="modal fade" id="editarEstadoModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Editar Estado de Postulación</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <form *ngIf="postulacionSeleccionada" (ngSubmit)="guardarEstadoPostulacion()">
-              <div class="mb-3">
-                <label class="form-label">Estado</label>
-                <select class="form-control" [(ngModel)]="postulacionSeleccionada.estado" name="estado" required>
-                  <option value="Pendiente">Pendiente</option>
-                  <option value="Aceptado">Aceptado</option>
-                  <option value="Rechazado">Rechazado</option>
-                </select>
-              </div>
-              <p *ngIf="postulacionSeleccionada.id !== undefined"><strong>ID de Postulación:</strong> {{ postulacionSeleccionada.id }}</p>
-              <p><strong>Fecha de postulación:</strong> {{ postulacionSeleccionada.fechaPostulacion }}</p>
-               <p><strong>ID de Vacante:</strong> {{ postulacionSeleccionada.vacanteId }}</p>
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Editar Estado de Postulación</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form *ngIf="postulacionSeleccionada" (ngSubmit)="guardarEstadoPostulacion()">
+              <div class="mb-3">
+                <label class="form-label">Estado</label>
+                <select class="form-control" [(ngModel)]="postulacionSeleccionada.estado" name="estado" required>
+                  <option value="Pendiente">Pendiente</option>
+                  <option value="Aceptado">Aceptado</option>
+                  <option value="Rechazado">Rechazado</option>
+                </select>
+              </div>
+              <p *ngIf="postulacionSeleccionada.id !== undefined"><strong>ID de Postulación:</strong> {{ postulacionSeleccionada.id }}</p>
+              <p><strong>Fecha de postulación:</strong> {{ postulacionSeleccionada.fechaPostulacion }}</p>
+               <p><strong>ID de Vacante:</strong> {{ postulacionSeleccionada.vacanteId }}</p>
 
 
-              <button type="submit" class="btn btn-primary">Guardar Estado</button>
-            </form>
-             <div *ngIf="!postulacionSeleccionada">
-                 <p>No se ha seleccionado ninguna postulación para editar el estado.</p>
-             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+              <button type="submit" class="btn btn-primary">Guardar Estado</button>
+            </form>
+             <div *ngIf="!postulacionSeleccionada">
+                 <p>No se ha seleccionado ninguna postulación para editar el estado.</p>
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <div class="modal fade" id="verDetallesModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Detalles de Postulación</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <div *ngIf="postulacionSeleccionada">
-                 <p><strong>ID de Postulación:</strong> {{ postulacionSeleccionada.id }}</p>
-                 <p><strong>Fecha de postulación:</strong> {{ postulacionSeleccionada.fechaPostulacion }}</p>
-                 <p><strong>Estado:</strong> {{ postulacionSeleccionada.estado }}</p>
-                 <p><strong>ID de Vacante:</strong> {{ postulacionSeleccionada.vacanteId }}</p>
-                 </div>
-              <div *ngIf="!postulacionSeleccionada">
-                 <p>No se ha seleccionado ninguna postulación para mostrar detalles.</p>
-             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="modal fade" id="verDetallesModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Detalles de Postulación</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div *ngIf="postulacionSeleccionada">
+                 <p><strong>ID de Postulación:</strong> {{ postulacionSeleccionada.id }}</p>
+                 <p><strong>Fecha de postulación:</strong> {{ postulacionSeleccionada.fechaPostulacion }}</p>
+                 <p><strong>Estado:</strong> {{ postulacionSeleccionada.estado }}</p>
+                 <p><strong>ID de Vacante:</strong> {{ postulacionSeleccionada.vacanteId }}</p>
+                 </div>
+              <div *ngIf="!postulacionSeleccionada">
+                 <p>No se ha seleccionado ninguna postulación para mostrar detalles.</p>
+             </div>
+            </div>
+        </div>
+      </div>
+    </div>
 
 
   </div>
