@@ -9,12 +9,11 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   getUsuario(): Observable<any> {
-    const token = localStorage.getItem('token');  // Obtener el token de autenticación desde el localStorage
+    const token = localStorage.getItem('token'); // Obtener el token de autenticación desde el localStorage
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`  // Incluir el token en los encabezados de la solicitud
+      Authorization: `Bearer ${token}` // Incluir el token en los encabezados de la solicitud
     });
 
-    // Realizar la solicitud GET al backend de Laravel
     return this.http.get<any>(`${this.apiUrl}/user`, { headers });
   }
 
@@ -24,11 +23,11 @@ export class AuthService {
 
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, credentials).pipe(
-        tap((res: any) => {
-            localStorage.setItem('token', res.token);
-        })
+      tap((res: any) => {
+        localStorage.setItem('token', res.token);
+      })
     );
-}
+  }
 
   getProfile(): Observable<any> {
     const headers = new HttpHeaders({
@@ -41,7 +40,6 @@ export class AuthService {
     localStorage.removeItem('token');
   }
 
-  // auth.service.ts
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     return !!token; // ❌ si no hay token, devuelve false
