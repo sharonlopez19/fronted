@@ -110,7 +110,10 @@ export class RegisterComponent {
         this.mensaje = '✅ Registro exitoso 🎉';
         this.registroExitoso = true;
         localStorage.setItem('token', res.token);
-        this.router.navigate([res.redirect || '/home']);
+        if(res.user){
+          localStorage.setItem('usuario', JSON.stringify(res.user));
+        }
+        this.router.navigate(['/home']); // Redirigir a la página principal
         this.resetForm();
       },
       error: (err) => {
