@@ -318,3 +318,19 @@
      font-size: 1rem; // Adjust icon size if needed in card view
    }
 }
+
+.contenido-principal {
+    .mb-3 {
+      input.form-control {
+        background-color: #1d2233;
+        color: white;
+        border: 1px solid #7a86a1;
+        
+        // Opcional: Estilizar también el texto del placeholder
+        &::placeholder {
+          color: #cccccc; // Un tono de blanco más claro para mejor contraste/visibilidad
+          opacity: 1; // Asegura que el placeholder sea visible
+        }
+      }
+    }
+  }

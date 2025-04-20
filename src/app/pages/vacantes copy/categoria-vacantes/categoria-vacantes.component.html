@@ -23,7 +23,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let categoria of categorias; let i = index">
+          <tr *ngFor="let categoria of categorias | filterCategoria : filtroNombre; let i = index">
             <td data-label="ID">{{ categoria.id }}</td>
             <td data-label="Nombre">{{ categoria.nombre }}</td>
             <td data-label="Acciones">
