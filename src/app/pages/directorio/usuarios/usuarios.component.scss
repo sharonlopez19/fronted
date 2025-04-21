@@ -284,5 +284,12 @@
     color: #b0b8d1;
     opacity: 1;
   }
-  
+  .modal-70 {
+    max-width: 70% !important;
+  }
+.modal-body{
+  max-height: 70vh; 
+  overflow-y: auto;
+}  
+
   

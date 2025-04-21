@@ -10,14 +10,17 @@ export interface Usuarios {
   segundoApellido: string;
   telefono: string;
   email: string;
+  email_confirmation: string;
   direccion: string;
   password:string;
+  password_confirmation: string,
   nacionalidadId?: number | null;
   epsCodigo?: string | null;
   generoId?: number | null;
   tipoDocumentoId?: number | null;
   estadoCivilId?: number | null;
   pensionesCodigo?: string | null;
+  rol?: number | null;
   // Agrega más campos si los necesitas en el frontend
 }
 
@@ -38,6 +41,8 @@ export class UsuariosService {
     );
   }
   agregarUsuario(usuario: any) {
+    console.log('Usuario que se enviará a Laravel:', usuario);
+
     return this.http.post<Usuarios>('http://localhost:8000/api/usuarios', usuario);
   }
   
@@ -50,11 +55,6 @@ export class UsuariosService {
     return this.http.patch<any>(`http://localhost:8000/api/usuarios/${id}`, datos);
   }
   
-  obtenerEps(): Observable<any[]> {
-    return this.http.get<any>('http://localhost:8000/api/epss').pipe(
-      map(res => res.Eps) // 👈 Ajusta según la estructura real
-    );
-  }
   eliminarUsuario(id: number): Observable<any> {
     return this.http.delete<any>(`http://localhost:8000/api/usuarios/${id}`);
   }
@@ -64,27 +64,47 @@ export class UsuariosService {
   
   obtenerGeneros(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/genero').pipe(
-      map(res => res.Genero) // 👈 Ajusta según la estructura real
+      map(res => res.genero) // 👈 Ajusta según la estructura real
     );
   }
   
   obtenerTiposDocumento(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/tipodocumento').pipe(
-      map(res => res.TipoDocumento) // 👈 Ajusta según la estructura real
+      map(res => res.tipodocumento) // 👈 Ajusta según la estructura real
     );
   }
   
   obtenerEstadosCiviles(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/estadocivil').pipe(
-      map(res => res.EstadoCivil) // 👈 Ajusta según la estructura real
+      map(res => res.estadocivil) // 👈 Ajusta según la estructura real
+    );
+  }
+  
+  obtenerEps(): Observable<any[]> {
+    return this.http.get<any>('http://localhost:8000/api/epss').pipe(
+      map(res => res.eps) // debe coincidir con la estructura del JSON
     );
   }
   
   obtenerPensiones(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/pensiones').pipe(
-      map(res => res.Pensiones) // 👈 Ajusta según la estructura real
+      map(res => res.pensiones)
     );
   }
+  obtenerRoles(): Observable<any[]> {
+    return this.http.get<any>('http://localhost:8000/api/rols').pipe(
+      map(res => res.rol) // 👈 asegurate que la clave sea correcta
+    );
+  }
+  verificarExistenciaUsuario(email: string, documento: number): Observable<boolean> {
+    return this.http.get<any>(`http://localhost:8000/api/verificar-usuario`, {
+      params: { email, documento }
+    }).pipe(
+      map(res => res.existe)
+    );
+  }
+  
+    
   
   
   

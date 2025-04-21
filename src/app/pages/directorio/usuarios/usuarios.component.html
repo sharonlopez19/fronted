@@ -4,7 +4,15 @@
   <div class="contenido-principal">
     <div class="header-horas d-flex justify-content-between align-items-center">
       <h3>Directorio Usuarios</h3>
-      
+      <button
+        class="btn btn-light btn-sm agregar-btn"
+        data-bs-toggle="modal"
+        data-bs-target="#agregarusuariosModal"
+        *ngIf="[1, 4].includes(usuario?.rol)"
+        (click)="abrirModalAgregar()"
+      >
+        <i class="fas fa-plus-circle"></i> Agregar
+      </button>
     </div>
 
     <div *ngIf="[1, 4].includes(usuario?.rol); else sinPermiso">
@@ -16,7 +24,6 @@
           class="form-control"
           placeholder="Buscar por nombre o Numero de documento..."
           [(ngModel)]="filtroNombre"
-          style="background-color: #1d2233; color: white; border: 1px solid #7a86a1;"
         />
       </div>
 
@@ -35,7 +42,10 @@
           <tbody>
             <tr
               *ngFor="
-                let usuarios of usuarios | filterNombre : filtroNombre;
+                let usuarios of usuarios
+                  | filterNombre : filtroNombre
+                  | paginate
+                    : { itemsPerPage: itemsPerPage, currentPage: currentPage };
                 let i = index
               "
             >
@@ -150,7 +160,7 @@
       tabindex="-1"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-dialog-scrollable modal-lg">
+      <div class="modal-dialog modal-dialog-scrollable modal-xl modal-70">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Agregar Usuario</h5>
@@ -161,47 +171,240 @@
             ></button>
           </div>
           <form (ngSubmit)="agregarUsuario()" #formAgregar="ngForm">
-            <div class="modal-body">
+            <div class="modal-body" >
               <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                   <label class="form-label">Número de Documento</label>
-                  <input class="form-control" [(ngModel)]="nuevoUsuario.numDocumento" name="numDocumento" required />
+                  <input
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.numDocumento"
+                    name="numDocumento"
+                    required
+                  />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                   <label class="form-label">Primer Nombre</label>
-                  <input class="form-control" [(ngModel)]="nuevoUsuario.primerNombre" name="primerNombre" required />
+                  <input
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.primerNombre"
+                    name="primerNombre"
+                    required
+                  />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                   <label class="form-label">Segundo Nombre</label>
-                  <input class="form-control" [(ngModel)]="nuevoUsuario.segundoNombre" name="segundoNombre" />
+                  <input
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.segundoNombre"
+                    name="segundoNombre"
+                  />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                   <label class="form-label">Primer Apellido</label>
-                  <input class="form-control" [(ngModel)]="nuevoUsuario.primerApellido" name="primerApellido" required />
+                  <input
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.primerApellido"
+                    name="primerApellido"
+                    required
+                  />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                   <label class="form-label">Segundo Apellido</label>
-                  <input class="form-control" [(ngModel)]="nuevoUsuario.segundoApellido" name="segundoApellido" />
+                  <input
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.segundoApellido"
+                    name="segundoApellido"
+                  />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                   <label class="form-label">Correo</label>
-                  <input type="email" class="form-control" [(ngModel)]="nuevoUsuario.email" name="email" required />
+                  <input
+                    type="email"
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.email"
+                    name="email"
+                    required
+                  />
+                  <input type="hidden" [(ngModel)]="nuevoUsuario.email_confirmation" name="email_confirmation">
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                   <label class="form-label">Dirección</label>
-                  <input class="form-control" [(ngModel)]="nuevoUsuario.direccion" name="direccion" required />
+                  <input
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.direccion"
+                    name="direccion"
+                    required
+                  />
                 </div>
-                <div class="col-md-6 mb-3">
+                <div class="col-md-4 mb-3">
                   <label class="form-label">Teléfono</label>
-                  <input class="form-control" [(ngModel)]="nuevoUsuario.telefono" name="telefono" required />
+                  <input
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.telefono"
+                    name="telefono"
+                    required
+                  />
+                </div>
+                <!-- Nacionalidad -->
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Nacionalidad</label>
+                  <select
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.nacionalidadId"
+                    name="nacionalidadId"
+                    required
+                  >
+                    <option [ngValue]="null">
+                      Seleccione una nacionalidad
+                    </option>
+                    <option *ngFor="let n of nacionalidades" [value]="n.id">
+                      {{ n.nombre }}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- EPS -->
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">EPS</label>
+                  <select
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.epsCodigo"
+                    name="epsCodigo"
+                    required
+                  >
+                    <option [ngValue]="null">Seleccione una EPS</option>
+                    <option *ngFor="let e of eps" [value]="e.epsCodigo">
+                      {{ e.nombreEps }}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Fondo de Pensiones -->
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Fondo de Pensiones</label>
+                  <select
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.pensionesCodigo"
+                    name="pensionesCodigo"
+                    required
+                  >
+                    <option [ngValue]="null">Seleccione un fondo</option>
+                    <option
+                      *ngFor="let p of pensiones"
+                      [value]="p.codigoPensiones"
+                    >
+                      {{ p.nombrePensiones }}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Género -->
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Género</label>
+                  <select
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.generoId"
+                    name="generoId"
+                    required
+                  >
+                    <option [ngValue]="null">Seleccione un género</option>
+                    <option *ngFor="let g of generos" [value]="g.idGenero">
+                      {{ g.abreviacionGenero }}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Tipo de Documento -->
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Tipo de Documento</label>
+                  <select
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.tipoDocumentoId"
+                    name="tipoDocumentoId"
+                    required
+                  >
+                    <option [ngValue]="null">Seleccione un tipo</option>
+                    <option
+                      *ngFor="let t of tiposDocumento"
+                      [value]="t.idTipoDocumento"
+                    >
+                      {{ t.nombreTipoDocumento }}
+                    </option>
+                  </select>
+                </div>
+
+                <!-- Estado Civil -->
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Estado Civil</label>
+                  <select
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.estadoCivilId"
+                    name="estadoCivilId"
+                    required
+                  >
+                    <option [ngValue]="null">Seleccione un estado civil</option>
+                    <option
+                      *ngFor="let ec of estadosCiviles"
+                      [value]="ec.idEstadoCivil"
+                    >
+                      {{ ec.nombreEstado }}
+                    </option>
+                  </select>
+                </div>
+                <!-- Contraseña -->
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Contraseña</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.password"
+                    name="password"
+                    required
+                  />
+                </div>
+
+                <!-- Repetir Contraseña -->
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Repetir Contraseña</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.repetirPassword"
+                    name="repetirPassword"
+                    required
+                  />
+                </div>
+
+                <!-- Rol -->
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Rol</label>
+                  <select
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.rol"
+                    name="rol"
+                    required
+                  >
+                    <option [ngValue]="null">Seleccione un rol</option>
+                    <option *ngFor="let r of roles" [value]="r.idRol">
+                      {{ r.nombreRol }}
+                    </option>
+                  </select>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-primary" [disabled]="formAgregar.invalid">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="formAgregar.invalid"
+              >
                 Guardar
               </button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
                 Cancelar
               </button>
             </div>
@@ -235,10 +438,13 @@
               <button type="submit" class="btn btn-primary">
                 Guardar cambios
               </button>
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
                 Cancelar
               </button>
-              
             </form>
           </div>
         </div>
