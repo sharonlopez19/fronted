@@ -12,6 +12,9 @@ import { RouterOutlet } from '@angular/router';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
+toggleSubmenuVacantes() {
+throw new Error('Method not implemented.');
+}
   isCollapsed = false;
   isSubmenuOpen = false; // Directorio
   isSubmenuVacantesOpen = false; // Vacantes

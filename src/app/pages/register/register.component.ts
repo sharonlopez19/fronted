@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit, OnDestroy {
   nombre: string = '';
   email: string = '';
   confirmarEmail: string = '';
@@ -79,6 +79,18 @@ export class RegisterComponent {
     private router: Router
   ) {}
 
+  ngOnInit(): void {
+    // Asegúrate de eliminar cualquier clase innecesaria del body al cargar el componente
+    document.body.classList.remove('login-background');
+    this.eliminarModalBackdrop();
+  }
+
+  ngOnDestroy(): void {
+    // Limpia cualquier clase aplicada al body cuando el componente sea destruido
+    document.body.classList.remove('login-background');
+    this.eliminarModalBackdrop();
+  }
+
   seleccionarVacante(vacante: any): void {
     this.vacanteSeleccionada = vacante;
     this.mensaje = '';
@@ -109,11 +121,18 @@ export class RegisterComponent {
       next: (res) => {
         this.mensaje = '✅ Registro exitoso 🎉';
         this.registroExitoso = true;
+
+        // Guardar datos en localStorage
         localStorage.setItem('token', res.token);
-        if(res.user){
+        if (res.user) {
           localStorage.setItem('usuario', JSON.stringify(res.user));
         }
-        this.router.navigate(['/home']); // Redirigir a la página principal
+
+        // Redirigir de manera limpia
+        this.router.navigate(['/vacantes']).then(() => {
+          this.eliminarModalBackdrop(); // Asegúrate de eliminar cualquier overlay residual
+        });
+
         this.resetForm();
       },
       error: (err) => {
@@ -127,6 +146,17 @@ export class RegisterComponent {
         this.registroExitoso = false;
       }
     });
+  }
+
+  private eliminarModalBackdrop(): void {
+    // Elimina cualquier overlay del modal que pueda permanecer en el DOM
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach((backdrop) => backdrop.remove());
+    const openModals = document.querySelectorAll('.modal.show');
+    openModals.forEach((modal) => modal.classList.remove('show'));
+    document.body.classList.remove('modal-open'); // Elimina la clase que bloquea el scroll
+    document.body.style.overflow = ''; // Restaura el scroll
+    document.body.style.paddingRight = ''; // Restaura el padding
   }
 
   private resetForm(): void {
