@@ -101,7 +101,7 @@
 
     <ng-template #formularioVacante>
       <div class="mb-3">
-        <label class="form-label">ID</label>
+        <label class="form-label">ID vacante</label>
         <input type="text" class="form-control" [(ngModel)]="vacanteSeleccionada.idVacantes" name="idVacantes" disabled />
         </div>
       <div class="mb-3">
@@ -117,16 +117,25 @@
         <input type="number" class="form-control" [(ngModel)]="vacanteSeleccionada.salario" name="salario" required />
       </div>
       <div class="mb-3">
-        <label class="form-label">Exp. Mínima</label>
+        <label class="form-label">Experiencia Mínima</label>
         <input type="text" class="form-control" [(ngModel)]="vacanteSeleccionada.expMinima" name="expMinima" required />
       </div>
       <div class="mb-3">
         <label class="form-label">Cargo</label>
         <input type="text" class="form-control" [(ngModel)]="vacanteSeleccionada.cargoVacante" name="cargoVacante" required />
       </div>
+
       <div class="mb-3">
-        <label class="form-label">ID Categoría</label>
-        <input type="number" class="form-control" [(ngModel)]="vacanteSeleccionada.catVacId" name="catVacId" required />
+        <label class="form-label">Categoría Vacante</label>
+        <select
+          class="form-control"
+          [(ngModel)]="vacanteSeleccionada.catVacId"
+          name="catVacId"
+          required
+        >
+          <option [ngValue]="undefined">Seleccione una categoría</option> <option *ngFor="let categoria of categorias" [value]="categoria.idCatVac">
+            {{ categoria.nomCategoria }} </option>
+        </select>
       </div>
       </ng-template>
 
