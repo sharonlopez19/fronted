@@ -29,7 +29,8 @@ export class UsuariosComponent implements OnInit {
   estadosCiviles: any[] = [];
   pensiones: any[] = [];
   totalPages=5;
- 
+  roles: any[] = [];
+
 
   usuarioSeleccionado: Usuarios = {
     primerNombre: '',
@@ -38,20 +39,23 @@ export class UsuariosComponent implements OnInit {
     segundoApellido: '',
     telefono: '',
     email: '',
+    email_confirmation:'',
     password:"",
+    password_confirmation:"",
     direccion: '',
     numDocumento: 0,
     nacionalidadId: null,
-    epsCodigo: '',
+    epsCodigo: null,
     generoId: null,
     tipoDocumentoId: null,
     estadoCivilId: null,
-    pensionesCodigo: ''
+    pensionesCodigo: null,
+    rol:null
   };
 
   usuario: any = {}; // usuario logueado desde localStorage
   nuevoUsuario: any = {};
-  constructor(private usuariosService: UsuariosService) {}
+  constructor(private usuariosService: UsuariosService,private authService: AuthService) {}
 
   ngOnInit(): void {
     const userFromLocal = localStorage.getItem('usuario');
@@ -65,8 +69,51 @@ export class UsuariosComponent implements OnInit {
         console.log('Usuario cargado:', this.usuarios);
       }
     });
+    this.cargarForaneas();
   }
-
+  
+  abrirModalAgregar(): void {
+    this.nuevoUsuario = {
+      primerNombre: '',
+      segundoNombre: '',
+      primerApellido: '',
+      segundoApellido: '',
+      telefono: '',
+      email: '',
+      email_confirmation:'',
+      password:"",
+      password_confirmation:'',
+      direccion: '',
+      numDocumento: 0,
+      nacionalidadId: null,
+      epsCodigo: null,
+      generoId: null,
+      tipoDocumentoId: null,
+      estadoCivilId: null,
+      pensionesCodigo: null,
+      rol: null
+    };
+  }
+  cargarForaneas() {
+    this.usuariosService.obtenerNacionalidades().subscribe(data => this.nacionalidades = data);
+    this.usuariosService.obtenerGeneros().subscribe(data => this.generos = data);
+    this.usuariosService.obtenerTiposDocumento().subscribe(data => this.tiposDocumento = data);
+    this.usuariosService.obtenerEstadosCiviles().subscribe(data => this.estadosCiviles = data);
+    this.usuariosService.obtenerEps().subscribe(data => {
+      this.eps = data;
+      console.log('EPS cargadas:', data);
+    });
+  
+    this.usuariosService.obtenerPensiones().subscribe(data => {
+      this.pensiones = data;
+      console.log('Pensiones cargadas:', data);
+    });
+    this.usuariosService.obtenerRoles().subscribe(data => {
+      this.roles = data;
+      console.log('Roles cargados:', this.roles);
+    });
+    
+  }
   cargarUsuarios(): void {
     this.usuariosService.obtenerUsuarios().subscribe({
       next: (data) => {
@@ -134,50 +181,71 @@ export class UsuariosComponent implements OnInit {
     }
   }
   agregarUsuario(): void {
-    const usuarioABase = {
-      numDocumento: this.nuevoUsuario.numDocumento,
-      primerNombre: this.nuevoUsuario.primerNombre,
-      segundoNombre: this.nuevoUsuario.segundoNombre,
-      primerApellido: this.nuevoUsuario.primerApellido,
-      segundoApellido: this.nuevoUsuario.segundoApellido,
-      email: this.nuevoUsuario.email,
-      direccion: this.nuevoUsuario.direccion,
-      telefono: this.nuevoUsuario.telefono,
-
-      password: '123456', // valor temporal
-      fechaNac: '2000-01-01',
-      numHijos: 0,
-      contactoEmergencia: 'LLENAR CAMPO',
-      numContactoEmergencia: '0000000000',
-      nacionalidadId: 1,
-      epsCodigo: "EPS001",
-      generoId: 1,
-      tipoDocumentoId: 1,
-      estadoCivilId: 1,
-      pensionesCodigo: "230301",
-      usersId: this.usuario?.id || 1
-    };
+    const { email, numDocumento, password, repetirPassword, rol } = this.nuevoUsuario;
   
-    console.log('Usuario a guardar:', usuarioABase);
+    if (password !== repetirPassword) {
+      Swal.fire('Error', 'Las contraseñas no coinciden.', 'error');
+      return;
+    }
   
-    // Simulamos el guardado
-    this.usuarios.push(usuarioABase);
-    this.nuevoUsuario = {}; // limpiar formulario
-    this.usuariosService.agregarUsuario(usuarioABase).subscribe({
-      next: (res: Usuarios) => {
-        console.log('Guardado en base de datos:', res);
-        this.usuarios.push(res); // opcional si el backend devuelve el usuario guardado
-        Swal.fire('¡Agregado!', 'El usuario ha sido guardado correctamente.', 'success');
-        this.nuevoUsuario = {};
-      },
-      error: (err) => {
-        console.error('Error al guardar en base de datos:', err);
-        Swal.fire('Error', 'No se pudo guardar el usuario.', 'error');
+    // 1. Verificar existencia previa
+    this.usuariosService.verificarExistenciaUsuario(email, numDocumento).subscribe(existe => {
+      if (existe) {
+        Swal.fire('Error', 'Ya existe un usuario con ese correo o número de documento.', 'error');
+        return;
       }
-    });
   
-    
+      // 2. Registrar primero en `users`
+      const userData = {
+        name: `${this.nuevoUsuario.primerNombre} ${this.nuevoUsuario.primerApellido}`,
+        email: email,
+        email_confirmation: email,
+        password: password,
+        password_confirmation: repetirPassword,
+        rol: rol
+      };
+  
+      this.authService.register(userData).subscribe({
+        next: (res) => {
+          const userId = res.user.id;
+  
+          // 3. Crear el objeto para la tabla usuarios
+          const usuarioFinal = {
+            ...this.nuevoUsuario,
+            usersId: userId,
+            fechaNac: '2000-01-01', // o ajustá si pedís esta info
+            numHijos: 0,
+            contactoEmergencia: 'NO REGISTRADO',
+            numContactoEmergencia: '0000000000'
+          };
+  
+          // Guardar el usuario
+          this.usuariosService.agregarUsuario(usuarioFinal).subscribe({
+            next: () => {
+              Swal.fire('¡Éxito!', 'El usuario fue creado correctamente.', 'success');
+              this.nuevoUsuario = {};
+              this.cargarUsuarios();
+            },
+            error: (err) => {
+              console.error('Error al guardar usuario:', err);
+              Swal.fire('Error', 'No se pudo guardar el usuario.', 'error');
+            }
+          });
+        },
+        error: (err) => {
+          
+          Swal.fire('Error', 'No se pudo crear el usuario base.', 'error');
+          if (err.status === 422 && err.error?.errors) {
+            const errores = Object.values(err.error.errors).flat().join(' ');
+            Swal.fire('Error', errores, 'error');
+          } else {
+            Swal.fire('Error', 'No se pudo crear el usuario base.', 'error');
+          }
+        }
+      });
+    });
   }
+  
   actualizarUsuario(): void {
     if (!this.usuarioSeleccionado || !this.usuarioSeleccionado.numDocumento) return;
   
@@ -204,5 +272,6 @@ export class UsuariosComponent implements OnInit {
       }
     });
   }
+ 
   
 }
