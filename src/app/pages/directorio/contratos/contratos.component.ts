@@ -31,8 +31,10 @@ export class ContratosComponent implements OnInit{
   totalPages=5;
   archivoSeleccionado: File | null = null;
   tiposContrato: any[] = [];
+  
 
   contratoSeleccionado: Contratos = {
+    idContrato: 0,
     numDocumento: 0, // ✅ ahora está correcto
     tipoContratoId: 1,
     estado: 1,
@@ -189,22 +191,41 @@ export class ContratosComponent implements OnInit{
    
 
   abrirModalImagen(url: string) {
-    this.imagenSeleccionada =  url;
+    this.imagenSeleccionada = 'http://localhost:8000/' + url;
+
     setTimeout(() => {
       const modalElement = document.getElementById('modalImagen');
       if (modalElement) {
         const modal = new bootstrap.Modal(modalElement);
         modal.show();
+        document.getElementById('modalImagen');
+
       } else {
         console.error('Modal no encontrado en el DOM');
       }
-    });
+    }, 200); // <-- prueba con 200ms
   }
 
   actualizarContrato(): void {
-    if (!this.contratoSeleccionado || !this.contratoSeleccionado.numDocumento) return;
+
+    const formData = new FormData();
   
-    this.contratosService.actualizarContratoParcial(this.contratoSeleccionado.numDocumento, this.contratoSeleccionado).subscribe({
+    // Campos obligatorios o editables
+    formData.append('_method', 'PATCH');
+    formData.append('idContrato', this.contratoSeleccionado.idContrato.toString());
+    formData.append('numDocumento', this.contratoSeleccionado.numDocumento.toString());
+    formData.append('tipoContratoId', this.contratoSeleccionado.tipoContratoId.toString());
+    formData.append('estado', this.contratoSeleccionado.estado.toString());
+    formData.append('fechaIngreso', this.contratoSeleccionado.fechaIngreso);
+    formData.append('fechaFinal', this.contratoSeleccionado.fechaFinal);
+  
+    // Archivo (si fue seleccionado)
+    if (this.archivoSeleccionado) {
+      formData.append('documento', this.archivoSeleccionado);
+    }
+    console.log('ID que se está enviando:', this.contratoSeleccionado.idContrato);
+
+    this.contratosService.actualizarContratoParcial(this.contratoSeleccionado.idContrato, formData).subscribe({
       next: (res) => {
         Swal.fire({
           title: '¡Actualizado!',
@@ -212,11 +233,10 @@ export class ContratosComponent implements OnInit{
           icon: 'success',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          location.reload(); // 👈 recarga la página cuando se cierre el alert
+          location.reload(); // o this.cargarContratos(); si no querés recargar toda la página
         });
   
-        // Si querés actualizar la tabla:
-        const index = this.contratos.findIndex(u => u.numDocumento === this.contratoSeleccionado.numDocumento);
+        const index = this.contratos.findIndex(c => c.numDocumento === this.contratoSeleccionado.numDocumento);
         if (index !== -1) {
           this.contratos[index] = { ...this.contratoSeleccionado };
         }
@@ -224,17 +244,17 @@ export class ContratosComponent implements OnInit{
       error: (err) => {
         console.error('Error al actualizar contrato:', err);
         Swal.fire({
-                  title: '¡Error!',
-                  text: 'Algo salio mal no se pudo actualizar.',
-                  icon: 'error',
-                  confirmButtonText: 'Aceptar'
-                }).then(() => {
-                  location.reload(); // 👈 recarga la página cuando se cierre el alert
-                });
+          title: '¡Error!',
+          text: 'Algo salió mal, no se pudo actualizar.',
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        }).then(() => {
+          location.reload(); // o this.cargarContratos(); si no querés recargar toda la página
+        })
       }
     });
-    
   }
+  
   abrirModalAgregar(): void {
     this.nuevocontrato = {
       numDocumento: '',
