@@ -14,7 +14,7 @@
         <span>Directorio</span>
         <i class="fas" [ngClass]="{'fa-chevron-down': !isSubmenuOpen, 'fa-chevron-up': isSubmenuOpen}" style="margin-left:auto;"></i>
       </div>
-    
+
       <!-- Submenú desplegable -->
       <div *ngIf="isSubmenuOpen && [1, 4].includes(usuario?.rol)" class="submenu">
         <a class="nav-link" (click)="navigateTo('/directorio/usuarios')" [class.active]="isActive('/directorio/usuarios')">
@@ -35,13 +35,13 @@
         </a>
       </div>
       <!-- Directorio Fin -->
-    
+
       <!-- Resto del menú -->
       <a *ngIf="[2, 3, 5].includes(usuario?.rol)" class="nav-link" (click)="navigateTo('/home')" [class.active]="isActive('/home')">
         <i class="fas fa-user"></i>
         <span>Perfil</span>
       </a>
-    
+
       <a class="nav-link" *ngIf="[2, 3].includes(usuario?.rol)" (click)="navigateTo('/vacantes')" [class.active]="isActive('/vacantes')">
         <i class="fas fa-briefcase"></i>
         <span>Vacantes</span>
@@ -86,7 +86,7 @@
         <i class="fas fa-bell"></i>
         <span>Notificaciones</span>
       </a>
-    
+
       <div class="nav-section mt-auto">
         <a class="nav-link logout" (click)="logout()">
           <i class="fas fa-sign-out-alt"></i>
@@ -102,7 +102,7 @@
         </div>
       </div>
     </nav>
-    
+
   </aside>
 
   <!-- Contenido dinámico cargado con router -->

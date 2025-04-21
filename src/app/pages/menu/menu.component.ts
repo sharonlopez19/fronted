@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service'; 
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
@@ -16,7 +16,7 @@ export class MenuComponent implements OnInit{
 
   usuario: any ={};
   constructor(private router: Router) {}
-  
+
   ngOnInit(): void {
     const usuarioGuardado = localStorage.getItem('usuario');
     if (usuarioGuardado) {
@@ -48,5 +48,5 @@ export class MenuComponent implements OnInit{
     this.isSubmenuOpen = !this.isSubmenuOpen;
   }
 
-  
+
 }

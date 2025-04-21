@@ -10,7 +10,7 @@ import { VacacionesComponent } from './pages/vacaciones/vacaciones.component';
 import { IncapacidadesComponent } from './pages/incapacidades/incapacidades.component';
 import { HorasExtraComponent } from './pages/horas-extra/horas-extra.component';
 import { NotificacionesComponent } from './pages/notificaciones/notificaciones.component';
-import { FormvacacionesComponent} from './pages/formvacaciones/formvacaciones.component';
+import { FormvacacionesComponent } from './pages/formvacaciones/formvacaciones.component';
 import { NotificacionesAdminComponent } from './pages/notificaciones-admin/notificaciones-admin.component';
 import { AreaComponent } from './pages/directorio/area/area.component';
 import { UsuariosComponent } from './pages/directorio/usuarios/usuarios.component';
@@ -22,10 +22,13 @@ import { ContratosComponent } from './pages/directorio/contratos/contratos.compo
 import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  
+  // Ruta para login
   { path: 'login', component: LoginComponent },
+
+  // Ruta para registro
   { path: 'register', component: RegisterComponent },
 
+  // Rutas protegidas por el AuthGuard
   {
     path: '',
     canActivate: [AuthGuard],
@@ -40,18 +43,18 @@ export const routes: Routes = [
       { path: 'notificaciones', component: NotificacionesComponent },
       { path: 'notificaciones-admin', component: NotificacionesAdminComponent },
       { path: 'formvacaciones', component: FormvacacionesComponent },
-      { path: 'directorio/area', component: AreaComponent},
-      { path: 'directorio/usuarios', component: UsuariosComponent},
-      { path: 'directorio/contratos', component: ContratosComponent},
-      { path: 'directorio/trazabilidad', component: TrazabilidadComponent},
-      //{ path: 'formhoras-extra', component: FormhorasExtraComponent}
+      { path: 'directorio/area', component: AreaComponent },
+      { path: 'directorio/usuarios', component: UsuariosComponent },
+      { path: 'directorio/contratos', component: ContratosComponent },
+      { path: 'directorio/trazabilidad', component: TrazabilidadComponent },
+      //{ path: 'formhoras-extra', component: FormhorasExtraComponent }
     ]
   },
 
-  
+  // Redirección predeterminada a /login si no hay rutas coincidentes
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  
+  // Ruta "catch-all" para redirigir a /login
   { path: '**', redirectTo: 'login' }
 ];
 
