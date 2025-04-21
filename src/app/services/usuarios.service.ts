@@ -43,7 +43,7 @@ export class UsuariosService {
   agregarUsuario(usuario: any) {
     console.log('Usuario que se enviará a Laravel:', usuario);
 
-    return this.http.post<Usuarios>('http://localhost:8000/api/usuarios', usuario);
+    return this.http.post<any>('http://localhost:8000/api/usuarios', usuario);
   }
   
   obtenerNacionalidades(): Observable<any[]> {

@@ -257,7 +257,7 @@
                     <option [ngValue]="null">
                       Seleccione una nacionalidad
                     </option>
-                    <option *ngFor="let n of nacionalidades" [value]="n.id">
+                    <option *ngFor="let n of nacionalidades" [value]="n.idNacionalidad">
                       {{ n.nombre }}
                     </option>
                   </select>
@@ -273,7 +273,7 @@
                     required
                   >
                     <option [ngValue]="null">Seleccione una EPS</option>
-                    <option *ngFor="let e of eps" [value]="e.epsCodigo">
+                    <option *ngFor="let e of eps" [value]="e.codigoEps">
                       {{ e.nombreEps }}
                     </option>
                   </select>
