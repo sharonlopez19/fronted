@@ -127,7 +127,7 @@ export class UsuariosComponent implements OnInit {
   }
 
   nombreCompleto(usuarios: Usuarios): string {
-    return `${usuarios.primerNombre} ${usuarios.segundoNombre} ${usuarios.primerApellido} ${usuarios.segundoApellido}`;
+    return `${usuarios.primerNombre} ${usuarios.primerApellido}`;
   }
 
   editarusuarios(usuario: Usuarios, index: number): void {
@@ -228,8 +228,18 @@ export class UsuariosComponent implements OnInit {
             },
             error: (err) => {
               console.error('Error al guardar usuario:', err);
-              Swal.fire('Error', 'No se pudo guardar el usuario.', 'error');
+            
+              if (err.status === 400 && err.error?.errors) {
+                const errores = Object.entries(err.error.errors)
+                  .map(([campo, mensajes]: [string, any]) => `${campo}: ${mensajes.join(', ')}`)
+                  .join('\n');
+                
+                Swal.fire('Error de validación', errores, 'error');
+              } else {
+                Swal.fire('Error', 'No se pudo guardar el usuario.', 'error');
+              }
             }
+            
           });
         },
         error: (err) => {
