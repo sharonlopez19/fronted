@@ -1,90 +1,111 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-export interface Postulacion {
-  id?: number;
-  fechaPostulacion: string;
-  estado: 'Aceptado' | 'Rechazado' | 'Pendiente';
-  vacanteId: number;
-}
-
-import { AuthService } from '../../../services/auth.service';
 import Swal from 'sweetalert2';
-
+import { Postulacion, PostulacionesService } from '../../../services/postulaciones.service';
+import { AuthService } from '../../../services/auth.service';
 import { MenuComponent } from '../../menu/menu.component';
-
-import { FilterPostulacionPipe } from './filter-postulaciones'; // Importación del Pipe de Filtrado
-
+import { Subject, Subscription, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-postulaciones',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MenuComponent,
-    FilterPostulacionPipe, // Adición del Pipe al array de imports
-  ],
-  templateUrl: './postulaciones.component.html',
-  styleUrls: ['./postulaciones.component.scss']
+  selector: 'app-postulaciones',
+  standalone: true,
+  imports: [CommonModule, FormsModule, MenuComponent],
+  templateUrl: './postulaciones.component.html',
+  styleUrls: ['./postulaciones.component.scss']
 })
-export class PostulacionesComponent implements OnInit {
+export class PostulacionesComponent implements OnInit, OnDestroy {
+  postulaciones: Postulacion[] = [];
+  usuario: Record<string, any> = {};
+  postulacionSeleccionada: Postulacion | null = null;
 
-  postulaciones: Postulacion[] = [];
-  filtroNombre: string = "";
-  usuario: any = {};
-  postulacionSeleccionada: Postulacion | null = null;
+  private searchTerms = new Subject<string>();
+  private searchSubscription?: Subscription;
 
-  constructor(
-    public authService: AuthService
-  ) { }
+  constructor(
+    public authService: AuthService,
+    private postulacionesService: PostulacionesService
+  ) {}
 
-  ngOnInit(): void {
-    const userFromLocal = localStorage.getItem('usuario');
-    if (userFromLocal) {
-      this.usuario = JSON.parse(userFromLocal);
-    }
+  ngOnInit(): void {
+    const userFromLocal = localStorage.getItem('usuario');
+    if (userFromLocal) {
+      this.usuario = JSON.parse(userFromLocal);
+    }
 
-    this.cargarPostulaciones();
-  }
+    this.searchSubscription = this.searchTerms.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((term: string) => {
+        if (!term || term.trim() === '' || isNaN(+term)) {
+          return this.postulacionesService.getPostulaciones().pipe(
+            catchError(error => {
+              console.error('Error al cargar todas las postulaciones:', error);
+              Swal.fire('Error', 'No se pudieron cargar las postulaciones.', 'error');
+              return of([]);
+            })
+          );
+        } else {
+          const vacanteId = +term;
+          return this.postulacionesService.searchPostulacionesByVacantesId(vacanteId).pipe(
+            catchError(error => {
+              console.error(`Error al buscar postulaciones para Vacante ID ${vacanteId}:`, error);
+              Swal.fire('Error', `Error al buscar postulaciones para Vacante ID ${vacanteId}.`, 'error');
+              return of([]);
+            })
+          );
+        }
+      })
+    ).subscribe({
+      next: (results: Postulacion[]) => {
+        this.postulaciones = results;
+        console.log('Lista de postulaciones actualizada:', results);
+      },
+      error: (error) => {
+        console.error('Error en la suscripción de búsqueda:', error);
+      }
+    });
 
-  cargarPostulaciones(): void {
-    this.postulaciones = [
-      { id: 1, fechaPostulacion: '2023-10-26', estado: 'Aceptado', vacanteId: 1 },
-      { id: 2, fechaPostulacion: '2023-10-25', estado: 'Pendiente', vacanteId: 2 },
-      { id: 3, fechaPostulacion: '2023-10-24', estado: 'Rechazado', vacanteId: 1 },
-      { id: 4, fechaPostulacion: '2023-10-23', estado: 'Pendiente', vacanteId: 3 },
-      { id: 5, fechaPostulacion: '2023-10-22', estado: 'Aceptado', vacanteId: 4 },
-      { id: 6, fechaPostulacion: '2023-10-21', estado: 'Rechazado', vacanteId: 2 },
-    ];
-  }
+    this.cargarPostulaciones();
+  }
 
-  editarPostulacion(postulacion: Postulacion, index: number): void {
-    this.postulacionSeleccionada = { ...postulacion };
-  }
+  ngOnDestroy(): void {
+    if (this.searchSubscription) {
+      this.searchSubscription.unsubscribe();
+    }
+  }
 
-  verDetalles(postulacion: Postulacion): void {
-      this.postulacionSeleccionada = postulacion;
-  }
+  onSearchInput(event: Event): void {
+    const searchTerm = (event.target as HTMLInputElement).value;
+    this.searchTerms.next(searchTerm);
+  }
 
-  guardarEstadoPostulacion(): void {
-    if (!this.postulacionSeleccionada || this.postulacionSeleccionada.id === undefined) {
-      Swal.fire('Error', 'No se ha seleccionado una postulación válida para actualizar.', 'error');
-      return;
-    }
+  private cargarPostulaciones(): void {
+    this.searchTerms.next('');
+  }
 
-    const selectedPostulacion = this.postulacionSeleccionada;
+  editarPostulacion(postulacion: Postulacion, index: number): void {
+    this.postulacionSeleccionada = { ...postulacion };
+    console.log('Editando postulación:', postulacion);
+  }
 
-    const index = this.postulaciones.findIndex(p => p.id === selectedPostulacion.id);
-    if (index !== -1) {
-      this.postulaciones[index].estado = selectedPostulacion.estado;
-    }
-    Swal.fire('¡Actualizado!', 'Estado de postulación guardado correctamente (simulado).', 'success');
-    this.postulacionSeleccionada = null;
-  }
+  verDetalles(postulacion: Postulacion): void {
+    this.postulacionSeleccionada = postulacion;
+    console.log('Detalles de postulación:', postulacion);
+  }
 
-  confirmDeletePostulacion(index: number): void {
-       console.warn("La función confirmDeletePostulacion no se llama directamente desde el HTML con el icono de ojo. Si necesitas eliminar, añade un botón de eliminar separado.");
-   }
+  guardarEstadoPostulacion(): void {
+    if (!this.postulacionSeleccionada || this.postulacionSeleccionada.idPostulaciones === undefined) {
+      Swal.fire('Error', 'No se ha seleccionado una postulación válida para actualizar.', 'error');
+      return;
+    }
+
+    Swal.fire('¡Actualizado!', 'Estado de postulación guardado correctamente (simulado). **Implementar llamada a la API**', 'success');
+    this.postulacionSeleccionada = null;
+  }
+
+  confirmDeletePostulacion(postulacion: Postulacion): void {
+    console.warn("confirmDeletePostulacion: método placeholder sin implementación actual.");
+  }
 }
