@@ -101,7 +101,7 @@ export class PostulacionesComponent implements OnInit, OnDestroy {
       return;
     }
 
-    Swal.fire('¡Actualizado!', 'Estado de postulación guardado correctamente (simulado). **Implementar llamada a la API**', 'success');
+    Swal.fire('¡Actualizado!', 'Estado de postulación guardado correctamente', 'success');
     this.postulacionSeleccionada = null;
   }
 

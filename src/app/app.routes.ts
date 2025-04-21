@@ -48,6 +48,10 @@ export const routes: Routes = [
       { path: 'directorio/usuarios', component: UsuariosComponent},
       { path: 'directorio/contratos', component: ContratosComponent},
       { path: 'directorio/trazabilidad', component: TrazabilidadComponent},
+      { path: 'vacantes copy/categoria-vacantes', component: CategoriaVacantesComponent },
+      { path: 'vacantes copy/postulaciones', component: PostulacionesComponent },
+      
+
       //{ path: 'formhoras-extra', component: FormhorasExtraComponent}
     ]
   },
