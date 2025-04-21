@@ -6,7 +6,6 @@
       <img src="https://i.postimg.cc/XJjkMhDq/logo.png" alt="Logo Mobile" class="logo-mobile">
     </div>
 
-
     <nav class="nav">
       <!-- Directorio Inicio -->
       <div *ngIf="[1, 4].includes(usuario?.rol)" class="nav-link submenu-toggle" (click)="toggleSubmenu()">
@@ -35,6 +34,26 @@
         </a>
       </div>
       <!-- Directorio Fin -->
+
+
+      <!-- Vacantes Inicio -->
+      <div *ngIf="[1, 4].includes(usuario?.rol)" class="nav-link submenu-toggle" (click)="toggleSubmenuVacantes()">
+        <i class="fas fa-briefcase"></i>
+        <span>Vacantes</span>
+        <i class="fas" [ngClass]="{'fa-chevron-down': !isSubmenuVacantesOpen, 'fa-chevron-up': isSubmenuVacantesOpen}" style="margin-left:auto;"></i>
+      </div>
+
+      <div *ngIf="isSubmenuVacantesOpen && [1, 4].includes(usuario?.rol)" class="submenu">
+        <a class="nav-link" (click)="navigateTo('/vacantes/categoria')" [class.active]="isActive('/vacantes/categoria')">
+          <i class="fas fa-layer-group"></i>
+          <span>Categoría</span>
+        </a>
+        <a class="nav-link" (click)="navigateTo('/vacantes/postulaciones')" [class.active]="isActive('/vacantes/postulaciones')">
+          <i class="fas fa-file-alt"></i>
+          <span>Postulaciones</span>
+        </a>
+      </div>
+      <!-- Vacantes Fin -->
 
       <!-- Resto del menú -->
       <a *ngIf="[2, 3, 5].includes(usuario?.rol)" class="nav-link" (click)="navigateTo('/home')" [class.active]="isActive('/home')">

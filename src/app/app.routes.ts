@@ -16,10 +16,14 @@ import { AreaComponent } from './pages/directorio/area/area.component';
 import { UsuariosComponent } from './pages/directorio/usuarios/usuarios.component';
 import { TrazabilidadComponent } from './pages/directorio/trazabilidad/trazabilidad.component';
 import { ContratosComponent } from './pages/directorio/contratos/contratos.component';
+import { CategoriaVacantesComponent } from './pages/vacantes copy/categoria-vacantes/categoria-vacantes.component';
+import { PostulacionesComponent } from './pages/vacantes copy/postulaciones/postulaciones.component';
 
 //import { FormhorasExtraComponent} from './pages/formhoras-extra/formhoras-extra.component';
 
 import { AuthGuard } from './guards/auth.guard';
+
+
 
 export const routes: Routes = [
   // Ruta para login
@@ -43,11 +47,11 @@ export const routes: Routes = [
       { path: 'notificaciones', component: NotificacionesComponent },
       { path: 'notificaciones-admin', component: NotificacionesAdminComponent },
       { path: 'formvacaciones', component: FormvacacionesComponent },
-      { path: 'directorio/area', component: AreaComponent },
-      { path: 'directorio/usuarios', component: UsuariosComponent },
-      { path: 'directorio/contratos', component: ContratosComponent },
-      { path: 'directorio/trazabilidad', component: TrazabilidadComponent },
-      //{ path: 'formhoras-extra', component: FormhorasExtraComponent }
+      { path: 'directorio/area', component: AreaComponent},
+      { path: 'directorio/usuarios', component: UsuariosComponent},
+      { path: 'directorio/contratos', component: ContratosComponent},
+      { path: 'directorio/trazabilidad', component: TrazabilidadComponent},
+      //{ path: 'formhoras-extra', component: FormhorasExtraComponent}
     ]
   },
 
