@@ -18,9 +18,10 @@ import { TrazabilidadComponent } from './pages/directorio/trazabilidad/trazabili
 import { ContratosComponent } from './pages/directorio/contratos/contratos.component';
 import { CategoriaVacantesComponent } from './pages/vacantes copy/categoria-vacantes/categoria-vacantes.component';
 import { PostulacionesComponent } from './pages/vacantes copy/postulaciones/postulaciones.component';
-//import { FormhorasExtraComponent} from './pages/formhoras-extra/formhoras-extra.component';
+import { GestionComponent } from './pages/vacantes copy/gestion/gestion.component';
 
 import { AuthGuard } from './guards/auth.guard';
+
 
 export const routes: Routes = [
   // Ruta para login
@@ -50,6 +51,7 @@ export const routes: Routes = [
       { path: 'directorio/trazabilidad', component: TrazabilidadComponent},
       { path: 'vacantes copy/categoria-vacantes', component: CategoriaVacantesComponent },
       { path: 'vacantes copy/postulaciones', component: PostulacionesComponent },
+      { path: 'vacantes copy/gestion', component: GestionComponent }, 
       
 
       //{ path: 'formhoras-extra', component: FormhorasExtraComponent}

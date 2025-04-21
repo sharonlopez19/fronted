@@ -44,6 +44,9 @@
       </div>
 
       <div *ngIf="isSubmenuVacantesOpen && [1, 4].includes(usuario?.rol)" class="submenu">
+        <a class="nav-link" (click)="navigateTo('/vacantes copy/gestion')" [class.active]="isActive('/vacantes copy/gestion')">
+          <i class="fas fa-cog"></i> <span>Gestión</span>
+        </a>
         <a class="nav-link" (click)="navigateTo('/vacantes copy/categoria-vacantes')" [class.active]="isActive('/vacantes/categoria')">
           <i class="fas fa-layer-group"></i>
           <span>Categoría</span>

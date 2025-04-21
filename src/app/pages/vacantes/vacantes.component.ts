@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from '../menu/menu.component';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core'; // Eliminado ElementRef y ViewChild
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -41,29 +41,26 @@ export class VacantesComponent {
     }
   ];
 
-  vacanteSeleccionada = this.vacantes[0];
+  // Se inicializa con la primera vacante o un objeto vacío si el arreglo puede estar vacío
+  vacanteSeleccionada: any = this.vacantes.length > 0 ? this.vacantes[0] : {};
 
   seleccionarVacante(vacante: any): void {
     this.vacanteSeleccionada = vacante;
   }
 
-  eliminarVacante(vacante: any): void {
-    console.log('Eliminar vacante:', vacante);
+  // Nueva función para manejar la postulación
+  postularme(): void {
+    // Aquí puedes implementar la lógica para postular al usuario a la vacante seleccionada.
+    // Esto podría implicar:
+    // 1. Navegar a una página o modal de formulario de postulación.
+    // 2. Mostrar un mensaje de confirmación.
+    // 3. Enviar una solicitud a un servicio backend para registrar la postulación.
+    console.log('El usuario quiere postularse a:', this.vacanteSeleccionada.titulo);
+    // Ejemplo: Puedes agregar lógica para abrir un modal de confirmación o formulario aquí
+    // o llamar a un servicio:
+    // this.postulacionService.enviarPostulacion(this.vacanteSeleccionada.id).subscribe(...);
   }
 
-  abrirModalAgregar() {
-    const modal = new (window as any).bootstrap.Modal(
-      document.getElementById('modalAgregarVacante'),
-      {}
-    );
-    modal.show();
-  }
-
-  editarVacante(vacante: any): void {
-    this.vacanteSeleccionada = vacante;
-    const modal = new (window as any).bootstrap.Modal(
-      document.getElementById('modalEditarVacante')
-    );
-    modal.show();
-  }
+  // Funciones eliminarVacante, abrirModalAgregar y editarVacante han sido eliminadas
+  // ya que no se llaman desde el HTML modificado.
 }
