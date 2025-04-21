@@ -292,7 +292,11 @@
     color: #b0b8d1;
     opacity: 1;
   }
-  
+  .estado-badge {
+    display: inline-block;
+    width: 100px;        // ajustalo según lo que necesites
+    text-align: center;
+  }
   
   
   

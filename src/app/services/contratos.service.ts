@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 export interface Contratos {
  
-  idContrato?: number;
-  numDocumento: number;         // 👈 aquí como number
+  idContrato: number;
+  numDocumento: number;         
   tipoContratoId: number;
   estado: number;
   fechaIngreso: string;
@@ -47,9 +47,12 @@ export class ContratosService {
       map(res => res.Nacionalidad) // 👈 Esto extrae el array
     );
   }
-  actualizarContratoParcial(id: number, datos: Partial<Contratos>): Observable<any> {
-    return this.http.patch<any>(`http://localhost:8000/api/contrato/${id}`, datos);
-  }
+ // contratos.service.ts
+actualizarContratoParcial(id: number, formData: FormData) {
+  return this.http.post(`http://localhost:8000/api/contrato/${id}/actualizar`, formData);
+}
+
+  
   
   obtenerEps(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/epss').pipe(

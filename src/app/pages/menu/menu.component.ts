@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service'; 
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
@@ -11,12 +11,18 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.scss']
 })
-export class MenuComponent implements OnInit{
+export class MenuComponent implements OnInit {
+toggleSubmenuVacantes() {
+throw new Error('Method not implemented.');
+}
   isCollapsed = false;
+  isSubmenuOpen = false; // Directorio
+  isSubmenuVacantesOpen = false; // Vacantes
 
-  usuario: any ={};
+  usuario: any = {};
+
   constructor(private router: Router) {}
-  
+
   ngOnInit(): void {
     const usuarioGuardado = localStorage.getItem('usuario');
     if (usuarioGuardado) {
@@ -26,27 +32,28 @@ export class MenuComponent implements OnInit{
       console.log('No hay usuario en localStorage');
     }
   }
+
   logout(): void {
     localStorage.removeItem('token');
-    localStorage.removeItem('usuario'); // Limpia también el usuario
+    localStorage.removeItem('usuario');
     this.router.navigate(['/login']);
-
   }
 
   toggleMenu(): void {
     this.isCollapsed = !this.isCollapsed;
   }
-  navigateTo(path: string){
+
+  navigateTo(path: string): void {
     this.router.navigate([path]);
   }
+
   isActive(path: string): boolean {
     return this.router.url === path;
   }
-  isSubmenuOpen = false;
 
   toggleSubmenu(): void {
     this.isSubmenuOpen = !this.isSubmenuOpen;
   }
 
-  
+
 }

@@ -37,8 +37,10 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
-  }
+  localStorage.removeItem('token');
+  sessionStorage.clear(); // Limpia cualquier dato de sesión
+  this.http.post(`${this.apiUrl}/logout`, {}).subscribe(); // Notifica al backend si es necesario
+}
 
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
