@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ContratosService, Contratos } from '../../../services/contratos.service';
+import { UsuariosService, Usuarios } from '../../../services/usuarios.service';
 import { AuthService } from '../../../services/auth.service';
 import { MenuComponent } from '../../menu/menu.component';
 import Swal from 'sweetalert2';
@@ -46,7 +47,7 @@ export class ContratosComponent implements OnInit{
   contrato: any = {}; // contrato logueado desde localStorage
   usuario:any={};
   nuevocontrato: any = {};
-  constructor(private contratosService: ContratosService) {}
+  constructor(private contratosService: ContratosService,private usuariosService: UsuariosService) {}
 
   ngOnInit(): void {
     const userFromLocal = localStorage.getItem('usuario');
@@ -96,10 +97,17 @@ export class ContratosComponent implements OnInit{
   }
   confirmDelete(index: number): void {
     const contrato = this.contratos[index];
+  console.log(contrato);
+    this.usuariosService.obtenerUsuario(contrato.numDocumento).subscribe({
+      next: (res) => {
+        const usuario = res.usuario ?? res;
   
-    this.contratosService.obtenerUsuarioPorDocumento(contrato.numDocumento).subscribe({
-      next: (usuario) => {
-        const nombre = `${usuario.primerNombre} ${usuario.primerApellido}`; // ajusta según tu estructura
+        if (!usuario || !usuario.primerNombre || !usuario.primerApellido) {
+          Swal.fire('Error', 'No se encontró información del usuario.', 'error');
+          return;
+        }
+  
+        const nombre = `${usuario.primerNombre} ${usuario.primerApellido}`;
   
         Swal.fire({
           title: `¿Eliminar a ${nombre}?`,
@@ -110,7 +118,7 @@ export class ContratosComponent implements OnInit{
           cancelButtonText: 'Cancelar'
         }).then((result) => {
           if (result.isConfirmed) {
-            this.contratosService.eliminarContrato(contrato.numDocumento).subscribe({
+            this.contratosService.eliminarContrato(contrato.idContrato).subscribe({
               next: () => {
                 Swal.fire({
                   title: 'Eliminado',
@@ -130,13 +138,11 @@ export class ContratosComponent implements OnInit{
         });
       },
       error: (err) => {
-        console.error('No se pudo obtener el nombre del usuario:', err);
-        Swal.fire('Error', 'No se pudo obtener la información del contrato.', 'error');
+        console.error('No se pudo obtener el usuario:', err);
+        Swal.fire('Error', 'No se pudo obtener la información del usuario.', 'error');
       }
     });
   }
-  
-  
   
   get contratosPaginados(): Contratos[] {
     const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -149,44 +155,54 @@ export class ContratosComponent implements OnInit{
     }
   }
   agregarContrato(): void {
-    const formData = new FormData();
-  
-    formData.append('numDocumento', this.contratoSeleccionado.numDocumento.toString());
-    formData.append('tipoContratoId', this.contratoSeleccionado.tipoContratoId.toString());
-    formData.append('estado', this.contratoSeleccionado.estado.toString());
-
-    formData.append('fechaIngreso', this.contratoSeleccionado.fechaIngreso);
-    formData.append('fechaFinal', this.contratoSeleccionado.fechaFinal);
-  
-    if (this.archivoSeleccionado) {
-      formData.append('documento', this.archivoSeleccionado);
-    }
-  
-    this.contratosService.agregarContrato(formData).subscribe({
+    // Verifica primero si el usuario existe
+    this.usuariosService.obtenerUsuario(this.contratoSeleccionado.numDocumento).subscribe({
       next: (res) => {
-       Swal.fire({
-                 title: '¡OK!',
-                 text: 'El contrato fue creado exitosamente.',
-                 icon: 'success',
-                 confirmButtonText: 'Aceptar'
-               }).then(() => {
-                 location.reload(); // 👈 recarga la página cuando se cierre el alert
-               });
-        this.cargarContratos();
+        const usuario = res.usuario ?? res;
+  
+        if (!usuario || !usuario.primerNombre || !usuario.primerApellido) {
+          Swal.fire('Error', 'No se encontró información del usuario.', 'error');
+          return;
+        }
+  
+        const nombre = `${usuario.primerNombre} ${usuario.primerApellido}`;
+  
+        // Si el usuario existe, sigue con el guardado
+        const formData = new FormData();
+        formData.append('numDocumento', this.contratoSeleccionado.numDocumento.toString());
+        formData.append('tipoContratoId', this.contratoSeleccionado.tipoContratoId.toString());
+        formData.append('estado', this.contratoSeleccionado.estado.toString());
+        formData.append('fechaIngreso', this.contratoSeleccionado.fechaIngreso);
+        formData.append('fechaFinal', this.contratoSeleccionado.fechaFinal);
+  
+        if (this.archivoSeleccionado) {
+          formData.append('documento', this.archivoSeleccionado);
+        }
+  
+        this.contratosService.agregarContrato(formData).subscribe({
+          next: () => {
+            Swal.fire({
+              title: '¡OK!',
+              text: `El contrato para ${nombre} fue creado exitosamente.`,
+              icon: 'success',
+              confirmButtonText: 'Aceptar'
+            }).then(() => {
+              location.reload(); // o this.cargarContratos() si no quieres recargar
+            });
+          },
+          error: (err) => {
+            console.error('Error al guardar:', err);
+            Swal.fire('¡ERROR!', 'No se pudo crear el contrato.', 'error');
+          }
+        });
       },
       error: (err) => {
-        console.error('Error al guardar:', err);
-        Swal.fire({
-                  title: '¡ERROR!',
-                  text: 'El usuario no se pudo crear.',
-                  icon: 'error',
-                  confirmButtonText: 'Aceptar'
-                }).then(() => {
-                  location.reload(); // 👈 recarga la página cuando se cierre el alert
-                });
+        console.error('Error al buscar el usuario:', err);
+        Swal.fire('Error', 'No se encontró el usuario. Verifique el número de documento.', 'error');
       }
     });
   }
+  
   imagenSeleccionada: string = '';
    
 
@@ -265,5 +281,32 @@ export class ContratosComponent implements OnInit{
       documento: ''
     };
   }
+  getNombreTipoContrato(tipoContratoId: number): string {
+    const tipo = this.tiposContrato.find(t => t.idTipoContrato === tipoContratoId);
+    return tipo ? tipo.nomTipoContrato : 'Desconocido';
+  }
+  
+  
+  getNombreEstado(estado: number): string {
+    switch (estado) {
+      case 1: return 'Activo';
+      case 2: return 'Bloqueado';
+      case 3: return 'Cancelado';
+      default: return 'Desconocido';
+    }
+  }
+  
+  getClaseEstado(estado: number): string {
+    switch (estado) {
+      case 1: return 'badge bg-success';
+      case 2: return 'badge bg-warning text-dark';
+      case 3: return 'badge bg-danger';
+      default: return 'badge bg-secondary';
+    }
+  }
+  
+  
+  
+  
   
 }

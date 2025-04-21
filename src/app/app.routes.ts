@@ -18,12 +18,9 @@ import { TrazabilidadComponent } from './pages/directorio/trazabilidad/trazabili
 import { ContratosComponent } from './pages/directorio/contratos/contratos.component';
 import { CategoriaVacantesComponent } from './pages/vacantes copy/categoria-vacantes/categoria-vacantes.component';
 import { PostulacionesComponent } from './pages/vacantes copy/postulaciones/postulaciones.component';
-
 //import { FormhorasExtraComponent} from './pages/formhoras-extra/formhoras-extra.component';
 
 import { AuthGuard } from './guards/auth.guard';
-
-
 
 export const routes: Routes = [
   

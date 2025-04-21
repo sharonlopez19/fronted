@@ -20,7 +20,7 @@
         <input
           type="text"
           class="form-control text-white border-0 py-2"
-          placeholder="Buscar por documento o estado..."
+          placeholder="Buscar por documento o fechas..."
           [(ngModel)]="filtroNombre"
           style="
             background-color: #1d2233;
@@ -52,8 +52,18 @@
               "
             >
               <td>{{ contrato.numDocumento }}</td>
-              <td>{{ contrato.tipoContratoId }}</td>
-              <td>{{ contrato.estado }}</td>
+              <!-- Mostrar nombre del tipo de contrato -->
+              <td>{{ getNombreTipoContrato(contrato.tipoContratoId) }}</td>
+
+
+              <!-- Mostrar estado legible -->
+              <!-- Estado con color y nombre -->
+              <td>
+                <span [ngClass]="getClaseEstado(contrato.estado)" class="estado-badge">
+                  {{getNombreEstado(contrato.estado)}}
+                </span>
+              </td>
+
               <td>{{ contrato.fechaIngreso }}</td>
               <td>{{ contrato.fechaFinal }}</td>
               <td>
@@ -61,7 +71,12 @@
                   [src]="'http://localhost:8000/' + contrato.documento"
                   alt="Documento"
                   class="img-thumbnail"
-                  style="width: 80px; height: 80px; object-fit: cover; cursor: pointer"
+                  style="
+                    width: 80px;
+                    height: 80px;
+                    object-fit: cover;
+                    cursor: pointer;
+                  "
                   (click)="abrirModalImagen(contrato.documento)"
                 />
               </td>
@@ -335,24 +350,28 @@
           </div>
           <div class="modal-body">
             <div class="row">
-            <form (ngSubmit)="actualizarContrato()" #formEditar="ngForm" enctype="multipart/form-data">
-              <ng-container
-                *ngTemplateOutlet="formularioContrato"
-              ></ng-container>
-              <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">
-                  Guardar cambios
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Cancelar
-                </button>
-              </div>
-            </form>
-          </div>
+              <form
+                (ngSubmit)="actualizarContrato()"
+                #formEditar="ngForm"
+                enctype="multipart/form-data"
+              >
+                <ng-container
+                  *ngTemplateOutlet="formularioContrato"
+                ></ng-container>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">
+                    Guardar cambios
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
