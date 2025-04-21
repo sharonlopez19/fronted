@@ -173,15 +173,7 @@
           <form (ngSubmit)="agregarUsuario()" #formAgregar="ngForm">
             <div class="modal-body" >
               <div class="row">
-                <div class="col-md-4 mb-3">
-                  <label class="form-label">Número de Documento</label>
-                  <input
-                    class="form-control"
-                    [(ngModel)]="nuevoUsuario.numDocumento"
-                    name="numDocumento"
-                    required
-                  />
-                </div>
+                
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Primer Nombre</label>
                   <input
@@ -214,6 +206,33 @@
                     class="form-control"
                     [(ngModel)]="nuevoUsuario.segundoApellido"
                     name="segundoApellido"
+                  />
+                </div>
+                <!-- Tipo de Documento -->
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Tipo de Documento</label>
+                  <select
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.tipoDocumentoId"
+                    name="tipoDocumentoId"
+                    required
+                  >
+                    <option [ngValue]="null">Seleccione un tipo</option>
+                    <option
+                      *ngFor="let t of tiposDocumento"
+                      [value]="t.idTipoDocumento"
+                    >
+                      {{ t.nombreTipoDocumento }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                  <label class="form-label">Número de Documento</label>
+                  <input
+                    class="form-control"
+                    [(ngModel)]="nuevoUsuario.numDocumento"
+                    name="numDocumento"
+                    required
                   />
                 </div>
                 <div class="col-md-4 mb-3">
@@ -314,24 +333,7 @@
                   </select>
                 </div>
 
-                <!-- Tipo de Documento -->
-                <div class="col-md-4 mb-3">
-                  <label class="form-label">Tipo de Documento</label>
-                  <select
-                    class="form-control"
-                    [(ngModel)]="nuevoUsuario.tipoDocumentoId"
-                    name="tipoDocumentoId"
-                    required
-                  >
-                    <option [ngValue]="null">Seleccione un tipo</option>
-                    <option
-                      *ngFor="let t of tiposDocumento"
-                      [value]="t.idTipoDocumento"
-                    >
-                      {{ t.nombreTipoDocumento }}
-                    </option>
-                  </select>
-                </div>
+                
 
                 <!-- Estado Civil -->
                 <div class="col-md-4 mb-3">
