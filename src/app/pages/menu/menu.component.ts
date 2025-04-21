@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service'; 
+import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
@@ -12,6 +12,9 @@ import { RouterOutlet } from '@angular/router';
   styleUrls: ['./menu.component.scss']
 })
 export class MenuComponent implements OnInit {
+toggleSubmenuVacantes() {
+throw new Error('Method not implemented.');
+}
   isCollapsed = false;
   isSubmenuOpen = false; // Directorio
   isSubmenuVacantesOpen = false; // Vacantes
@@ -52,7 +55,5 @@ export class MenuComponent implements OnInit {
     this.isSubmenuOpen = !this.isSubmenuOpen;
   }
 
-  toggleSubmenuVacantes(): void {
-    this.isSubmenuVacantesOpen = !this.isSubmenuVacantesOpen;
-  }
+
 }
