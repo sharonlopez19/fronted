@@ -1,23 +1,24 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2'; // Importamos Swal
 
-// --- Importación de la interfaz Categoria (esto ya lo tenías) ---
-export interface Categoria {
-  id?: number;
-  nombre: string;
-}
+// --- Importación del servicio y la interfaz ---
+// La interfaz Categoria DEBE venir de aquí, NO declarada localmente en este archivo.
+// **VERIFICA ESTA RUTA POR ÚLTIMA VEZ**
+import { Categoria, CategoriaService } from '../../../services/categoria.service';
 
-// --- Importación del Pipe de Filtrado (¡Esto es lo añadido para el filtro!) ---
-// ASEGÚRATE de que la ruta './filter-categoria' sea correcta
-// dependiendo de dónde guardaste el archivo filter-categoria.ts
+// --- Importación del Pipe de Filtrado ---
+// Verifica también esta ruta
 import { FilterCategoriaPipe } from './filter-categoria';
 
-
 import { AuthService } from '../../../services/auth.service';
-import Swal from 'sweetalert2';
-
 import { MenuComponent } from '../../menu/menu.component';
+
+// --- IMPORTA HttpClientModule ---
+
+import { catchError } from 'rxjs/operators'; // Importa catchError para manejo de errores en subscribe
+import { throwError } from 'rxjs'; // Importa throwError
 
 
 @Component({
@@ -27,24 +28,32 @@ import { MenuComponent } from '../../menu/menu.component';
     CommonModule,
     FormsModule,
     MenuComponent,
-    FilterCategoriaPipe, // <-- ¡El Pipe de filtrado añadido aquí!
+    FilterCategoriaPipe,
+    // <-- ¡ASEGÚRATE DE INCLUIR HttpClientModule AQUÍ!
   ],
   templateUrl: './categoria-vacantes.component.html',
   styleUrls: ['./categoria-vacantes.component.scss']
 })
 export class CategoriaVacantesComponent implements OnInit {
 
-  // --- Propiedad para la lista de categorías (ya la tenías) ---
+  // --- Propiedad para la lista de categorías ---
+  // Usa la interfaz importada del servicio
   categorias: Categoria[] = [];
-  categoriaSeleccionada: Categoria = { nombre: '' };
+
+  // --- Propiedad para la categoría seleccionada ---
+  // Inicializa con nomCategoria, según la interfaz importada
+  categoriaSeleccionada: Categoria = { nomCategoria: '' };
+
   usuario: any = {};
 
-  // --- Propiedad para el filtro (ya la tenías) ---
+  // --- Propiedad para el filtro ---
   filtroNombre: string = "";
 
-
+  // --- INYECCIÓN DEL SERVICIO ---
   constructor(
-    public authService: AuthService
+    public authService: AuthService,
+    // Asegúrate de que CategoriaService está correctamente importado y exportado
+    private categoriaService: CategoriaService // Inyección del servicio
   ) { }
 
   ngOnInit(): void {
@@ -54,40 +63,64 @@ export class CategoriaVacantesComponent implements OnInit {
       console.log('Usuario logueado:', this.usuario);
     }
 
-    this.cargarCategorias(); // Esto carga los datos de ejemplo iniciales
+    // === LLAMADA REAL AL SERVICIO AL INICIAR EL COMPONENTE ===
+    this.cargarCategorias();
   }
 
-  // --- Método para cargar categorías (simulado, ya lo tenías) ---
+  // --- Método para cargar categorías (AHORA LLAMA AL SERVICIO) ---
   cargarCategorias(): void {
-    console.log('Simulando carga de categorías...');
-    this.categorias = [
-      { id: 1, nombre: 'Desarrollador Frontend' },
-      { id: 2, nombre: 'Desarrollador Backend' },
-      { id: 3, nombre: 'Diseñador UX/UI' },
-      { id: 4, nombre: 'Gerente de Proyecto' },
-      { id: 5, nombre: 'Analista de Datos' },
-      { id: 6, nombre: 'Tester QA' },
-      { id: 7, nombre: 'Administrador de Sistemas' },
-    ];
+    console.log('Llamando al servicio para cargar categorías...');
+    this.categoriaService.getCategorias().pipe(
+        catchError(error => {
+            console.error('Error en la suscripción al cargar categorías:', error);
+             Swal.fire('Error', 'No se pudieron cargar las categorías.', 'error');
+            return throwError(() => new Error(error.message || 'Error desconocido al cargar categorías'));
+        })
+    )
+    .subscribe({
+      next: (data) => {
+        this.categorias = data;
+        console.log('Categorías cargadas:', data);
+      },
+      error: (error) => {
+        // El catchError de arriba ya maneja el Swal, aquí podrías hacer algo adicional si necesitas
+        console.error('Suscripción de cargarCategorias completada con error.', error);
+      }
+    });
   }
 
-  // --- Método para abrir modal de agregar (ya lo tenías) ---
+  // --- Método para abrir modal de agregar ---
   abrirModalAgregarCategoria(): void {
-    this.categoriaSeleccionada = { nombre: '' };
+    this.categoriaSeleccionada = { nomCategoria: '' };
     console.log('Abriendo modal para agregar categoría...');
+    // Aquí normalmente abrirías tu modal/formulario
   }
 
-  // --- Método para editar categoría (ya lo tenías) ---
-  editarCategoria(categoria: Categoria, index: number): void {
+  // --- Método para editar categoría ---
+  // Recibe el objeto Categoria completo
+  editarCategoria(categoria: Categoria): void {
     this.categoriaSeleccionada = { ...categoria };
     console.log('Editando categoría:', categoria);
+    // Aquí normalmente abrirías tu modal/formulario con los datos cargados
+    // Opcional: Obtener datos frescos de la API para editar si es necesario
+    // if (categoria.idCatVac !== undefined) {
+    //   this.categoriaService.getCategoria(categoria.idCatVac).subscribe(data => {
+    //     this.categoriaSeleccionada = data;
+    //   });
+    // }
   }
 
-  // --- Método para confirmar eliminación (simulado, ya lo tenías) ---
-  confirmDeleteCategoria(index: number): void {
-    const categoria = this.categorias[index];
+  // --- Método para confirmar eliminación (AHORA LLAMA AL SERVICIO) ---
+  // Recibe el objeto Categoria completo
+  confirmDeleteCategoria(categoria: Categoria): void {
+     if (categoria.idCatVac === undefined) {
+         console.error('No se puede eliminar una categoría sin ID.');
+         Swal.fire('Error', 'Datos de categoría inválidos para eliminar.', 'error');
+         return;
+     }
+
     Swal.fire({
-      title: `¿Eliminar la categoría "${categoria.nombre}"?`,
+      title: `¿Eliminar la categoría "${categoria.nomCategoria}"?`,
       text: 'Esta acción no se puede deshacer.',
       icon: 'warning',
       showCancelButton: true,
@@ -100,53 +133,91 @@ export class CategoriaVacantesComponent implements OnInit {
       buttonsStyling: false
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(`Simulando eliminación de categoría con ID: ${categoria.id}`);
-        // Simula la eliminación del array local
-        this.categorias.splice(index, 1);
-        Swal.fire('¡Eliminada!', `La categoría "${categoria.nombre}" fue eliminada correctamente.`, 'success');
-        // Nota: Aquí deberías llamar a tu servicio para eliminar en la API real
+        console.log(`Llamando al servicio para eliminar categoría con idCatVac: ${categoria.idCatVac}...`);
+        // ** Implementación de llamada al servicio - CORREGIDA CON EL OPERADOR ! **
+        // Usamos categoria.idCatVac! para asegurar a TypeScript que no es undefined aquí.
+        this.categoriaService.deleteCategoria(categoria.idCatVac!).pipe(
+             catchError(error => {
+                  console.error('Error en la suscripción al eliminar categoría:', error);
+                  Swal.fire('Error', 'No se pudo eliminar la categoría.', 'error');
+                  return throwError(() => new Error(error.message || 'Error desconocido al eliminar categoría'));
+             })
+        )
+        .subscribe({
+          next: () => {
+            console.log('Categoría eliminada con éxito');
+            Swal.fire('¡Eliminada!', `La categoría "${categoria.nomCategoria}" fue eliminada correctamente.`, 'success');
+            this.cargarCategorias(); // === RECARGAR LA LISTA DESPUÉS DEL ÉXITO ===
+          },
+          error: (error) => {
+            // El catchError de arriba ya maneja el Swal
+            console.error('Suscripción de deleteCategoria completada con error.', error);
+          }
+        });
       }
     });
   }
 
-  // --- Método para guardar nueva categoría (simulado, ya lo tenías) ---
+  // --- Método para guardar (crear o actualizar) categoría (AHORA LLAMA AL SERVICIO) ---
+  // Usa la interfaz Categoria con idCatVac y nomCategoria
   guardarCategoria(): void {
-    console.log('Intentando guardar nueva categoría:', this.categoriaSeleccionada);
+    console.log('Llamando al servicio para guardar categoría:', this.categoriaSeleccionada);
 
-    if (!this.categoriaSeleccionada.nombre) {
+    if (!this.categoriaSeleccionada.nomCategoria) {
       Swal.fire('Error', 'El nombre de la categoría es obligatorio.', 'error');
       return;
     }
 
-    console.log('Simulando guardado de nueva categoría:', this.categoriaSeleccionada);
-    // Simula la adición con un nuevo ID
-    const newId = Math.max(...this.categorias.map(c => c.id || 0), 0) + 1;
-    const nuevaCategoriaConId = { ...this.categoriaSeleccionada, id: newId };
-    this.categorias.push(nuevaCategoriaConId); // Añade al array local
-    Swal.fire('¡Agregada!', 'La categoría ha sido guardada correctamente (simulado).', 'success');
-    this.categoriaSeleccionada = { nombre: '' }; // Limpia el formulario
-    // Nota: Aquí deberías llamar a tu servicio para guardar en la API real
+    // Decide si crear o actualizar basado en si tiene idCatVac
+    if (this.categoriaSeleccionada.idCatVac !== undefined) {
+        console.log('Llamando al servicio para actualizar categoría:', this.categoriaSeleccionada.idCatVac);
+        // ** Implementación de llamada al servicio (Actualizar) - DESCOMENTADO **
+        this.categoriaService.updateCategoria(this.categoriaSeleccionada).pipe(
+             catchError(error => {
+                  console.error('Error en la suscripción al actualizar categoría:', error);
+                  Swal.fire('Error', 'No se pudo actualizar la categoría.', 'error');
+                  return throwError(() => new Error(error.message || 'Error desconocido al actualizar categoría'));
+             })
+        )
+        .subscribe({
+           next: (updatedCategoria) => {
+               console.log('Categoría actualizada con éxito:', updatedCategoria);
+               Swal.fire('¡Actualizada!', 'La categoría fue editada exitosamente.', 'success');
+               this.cargarCategorias(); // === RECARGAR LA LISTA DESPUÉS DEL ÉXITO ===
+               // Aquí normalmente cerrarías tu modal/formulario
+           },
+           error: (error) => {
+               // El catchError de arriba ya maneja el Swal
+               console.error('Suscripción de updateCategoria completada con error.', error);
+           }
+        });
+
+    } else { // Crear nueva categoría
+        console.log('Llamando al servicio para crear nueva categoría...');
+         // ** Implementación de llamada al servicio (Crear) - DESCOMENTADO **
+         this.categoriaService.createCategoria(this.categoriaSeleccionada).pipe(
+              catchError(error => {
+                   console.error('Error en la suscripción al crear categoría:', error);
+                   Swal.fire('Error', 'No se pudo crear la categoría.', 'error');
+                   return throwError(() => new Error(error.message || 'Error desconocido al crear categoría'));
+              })
+         )
+         .subscribe({
+            next: (newCategoria) => {
+               console.log('Categoría creada con éxito:', newCategoria);
+               Swal.fire('¡Creada!', 'La categoría ha sido guardada correctamente.', 'success');
+               this.categoriaSeleccionada = { nomCategoria: '' }; // Limpiar formulario
+               this.cargarCategorias(); // === RECARGAR LA LISTA DESPUÉS DEL ÉXITO ===
+               // Aquí normalmente cerrarías tu modal/formulario
+            },
+            error: (error) => {
+                 // El catchError de arriba ya maneja el Swal
+                 console.error('Suscripción de createCategoria completada con error.', error);
+            }
+         });
+    }
   }
 
-  // --- Método para guardar cambios de categoría (simulado, ya lo tenías) ---
-  guardarCambiosCategoria(): void {
-    console.log('Intentando actualizar categoría:', this.categoriaSeleccionada);
-
-    if (!this.categoriaSeleccionada.nombre || this.categoriaSeleccionada.id === undefined) {
-      Swal.fire('Error', 'Datos de categoría inválidos para actualizar.', 'error');
-      return;
-    }
-
-    console.log('Simulando actualización de categoría:', this.categoriaSeleccionada);
-    // Simula la actualización en el array local
-    const index = this.categorias.findIndex(c => c.id === this.categoriaSeleccionada.id);
-    if (index !== -1) {
-      this.categorias[index] = { ...this.categoriaSeleccionada };
-      Swal.fire('¡Actualizada!', 'La categoría fue editada exitosamente (simulado).', 'success');
-      // Nota: Aquí deberías llamar a tu servicio para actualizar en la API real
-    } else {
-      console.error('Categoría no encontrada para actualizar en el array local.');
-      Swal.fire('Error', 'No se pudo actualizar la categoría.', 'error');
-    }
-  }
+  // Si consolidaste la lógica en guardarCategoria(), este método ya no es necesario
+  // guardarCambiosCategoria(): void { ... }
 }

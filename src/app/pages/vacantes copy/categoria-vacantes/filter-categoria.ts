@@ -1,24 +1,34 @@
 import { Pipe, PipeTransform } from '@angular/core';
-// Importa la interfaz Categoria desde donde la tengas definida
-import { Categoria } from './categoria-vacantes.component'; // <--- Asegúrate que esta ruta sea correcta si la interfaz no está en el TS del componente
-
+// === 1. CORREGIR LA RUTA DE IMPORTACIÓN DE CATEGORIA ===
+// Importar Categoria desde el servicio donde está definida y exportada
+import { Categoria } from '../../../services/categoria.service'; // <-- ¡RUTA CORREGIDA!
 
 @Pipe({
-  name: 'filterCategoria', // Este nombre es crucial y DEBE coincidir con lo que pones en el HTML
-  standalone: true // O 'false' si no usas standalone y lo declaraste en un módulo
+  name: 'filterCategoria', // Asegúrate de que el nombre coincida con cómo lo usas en el HTML
+  standalone: true // O false si no es standalone
+  // pure: true // O false
 })
-export class FilterCategoriaPipe implements PipeTransform { // El nombre de la clase del Pipe
+export class FilterCategoriaPipe implements PipeTransform {
 
-  transform(categorias: Categoria[], termino: string): Categoria[] {
-    if (!categorias || !termino) {
+  // Asume que filtroNombre es una cadena de texto
+  // El segundo parámetro se llama 'filtroNombre' en tu componente y HTML, así que lo mantenemos aquí para claridad.
+  transform(categorias: Categoria[], filtroNombre: string): Categoria[] {
+    // Si no hay filtro, retorna la lista completa
+    if (!filtroNombre) {
       return categorias;
     }
 
-    const lowerTermino = termino.toLowerCase();
+    // Convierte el filtro a minúsculas para búsqueda insensible a mayúsculas/minúsculas
+    const filtroLower = filtroNombre.toLowerCase();
 
-    return categorias.filter(categoria =>
-      categoria.nombre.toLowerCase().includes(lowerTermino)
-      // Puedes añadir || (categoria.id ? categoria.id.toString().includes(lowerTermino) : false) si quieres buscar por ID también
-    );
+    // Filtra el array de categorías
+    return categorias.filter(categoria => {
+      // === 2. CORREGIR LA PROPIEDAD USADA PARA FILTRAR ===
+      // Cambia 'categoria.nombre' por 'categoria.nomCategoria'
+      return categoria.nomCategoria.toLowerCase().includes(filtroLower);
+      // Si quieres buscar por ID también (aunque es menos común en filtros de texto):
+      // || (categoria.idCatVac ? categoria.idCatVac.toString().includes(filtroLower) : false)
+    });
   }
+
 }
