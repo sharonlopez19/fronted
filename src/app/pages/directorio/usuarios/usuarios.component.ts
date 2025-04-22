@@ -50,7 +50,8 @@ export class UsuariosComponent implements OnInit {
     tipoDocumentoId: null,
     estadoCivilId: null,
     pensionesCodigo: null,
-    rol:null
+    rol:null,
+    usersId: 0
   };
 
   usuario: any = {}; // usuario logueado desde localStorage
@@ -142,32 +143,51 @@ export class UsuariosComponent implements OnInit {
   
     Swal.fire({
       title: `¿Eliminar a ${nombre}?`,
-      text: 'Esta acción no se puede deshacer.',
+      text: 'Esta acción eliminará también el acceso del usuario.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.usuariosService.eliminarUsuario(usuario.numDocumento).subscribe({
-          next: (res) => {
-            Swal.fire({
-              title: 'Eliminado',
-              text: `${nombre} fue eliminado correctamente.`,
-              icon: 'success',
-              confirmButtonText: 'Aceptar'
-            }).then(() => {
-              location.reload(); // ✅ recargar página después
-            });
-          },
-          error: (err) => {
-            console.error('Error al eliminar:', err);
-            Swal.fire('Error', 'No se pudo eliminar el usuario.', 'error');
-          }
-        });
+        
+        // 1. Eliminar el user (tabla users)
+        
+        if (usuario.usersId !== null) {
+          this.authService.eliminarUser(usuario.usersId).subscribe({
+            next: () => {
+              // 2. Luego eliminar el usuario (tabla usuarios)
+              this.usuariosService.eliminarUsuario(usuario.numDocumento).subscribe({
+                next: () => {
+                  Swal.fire({
+                    title: 'Eliminado',
+                    text: `${nombre} fue eliminado correctamente.`,
+                    icon: 'success',
+                    confirmButtonText: 'Aceptar'
+                  }).then(() => {
+                    this.cargarUsuarios(); // o location.reload();
+                  });
+                },
+                error: (err) => {
+                  console.error('Error al eliminar usuario:', err);
+                  Swal.fire('Error', 'No se pudo eliminar el usuario.', 'error');
+                }
+              });
+            },
+            error: (err) => {
+              console.error('Error al eliminar usuario base:', err);
+              Swal.fire('Error', 'No se pudo eliminar el acceso base del usuario.', 'error');
+            }
+          });
+        } else {
+          console.error("El usersId es null, no se puede eliminar.");
+        }
+        
+        
       }
     });
   }
+  
   
   
   get usuariosPaginados(): Usuarios[] {
@@ -188,38 +208,51 @@ export class UsuariosComponent implements OnInit {
       return;
     }
   
-    // 1. Verificar existencia previa
-    this.usuariosService.verificarExistenciaUsuario(email, numDocumento).subscribe(existe => {
+    // 1. Validar en tabla usuarios si ya existe correo o documento
+    this.usuariosService.verificarExistenciaUsuario(email, numDocumento).subscribe((existe: boolean) => {
       if (existe) {
         Swal.fire('Error', 'Ya existe un usuario con ese correo o número de documento.', 'error');
         return;
       }
-  
-      // 2. Registrar primero en `users`
+      console.log('Resultado existencia:', existe);
+
+      // 2. Crear primero el user
       const userData = {
         name: `${this.nuevoUsuario.primerNombre} ${this.nuevoUsuario.primerApellido}`,
         email: email,
-        email_confirmation: email,
+        email_confirmation: email,            // 👈 necesario
         password: password,
         password_confirmation: repetirPassword,
-        rol: rol
+        rol: Number(rol)
       };
-  
+      console.log('Datos que se envían a /register:', userData);
       this.authService.register(userData).subscribe({
         next: (res) => {
-          const userId = res.user.id;
+          const userId = res.user?.id;
   
-          // 3. Crear el objeto para la tabla usuarios
           const usuarioFinal = {
-            ...this.nuevoUsuario,
-            usersId: userId,
-            fechaNac: '2000-01-01', // o ajustá si pedís esta info
+            numDocumento: this.nuevoUsuario.numDocumento,
+            primerNombre: this.nuevoUsuario.primerNombre,
+            segundoNombre: this.nuevoUsuario.segundoNombre,
+            primerApellido: this.nuevoUsuario.primerApellido,
+            segundoApellido: this.nuevoUsuario.segundoApellido,
+            password: repetirPassword,
+            fechaNac: '2000-01-01',
             numHijos: 0,
             contactoEmergencia: 'NO REGISTRADO',
-            numContactoEmergencia: '0000000000'
+            numContactoEmergencia: '0000000000',
+            email: this.nuevoUsuario.email,
+            direccion: this.nuevoUsuario.direccion,
+            telefono: this.nuevoUsuario.telefono,
+            nacionalidadId: Number(this.nuevoUsuario.nacionalidadId),
+            epsCodigo: this.nuevoUsuario.epsCodigo,
+            generoId: Number(this.nuevoUsuario.generoId),
+            tipoDocumentoId: Number(this.nuevoUsuario.tipoDocumentoId),
+            estadoCivilId: Number(this.nuevoUsuario.estadoCivilId),
+            pensionesCodigo: this.nuevoUsuario.pensionesCodigo,
+            usersId: userId,
           };
-  
-          // Guardar el usuario
+          
           this.usuariosService.agregarUsuario(usuarioFinal).subscribe({
             next: () => {
               Swal.fire('¡Éxito!', 'El usuario fue creado correctamente.', 'success');
@@ -228,33 +261,28 @@ export class UsuariosComponent implements OnInit {
             },
             error: (err) => {
               console.error('Error al guardar usuario:', err);
-            
               if (err.status === 400 && err.error?.errors) {
-                const errores = Object.entries(err.error.errors)
-                  .map(([campo, mensajes]: [string, any]) => `${campo}: ${mensajes.join(', ')}`)
-                  .join('\n');
-                
-                Swal.fire('Error de validación', errores, 'error');
+                const errores = Object.values(err.error.errors).flat().join('\n');
+                Swal.fire('Validación', errores, 'warning');
               } else {
                 Swal.fire('Error', 'No se pudo guardar el usuario.', 'error');
               }
             }
-            
           });
         },
         error: (err) => {
-          
-          Swal.fire('Error', 'No se pudo crear el usuario base.', 'error');
           if (err.status === 422 && err.error?.errors) {
             const errores = Object.values(err.error.errors).flat().join(' ');
             Swal.fire('Error', errores, 'error');
           } else {
-            Swal.fire('Error', 'No se pudo crear el usuario base.', 'error');
+            Swal.fire('Error', err.error?.message || 'No se pudo crear el usuario base.', 'error');
           }
         }
       });
     });
   }
+  
+  
   
   actualizarUsuario(): void {
     if (!this.usuarioSeleccionado || !this.usuarioSeleccionado.numDocumento) return;
