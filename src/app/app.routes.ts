@@ -22,7 +22,6 @@ import { GestionComponent } from './pages/vacantes copy/gestion/gestion.componen
 
 import { AuthGuard } from './guards/auth.guard';
 
-
 export const routes: Routes = [
   // Ruta para login
   { path: 'login', component: LoginComponent },
@@ -45,17 +44,13 @@ export const routes: Routes = [
       { path: 'notificaciones', component: NotificacionesComponent },
       { path: 'notificaciones-admin', component: NotificacionesAdminComponent },
       { path: 'formvacaciones', component: FormvacacionesComponent },
-      { path: 'directorio/area', component: AreaComponent},
-      { path: 'directorio/usuarios', component: UsuariosComponent},
-      { path: 'directorio/contratos', component: ContratosComponent},
-      { path: 'directorio/trazabilidad', component: TrazabilidadComponent},
+      { path: 'directorio/area', component: AreaComponent },
+      { path: 'directorio/usuarios', component: UsuariosComponent },
+      { path: 'directorio/contratos', component: ContratosComponent },
+      { path: 'directorio/trazabilidad', component: TrazabilidadComponent },
       { path: 'vacantes copy/categoria-vacantes', component: CategoriaVacantesComponent },
-      { path: 'vacantes copy/postulaciones', component: PostulacionesComponent },
-      { path: 'vacantes copy/gestion', component: GestionComponent }, 
-      
-
-      //{ path: 'formhoras-extra', component: FormhorasExtraComponent}
-
+      { path: 'vacantes copy/postulaciones', component: PostulacionesComponent },
+      { path: 'vacantes copy/gestion', component: GestionComponent },
     ]
   },
 
@@ -66,4 +61,5 @@ export const routes: Routes = [
   { path: '**', redirectTo: 'login' }
 ];
 
+// Exportamos la configuración de rutas
 export const appRouting = provideRouter(routes);
