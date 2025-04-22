@@ -17,17 +17,7 @@ export interface Contratos {
   providedIn: 'root'
 })
 export class AreaService {
-  idArea: null;
-  primerNombre: string;
-  segundoNombre: string;
-  primerApellido: string;
-  segundoApellido: string;
-  telefono: string;
-  email: string;
-  email_confirmation: string;
-  direccion: string;
-  password:string;
-  password_confirmation: string,
+  
   nacionalidadId?: number | null;
   epsCodigo?: string | null;
   generoId?: number | null;
@@ -35,6 +25,6 @@ export class AreaService {
   estadoCivilId?: number | null;
   pensionesCodigo?: string | null;
   rol?: number | null;
-  usersId: number | null;
+  
   constructor() { }
 }
