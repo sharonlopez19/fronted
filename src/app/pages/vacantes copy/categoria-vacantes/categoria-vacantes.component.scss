@@ -1,5 +1,3 @@
-/* Import variables if you use them (like color variables) */
-// @import 'variables'; // Adjust the path if needed
 
 .layout {
     display: flex;
@@ -16,7 +14,7 @@
 
 
   .contenido-principal {
-    margin-left: 250px; // mismo ancho que el menú
+    margin-left: 250px;
     padding: 20px;
     margin-right: 0;
     margin-top: 10px;

@@ -19,8 +19,11 @@ import { ContratosComponent } from './pages/directorio/contratos/contratos.compo
 import { CategoriaVacantesComponent } from './pages/vacantes copy/categoria-vacantes/categoria-vacantes.component';
 import { PostulacionesComponent } from './pages/vacantes copy/postulaciones/postulaciones.component';
 import { GestionComponent } from './pages/vacantes copy/gestion/gestion.component';
+import { HorasAdminComponent } from './pages/horas-admin/horas-admin.component';
+
 
 import { AuthGuard } from './guards/auth.guard';
+
 
 export const routes: Routes = [
   // Ruta para login
@@ -41,6 +44,7 @@ export const routes: Routes = [
       { path: 'vacaciones', component: VacacionesComponent },
       { path: 'incapacidades', component: IncapacidadesComponent },
       { path: 'horas-extra', component: HorasExtraComponent },
+  
       { path: 'notificaciones', component: NotificacionesComponent },
       { path: 'notificaciones-admin', component: NotificacionesAdminComponent },
       { path: 'formvacaciones', component: FormvacacionesComponent },
@@ -51,6 +55,7 @@ export const routes: Routes = [
       { path: 'vacantes copy/categoria-vacantes', component: CategoriaVacantesComponent },
       { path: 'vacantes copy/postulaciones', component: PostulacionesComponent },
       { path: 'vacantes copy/gestion', component: GestionComponent },
+      { path: 'horas-admin', component: HorasAdminComponent },
     ]
   },
 
