@@ -19,7 +19,7 @@ export class IncapacidadesComponent implements OnInit {
   filtroNombreIncapacidad: string = '';
   usuario: any;
   archivoSeleccionado: File | null = null;
-  categorias: any[] = []; // si más adelante necesitas categorías u otros datos asociados
+  categorias: any[] = []; 
 
   constructor(
     public authService: AuthService,

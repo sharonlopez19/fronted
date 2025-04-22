@@ -2,10 +2,10 @@
 
 <div class="layout">
   <div class="contenido-principal">
-    <div class="header-horas d-flex justify-content-between align-items-center">
+<div class="header-vacaciones d-flex justify-content-between align-items-center">
       <h3>Gestión de Incapacidades</h3>
       <button class="btn btn-light btn-sm agregar-btn" data-bs-toggle="modal" data-bs-target="#agregarIncapacidadModal"
-        *ngIf="[1,2, 4].includes(usuario?.rol)" (click)="abrirModalAgregarIncapacidad()">
+        *ngIf="[1,2,4].includes(usuario?.rol)" (click)="abrirModalAgregarIncapacidad()">
         <i class="fas fa-plus-circle"></i> Agregar Incapacidad
       </button>
     </div>
@@ -16,7 +16,6 @@
     </div>
 
     <div *ngIf="[1,2,3,4].includes(usuario?.rol); else sinPermiso">
-
       <table class="table table-striped table-bordered table-hover">
         <thead class="table-dark">
           <tr>
@@ -33,16 +32,20 @@
           <tr *ngFor="let incapacidad of (incapacidades ?? []) | filterIncapacidad : filtroNombreIncapacidad">
             <td>{{ incapacidad.idIncapacidad }}</td>
             <td>{{ incapacidad.descrip }}</td>
-            <td>{{ incapacidad.archivo }}</td>
+            <td>
+              <a *ngIf="incapacidad.archivo" [href]="'http://localhost:8000/' + incapacidad.archivo" target="_blank">
+                Ver archivo
+              </a>
+            </td>
             <td>{{ incapacidad.fechaInicio }}</td>
             <td>{{ incapacidad.fechaFinal }}</td>
             <td *ngIf="[1,4].includes(usuario?.rol)">{{ incapacidad.contratoId }}</td>
             <td *ngIf="[1,4].includes(usuario?.rol)">
-              <button class="btn btn-link editar" data-bs-toggle="modal" data-bs-target="#editarIncapacidadModal"
+              <button class="btn-acciones editar" data-bs-toggle="modal" data-bs-target="#editarIncapacidadModal"
                 (click)="editarIncapacidad(incapacidad)">
                 <i class="fas fa-edit"></i>
               </button>
-              <button class="btn btn-link eliminar" (click)="confirmDeleteIncapacidad(incapacidad)">
+              <button class="btn-acciones eliminar" (click)="confirmDeleteIncapacidad(incapacidad)">
                 <i class="fas fa-trash-alt"></i>
               </button>
             </td>
@@ -56,14 +59,12 @@
         No se encontraron incapacidades con esa descripción.
       </div>
       <div *ngIf="(incapacidades ?? []).length === 0 && !filtroNombreIncapacidad" class="alert alert-info mt-3">
-        No hay incapacidades disponibles.
+        No hay incapacidades registradas.
       </div>
-
     </div>
+
     <ng-template #sinPermiso>
-      <div class="alert alert-warning">
-        No tienes permiso para ver esta información.
-      </div>
+      <div class="alert alert-warning">No tienes permiso para ver esta información.</div>
     </ng-template>
 
     <!-- Modal Agregar -->
@@ -75,8 +76,8 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
           <div class="modal-body">
-            <form (ngSubmit)="guardarIncapacidad()">
-              <ng-container *ngTemplateOutlet="formularioIncapacidad" enctype="multipart/form-data"></ng-container>
+            <form (ngSubmit)="guardarIncapacidad()" enctype="multipart/form-data">
+              <ng-container *ngTemplateOutlet="formularioIncapacidad"></ng-container>
               <button type="submit" class="btn btn-primary">Agregar</button>
             </form>
           </div>
@@ -111,30 +112,21 @@
         <label class="form-label">Archivo</label>
         <input type="file" class="form-control" (change)="onArchivoSeleccionado($event)" accept=".pdf,.doc,.docx,.jpg,.png,.jpeg" />
         <div *ngIf="archivoSeleccionado">
-          <small *ngIf="archivoSeleccionado" class="text-muted">
-            Archivo seleccionado: {{ archivoSeleccionado.name }}
-          </small>
-          
+          <small class="text-muted">Archivo seleccionado: {{ archivoSeleccionado.name }}</small>
         </div>
       </div>
-      
-      
       <div class="mb-3">
         <label class="form-label">Fecha de Inicio</label>
-        <input type="date" class="form-control" [(ngModel)]="incapacidadSeleccionada.fechainicio" name="fechainicio"
-          required />
+        <input type="date" class="form-control" [(ngModel)]="incapacidadSeleccionada.fechainicio" name="fechainicio" required />
       </div>
       <div class="mb-3">
         <label class="form-label">Fecha Final</label>
-        <input type="date" class="form-control" [(ngModel)]="incapacidadSeleccionada.fechaFinal" name="fechaFinal"
-          required />
+        <input type="date" class="form-control" [(ngModel)]="incapacidadSeleccionada.fechaFinal" name="fechaFinal" required />
       </div>
       <div class="mb-3">
         <label class="form-label">Contrato ID</label>
-        <input type="number" class="form-control" [(ngModel)]="incapacidadSeleccionada.contratoId" name="contratoId"
-          required />
+        <input type="number" class="form-control" [(ngModel)]="incapacidadSeleccionada.contratoId" name="contratoId" required />
       </div>
     </ng-template>
-
   </div>
 </div>

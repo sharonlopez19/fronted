@@ -95,12 +95,12 @@
       <a class="nav-link" *ngIf="[1, 4].includes(usuario?.rol)" (click)="navigateTo('/horas-extra-admin')" [class.active]="isActive('/horas-extra-admin')">
         <i class="fas fa-calendar-plus"></i>
         <span>Horas extra</span>
-      </a>
-      <a class="nav-link" *ngIf="[2, 3].includes(usuario?.rol)" (click)="navigateTo('/notificaciones')" [class.active]="isActive('/vacaciones')">
+      </a>notificaciones
+      <a class="nav-link" *ngIf="[2, 3].includes(usuario?.rol)" (click)="navigateTo('/notificaciones')" [class.active]="isActive('/notificaciones')">
         <i class="fas fa-bell"></i>
         <span>Notificaciones</span>
       </a>
-      <a class="nav-link" *ngIf="[1, 4].includes(usuario?.rol)" (click)="navigateTo('/notificaciones-admin')" [class.active]="isActive('/vacaciones')">
+      <a class="nav-link" *ngIf="[1, 4].includes(usuario?.rol)" (click)="navigateTo('/notificaciones-admin')" [class.active]="isActive('/notificaciones-admin')">
         <i class="fas fa-bell"></i>
         <span>Notificaciones</span>
       </a>

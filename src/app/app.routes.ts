@@ -42,7 +42,7 @@ export const routes: Routes = [
       { path: 'incapacidades', component: IncapacidadesComponent },
       { path: 'horas-extra', component: HorasExtraComponent },
       { path: 'notificaciones', component: NotificacionesComponent },
-      { path: 'notificaciones-admin', component: NotificacionesAdminComponent },
+      { path: 'notificaciones', component: NotificacionesAdminComponent },
       { path: 'formvacaciones', component: FormvacacionesComponent },
       { path: 'directorio/area', component: AreaComponent },
       { path: 'directorio/usuarios', component: UsuariosComponent },
