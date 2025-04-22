@@ -1,113 +1,110 @@
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
+import { IncapacidadesService } from 'src/app/services/incapacidades.service';
+import { FilterIncapacidad } from './filter-incapacidad';
+import { MenuComponent } from '../menu/menu.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MenuComponent } from "../menu/menu.component";
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { Component, OnInit, HostListener } from '@angular/core';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 @Component({
   selector: 'app-incapacidades',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MenuComponent, FontAwesomeModule],
   templateUrl: './incapacidades.component.html',
+  imports: [CommonModule, FormsModule, MenuComponent,NgxPaginationModule,FilterIncapacidad],
   styleUrls: ['./incapacidades.component.scss']
 })
 export class IncapacidadesComponent implements OnInit {
-
   incapacidades: any[] = [];
-  nuevaIncapacidad: any = {};
-  incapacidadEditada: any = {};
-  modalAbierto: boolean = false;
-  mostrarAgregarModalIncapacidad: boolean = false;
-  isLargeScreen: boolean = true;
+  incapacidadSeleccionada: any = {};
+  filtroNombreIncapacidad: string = '';
+  usuario: any;
+  archivoSeleccionado: File | null = null;
+  categorias: any[] = []; 
 
-  constructor() {}
+  constructor(
+    public authService: AuthService,
+    private incapacidadesService: IncapacidadesService
+  ) {}
 
   ngOnInit(): void {
-    // Simulamos datos iniciales (puedes reemplazar con datos reales)
-    this.incapacidades = [
-      {
-        id: 1,
-        nombre: 'Juan Pérez',
-        cargo: 'Desarrollador',
-        estado: 'Pendiente',
-        totalDias: 5,
-        fechaInicio: new Date('2024-04-10'),
-        fechaFinal: new Date('2024-04-15')
+    const userFromLocal = localStorage.getItem('usuario');
+    if (userFromLocal) {
+      this.usuario = JSON.parse(userFromLocal);
+      console.log('Usuario logueado:', this.usuario);
+    }
+
+    this.obtenerIncapacidades();
+  }
+
+  obtenerIncapacidades(): void {
+    this.incapacidadesService.obtenerIncapacidades().subscribe({
+      next: (data) => {
+        this.incapacidades = data;
+        console.log('Incapacidades cargadas:', this.incapacidades);
       },
-      {
-        id: 2,
-        nombre: 'María Gómez',
-        cargo: 'Diseñadora',
-        estado: 'Aprobado',
-        totalDias: 3,
-        fechaInicio: new Date('2024-04-05'),
-        fechaFinal: new Date('2024-04-08')
+      error: (err) => {
+        console.error('Error al obtener incapacidades:', err);
       }
-    ];
+    });
+    console.log('Incapacidades cargadas:', this.incapacidades);
 
-    // Agregamos isExpanded a cada incapacidad
-    this.incapacidades = this.incapacidades.map(incapacidad => ({
-      ...incapacidad,
-      isExpanded: false
-    }));
-
-    this.onResize(); // Para detectar tamaño inicial
   }
 
-  @HostListener('window:resize', [])
-  onResize() {
-    this.isLargeScreen = window.innerWidth > 1140;
-  }
-
-  toggleAcordeon(incapacidad: any): void {
-    incapacidad.isExpanded = !incapacidad.isExpanded;
-  }
-
-  agregarIncapacidad(): void {
-    this.nuevaIncapacidad = {};
-    this.mostrarAgregarModalIncapacidad = true;
-  }
-
-  cerrarAgregarModalIncapacidad(): void {
-    this.mostrarAgregarModalIncapacidad = false;
-  }
-
-  guardarNuevaIncapacidad(): void {
-    const nueva = {
-      ...this.nuevaIncapacidad,
-      id: Date.now(), // ID temporal
-      isExpanded: false
-    };
-    this.incapacidades.push(nueva);
-    this.cerrarAgregarModalIncapacidad();
+  abrirModalAgregarIncapacidad(): void {
+    this.incapacidadSeleccionada = {};
   }
 
   editarIncapacidad(incapacidad: any): void {
-    this.incapacidadEditada = { ...incapacidad };
-    this.modalAbierto = true;
-  }
-
-  cancelarEdicion(): void {
-    this.modalAbierto = false;
+    this.incapacidadSeleccionada = { ...incapacidad };
   }
 
   guardarIncapacidad(): void {
-    const index = this.incapacidades.findIndex(i => i.id === this.incapacidadEditada.id);
-    if (index !== -1) {
-      this.incapacidades[index] = {
-        ...this.incapacidadEditada,
-        isExpanded: this.incapacidades[index].isExpanded // conservar estado del acordeón
-      };
+    if (this.incapacidadSeleccionada?.idIncapacidad) {
+      // Si estás editando y no manejas archivo en la edición, puedes seguir con objeto normal
+      this.incapacidadesService.editarIncapacidad(this.incapacidadSeleccionada).subscribe({
+        next: () => this.obtenerIncapacidades(),
+        error: (err) => console.error('Error al editar incapacidad:', err)
+      });
+    } else {
+      // Aquí va la parte importante: usar FormData
+      const formData = new FormData();
+      formData.append('descrip', this.incapacidadSeleccionada.descrip || '');
+      formData.append('fechaInicio', this.incapacidadSeleccionada.fechainicio || '');
+      formData.append('fechaFinal', this.incapacidadSeleccionada.fechaFinal || '');
+      formData.append('contratoId', this.incapacidadSeleccionada.contratoId?.toString() || '');
+  
+      if (this.archivoSeleccionado) {
+        formData.append('archivo', this.archivoSeleccionado);
+      }
+  
+      this.incapacidadesService.agregarIncapacidad(formData).subscribe({
+        next: () => {
+          this.obtenerIncapacidades();
+          this.incapacidadSeleccionada = {}; // Limpia el formulario
+          this.archivoSeleccionado = null;
+        },
+        error: (err) => {
+          console.error('Error al agregar incapacidad:', err);
+        }
+      });
     }
-    this.cancelarEdicion();
+  }
+  
+  
+  confirmDeleteIncapacidad(incapacidad: any): void {
+    if (confirm('¿Estás seguro de eliminar esta incapacidad?')) {
+      this.incapacidadesService.eliminarIncapacidad(incapacidad.idIncapacidad).subscribe({
+        next: () => this.obtenerIncapacidades(),
+        error: (err) => console.error('Error al eliminar incapacidad:', err)
+      });
+    }
+  }
+  onArchivoSeleccionado(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.archivoSeleccionado = file;
+    }
   }
 
-  eliminarIncapacidad(id: number): void {
-    this.incapacidades = this.incapacidades.filter(i => i.id !== id);
-  }
-
-  generarReporte(): void {
-    // Aquí puedes implementar la lógica real de generación de PDF/Excel/etc.
-    console.log('Generar reporte de incapacidades');
-  }
+  
 }

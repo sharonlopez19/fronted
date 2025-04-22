@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 
-
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private apiUrl = 'http://localhost:8000/api';
@@ -42,18 +41,9 @@ export class AuthService {
   sessionStorage.clear(); // Limpia cualquier dato de sesión
   this.http.post(`${this.apiUrl}/logout`, {}).subscribe(); // Notifica al backend si es necesario
 }
-eliminarUser(id: number): Observable<any> {
-  return this.http.delete<any>(`http://localhost:8000/api/login/${id}`);
-}
+
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     return !!token; // si no hay token, devuelve false
   }
-  verificarExistenciaUsuario(email: string): Observable<boolean> {
-      return this.http.get<any>(`http://localhost:8000/api/verificar-user`, {
-        params: { email }
-      }).pipe(
-        tap(res => res)
-      );
-    }
 }

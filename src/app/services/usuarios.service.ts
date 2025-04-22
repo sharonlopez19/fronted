@@ -21,7 +21,10 @@ export interface Usuarios {
   estadoCivilId?: number | null;
   pensionesCodigo?: string | null;
   rol?: number | null;
+
   usersId: number | null;
+
+
 
 }
 
@@ -59,10 +62,6 @@ export class UsuariosService {
   eliminarUsuario(id: number): Observable<any> {
     return this.http.delete<any>(`http://localhost:8000/api/usuarios/${id}`);
   }
-  eliminarUser(id: number): Observable<any> {
-    return this.http.delete<any>(`http://localhost:8000/api/login/${id}`);
-  }
-  
   obtenerUsuario(id: number): Observable<any> {
     return this.http.get<any>(`http://localhost:8000/api/usuarios/${id}`);
   }
@@ -102,13 +101,12 @@ export class UsuariosService {
     );
   }
   verificarExistenciaUsuario(email: string, documento: number): Observable<boolean> {
-    return this.http.get<{ existe: boolean }>('http://localhost:8000/api/verificar-usuario', {
+    return this.http.get<any>(`http://localhost:8000/api/verificar-usuario`, {
       params: { email, documento }
     }).pipe(
       map(res => res.existe)
     );
   }
-  
   
     
   

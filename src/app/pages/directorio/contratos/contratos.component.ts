@@ -36,7 +36,7 @@ export class ContratosComponent implements OnInit{
 
   contratoSeleccionado: Contratos = {
     idContrato: 0,
-    numDocumento: 0, // ✅ ahora está correcto
+    numDocumento: 0,
     tipoContratoId: 1,
     estado: 1,
     fechaIngreso: '',
@@ -45,7 +45,7 @@ export class ContratosComponent implements OnInit{
     areaId: 0
   };
 
-  contrato: any = {}; // contrato logueado desde localStorage
+  contrato: any = {}; 
   usuario:any={};
   nuevocontrato: any = {};
   area:any={};
@@ -157,6 +157,7 @@ export class ContratosComponent implements OnInit{
     }
   }
   agregarContrato(): void {
+    // Verifica primero si el usuario existe
     this.usuariosService.obtenerUsuario(this.contratoSeleccionado.numDocumento).subscribe({
       next: (res) => {
         const usuario = res.usuario ?? res;
@@ -175,7 +176,6 @@ export class ContratosComponent implements OnInit{
         formData.append('estado', this.contratoSeleccionado.estado.toString());
         formData.append('fechaIngreso', this.contratoSeleccionado.fechaIngreso);
         formData.append('fechaFinal', this.contratoSeleccionado.fechaFinal);
-        formData.append('areaId', this.contratoSeleccionado.areaId.toString()); // ✅ importante
   
         if (this.archivoSeleccionado) {
           formData.append('documento', this.archivoSeleccionado);
@@ -204,7 +204,6 @@ export class ContratosComponent implements OnInit{
       }
     });
   }
-  
   
   imagenSeleccionada: string = '';
    
