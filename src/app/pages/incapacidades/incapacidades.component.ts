@@ -69,7 +69,7 @@ export class IncapacidadesComponent implements OnInit {
       // Aquí va la parte importante: usar FormData
       const formData = new FormData();
       formData.append('descrip', this.incapacidadSeleccionada.descrip || '');
-      formData.append('fechainicio', this.incapacidadSeleccionada.fechaInicio || '');
+      formData.append('fechaInicio', this.incapacidadSeleccionada.fechainicio || '');
       formData.append('fechaFinal', this.incapacidadSeleccionada.fechaFinal || '');
       formData.append('contratoId', this.incapacidadSeleccionada.contratoId?.toString() || '');
   
@@ -90,6 +90,7 @@ export class IncapacidadesComponent implements OnInit {
     }
   }
   
+  
   confirmDeleteIncapacidad(incapacidad: any): void {
     if (confirm('¿Estás seguro de eliminar esta incapacidad?')) {
       this.incapacidadesService.eliminarIncapacidad(incapacidad.idIncapacidad).subscribe({
@@ -104,5 +105,6 @@ export class IncapacidadesComponent implements OnInit {
       this.archivoSeleccionado = file;
     }
   }
+
   
 }

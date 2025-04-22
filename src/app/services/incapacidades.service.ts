@@ -33,6 +33,7 @@ export class IncapacidadesService {
     return this.http.get<any>(`${this.apiUrl}/${id}`);
   }
 
+
   agregarIncapacidad(formData: FormData) {
     return this.http.post<any>('http://127.0.0.1:8000/api/incapacidad', formData);
   }
