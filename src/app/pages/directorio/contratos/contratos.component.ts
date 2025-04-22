@@ -36,7 +36,7 @@ export class ContratosComponent implements OnInit{
 
   contratoSeleccionado: Contratos = {
     idContrato: 0,
-    numDocumento: 0, // ✅ ahora está correcto
+    numDocumento: 0,
     tipoContratoId: 1,
     estado: 1,
     fechaIngreso: '',
@@ -45,7 +45,7 @@ export class ContratosComponent implements OnInit{
     areaId: 0
   };
 
-  contrato: any = {}; // contrato logueado desde localStorage
+  contrato: any = {}; 
   usuario:any={};
   nuevocontrato: any = {};
   area:any={};
