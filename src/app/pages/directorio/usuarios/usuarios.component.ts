@@ -231,7 +231,7 @@ export class UsuariosComponent implements OnInit {
           const userId = res.user?.id;
   
           const usuarioFinal = {
-            numDocumento: this.nuevoUsuario.numDocumento,
+            numDocumento: Number(this.nuevoUsuario.numDocumento),
             primerNombre: this.nuevoUsuario.primerNombre,
             segundoNombre: this.nuevoUsuario.segundoNombre,
             primerApellido: this.nuevoUsuario.primerApellido,
