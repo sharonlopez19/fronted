@@ -20,15 +20,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
-    // ✅ Aplica clase para fondo del login si se necesita
+    
     document.body.classList.add('login-background');
 
-    // (Opcional) Limpiar token si ya hay uno
+   
     localStorage.removeItem('token');
   }
 
   ngOnDestroy(): void {
-    // ❌ Elimina la clase del fondo cuando el componente se destruye
+   
     document.body.classList.remove('login-background');
   }
 

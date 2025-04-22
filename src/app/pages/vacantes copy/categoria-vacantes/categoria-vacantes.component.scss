@@ -1,6 +1,3 @@
-/* Import variables if you use them (like color variables) */
-// @import 'variables'; // Adjust the path if needed
-
 .layout {
     display: flex;
     height: 100vh;
@@ -16,7 +13,7 @@
 
 
   .contenido-principal {
-    margin-left: 250px; // mismo ancho que el menú
+    margin-left: 250px; 
     padding: 20px;
     margin-right: 0;
     margin-top: 10px;
@@ -30,13 +27,13 @@
     overflow-y: auto;
 
     @media (max-width: 945px) {
-      margin-left: 70px; // si tu menú se reduce a 70px en responsive
+      margin-left: 70px; 
       width: calc(100% - 70px);
     }
   }
 
 
-  /* body, html { overflow: hidden; } */
+
 
   .header-horas {
     background: linear-gradient(90deg, var(--color-principal), var(--active-color));
@@ -86,8 +83,7 @@
     color: white;
   }
 
-  /* La regla .table-striped tbody tr:nth-child(odd) que estaba vacía ha sido eliminada para evitar la advertencia emptyRules */
-  /* Si deseas filas alternas, añade aquí una nueva regla con estilos no comentados */
+
 
 
   .btn-acciones {
@@ -249,17 +245,15 @@
       }
   }
 
-/* Styles for card-like responsive table on small screens */
-/* Based on the visual example of the Usuarios table on small screens */
-@media (max-width: 768px) { /* Adjust breakpoint if needed to match when your users table changes */
+
+@media (max-width: 768px) { 
 
   .table {
-    border: none; /* Remove table border in card view */
-    margin-bottom: 1.5rem; /* Add space between cards */
+    border: none; 
+    margin-bottom: 1.5rem; 
   }
 
   .table thead {
-    /* Hide table header in card view */
     border: none;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -271,51 +265,50 @@
   }
 
   .table tr {
-    /* Style table rows as cards */
-    border: 1px solid #ddd; /* Card border */
-    display: block; /* Make row a block element */
-    margin-bottom: .625em; /* Space between rows */
-    background-color: #1e2131; /* Card background */
-    padding: 1rem; /* Card padding */
-    border-radius: 8px; /* Card rounded corners */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Card shadow */
+    border: 1px solid #ddd; 
+    display: block; 
+    margin-bottom: .625em; 
+    background-color: #1e2131; 
+    padding: 1rem; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
   }
 
   .table td {
-    /* Style table data cells */
-    border-bottom: none; /* Eliminada la línea divisoria */
-    display: block; /* Make cell a block element */
-    font-size: .8em; /* Adjust font size */
-    text-align: left; /* ** CORREGIDO: Alinear texto a la izquierda ** */
-    padding-left: 1rem; /* Adjust padding */
-    padding-right: 1rem; // Add padding on the right
-    position: relative; // Needed for :before absolute positioning
-    margin-bottom: 0.5rem; // Add space below each data item
+    
+    border-bottom: none; 
+    display: block; 
+    font-size: .8em; 
+    text-align: left;
+    padding-left: 1rem; 
+    padding-right: 1rem; 
+    position: relative; 
+    margin-bottom: 0.5rem; 
   }
 
   .table td::before {
-    content: attr(data-label) ":"; /* Add colon and space after label */
+    content: attr(data-label) ":"; 
     font-weight: bold;
     text-transform: uppercase;
     display: inline-block;
-    margin-right: 0.5rem; /* Space after label */
-    color: #bbb; // Example label color
-    vertical-align: top; // Align label to the top if value wraps
+    margin-right: 0.5rem; 
+    color: #bbb; 
+    vertical-align: top; 
   }
 
-  /* Specific adjustments for the actions column */
+  
   .table td:last-child {
-    border-bottom: 0; /* No border below the last data item */
-    text-align: left; /* ** CORREGIDO: Alinear botones de acción a la izquierda ** */
+    border-bottom: 0; 
+    text-align: left; 
     padding-left: 1rem;
-    padding-right: 1rem; // Match other cells
-     margin-top: 1rem; // Add space above action buttons
-     margin-bottom: 0; // No margin below
+    padding-right: 1rem; 
+     margin-top: 1rem; 
+     margin-bottom: 0; 
   }
 
    .btn-acciones {
-     margin: 0 5px; // Add some space between action buttons
-     font-size: 1rem; // Adjust icon size if needed in card view
+     margin: 0 5px; 
+     font-size: 1rem; 
    }
 }
 
@@ -326,10 +319,10 @@
         color: white;
         border: 1px solid #7a86a1;
         
-        // Opcional: Estilizar también el texto del placeholder
+        
         &::placeholder {
-          color: #cccccc; // Un tono de blanco más claro para mejor contraste/visibilidad
-          opacity: 1; // Asegura que el placeholder sea visible
+          color: #cccccc; 
+          opacity: 1;
         }
       }
     }

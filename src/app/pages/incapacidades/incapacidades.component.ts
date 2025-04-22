@@ -23,7 +23,7 @@ export class IncapacidadesComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    // Simulamos datos iniciales (puedes reemplazar con datos reales)
+    
     this.incapacidades = [
       {
         id: 1,
@@ -45,13 +45,13 @@ export class IncapacidadesComponent implements OnInit {
       }
     ];
 
-    // Agregamos isExpanded a cada incapacidad
+   
     this.incapacidades = this.incapacidades.map(incapacidad => ({
       ...incapacidad,
       isExpanded: false
     }));
 
-    this.onResize(); // Para detectar tamaño inicial
+    this.onResize(); 
   }
 
   @HostListener('window:resize', [])
@@ -75,7 +75,7 @@ export class IncapacidadesComponent implements OnInit {
   guardarNuevaIncapacidad(): void {
     const nueva = {
       ...this.nuevaIncapacidad,
-      id: Date.now(), // ID temporal
+      id: Date.now(),
       isExpanded: false
     };
     this.incapacidades.push(nueva);
@@ -96,7 +96,7 @@ export class IncapacidadesComponent implements OnInit {
     if (index !== -1) {
       this.incapacidades[index] = {
         ...this.incapacidadEditada,
-        isExpanded: this.incapacidades[index].isExpanded // conservar estado del acordeón
+        isExpanded: this.incapacidades[index].isExpanded 
       };
     }
     this.cancelarEdicion();
@@ -107,7 +107,7 @@ export class IncapacidadesComponent implements OnInit {
   }
 
   generarReporte(): void {
-    // Aquí puedes implementar la lógica real de generación de PDF/Excel/etc.
+    
     console.log('Generar reporte de incapacidades');
   }
 }

@@ -61,5 +61,5 @@ export const routes: Routes = [
   { path: '**', redirectTo: 'login' }
 ];
 
-// Exportamos la configuración de rutas
+
 export const appRouting = provideRouter(routes);

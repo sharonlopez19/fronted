@@ -1,11 +1,11 @@
-/* Layout principal */
+
 .layout {
     display: flex;
     min-height: 100vh;
     background-color: #202940;
   }
   
-  /* Menú lateral */
+  
   app-menu {
     position: fixed;
     left: 0;
@@ -15,7 +15,7 @@
     z-index: 1000;
   }
   
-  /* Contenido principal */
+
   .contenido-principal {
     flex: 1;
     margin-left: 280px;
@@ -23,14 +23,14 @@
     min-height: 100vh;
   }
   
-  /* Container */
+ 
   .container {
     max-width: 1200px;
     margin: 0 auto;
-    /* padding: 0 15px; */
+    
   }
   
-  /* Header de notificaciones */
+ 
   .header-horas {
     background: linear-gradient(90deg, var(--color-principal), var(--active-color));
     padding: 15px 20px;
@@ -218,7 +218,7 @@
     }
   }
   
-  /* Scrollbar personalizada */
+ 
   ::-webkit-scrollbar {
     width: 8px;
   }
@@ -237,14 +237,14 @@
   }
 
   
-    /* Modal de Desplazamiento Suave */
+  
 .modal.fade {
   transition: opacity 0.3s ease;
 }
 
 .modal-slide-in {
-  transform: translateY(-100vh); /* El modal comienza fuera de la pantalla */
-  animation: slideIn 0.5s forwards; /* Animación para deslizar el modal hacia abajo */
+  transform: translateY(-100vh); 
+  animation: slideIn 0.5s forwards; 
 }
 
 @keyframes slideIn {
@@ -256,7 +256,7 @@
   }
 }
 
-/* Ajustes de Modal */
+
 
 
 .modal-content {

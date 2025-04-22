@@ -13,7 +13,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.42); // ← Opacidad aquí
+    background-color: rgba(0, 0, 0, 0.42); 
     z-index: -1;
   }
 }
@@ -130,10 +130,10 @@ a.olvidar {
 }
 
 span.text-muted {
-  color: #fafdff !important; // Cambia el color a blanco u otro si prefieres
-  font-size: 0.9rem; // Puedes ajustar el tamaño
-  font-weight: 500; // Opcional, para que se vea más definido
-  letter-spacing: 0.5px; // Ligero espaciado para más elegancia
+  color: #fafdff !important; 
+  font-size: 0.9rem; 
+  font-weight: 500; 
+  letter-spacing: 0.5px; 
   margin-top: -5px;
   
 }
