@@ -267,7 +267,7 @@ export class ContratosComponent implements OnInit{
           icon: 'error',
           confirmButtonText: 'Aceptar'
         }).then(() => {
-          location.reload(); // o this.cargarContratos(); si no querés recargar toda la página
+          location.reload(); 
         })
       }
     });
