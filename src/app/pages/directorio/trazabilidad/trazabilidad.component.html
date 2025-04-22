@@ -1,1 +1,51 @@
-<p>trazabilidad works!</p>
+<app-menu></app-menu>
+
+<div class="layout">
+  <div class="contenido-principal">
+    <h3 class="mb-3">Historial de Trazabilidad</h3>
+    
+    <input
+      type="text"
+      class="form-control mb-3"
+      placeholder="Buscar por documento o usuario..."
+      [(ngModel)]="filtro"
+    />
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>IP</th>
+            <th>Usuario Anterior</th>
+            <th>Usuario Nuevo</th>
+            <th>Clave Anterior</th>
+            <th>Clave Nueva</th>
+            <th>Documento</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let traza of trazabilidadFiltrada | paginate: { itemsPerPage: itemsPerPage, currentPage: currentPage }">
+            <td>{{ traza.idTrazabilidad }}</td>
+            <td>{{ traza.fechaModificacion }}</td>
+            <td>{{ traza.iP }}</td>
+            <td>{{ traza.usuarioanterior }}</td>
+            <td>{{ traza.usuarionuevo }}</td>
+            <td>{{ traza.claveAnterior }}</td>
+            <td>{{ traza.claveNueva }}</td>
+            <td>{{ traza.numDocumento }}</td>
+            <td>
+              <button class="btn btn-outline-danger btn-sm" (click)="confirmDelete(traza.idTrazabilidad)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+  </div>
+</div>
