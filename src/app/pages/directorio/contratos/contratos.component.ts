@@ -41,12 +41,14 @@ export class ContratosComponent implements OnInit{
     estado: 1,
     fechaIngreso: '',
     fechaFinal: '',
-    documento: ''
+    documento: '',
+    areaId: 0
   };
 
   contrato: any = {}; // contrato logueado desde localStorage
   usuario:any={};
   nuevocontrato: any = {};
+  area:any={};
   constructor(private contratosService: ContratosService,private usuariosService: UsuariosService) {}
 
   ngOnInit(): void {
@@ -278,7 +280,8 @@ export class ContratosComponent implements OnInit{
       estado: '',
       fechaIngreso: '',
       fechaFinal: '',
-      documento: ''
+      documento: '',
+      areaId:0
     };
   }
   getNombreTipoContrato(tipoContratoId: number): string {

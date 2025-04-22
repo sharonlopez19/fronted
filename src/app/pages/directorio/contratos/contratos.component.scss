@@ -27,7 +27,7 @@
     overflow-y: auto;
   
     @media (max-width: 945px) {
-      margin-left: 70px; // si tu menú se reduce a 70px en responsive
+      margin-left: 70px; 
       width: calc(100% - 70px);
     }
   }
@@ -118,7 +118,7 @@
   }
   
   .btn-acciones.eliminar:hover {
-    background-color: #b02a3733; /* Efecto suave al hacer hover */
+    background-color: #b02a3733; 
     color: white;
     transform: scale(1.1);
   }
@@ -155,11 +155,11 @@
     }
   
     &.editar i {
-      color: #0d6efd; // Azul para editar
+      color: #0d6efd; 
     }
   
     &.eliminar i {
-      color: #dc3545; // Rojo para eliminar
+      color: #dc3545; 
     }
   
     &.editar:hover {
@@ -178,7 +178,7 @@
     }
   
     & {
-      overflow-y: auto; // ✅ esta es la forma futura segura
+      overflow-y: auto;
     }
   }
   
@@ -241,7 +241,7 @@
   }
   
   .modal-dialog {
-    max-width: 500px; // igual que modal-lg de Bootstrap
+    max-width: 500px;
   }
   
   .button .btn-close {
@@ -294,7 +294,7 @@
   }
   .estado-badge {
     display: inline-block;
-    width: 100px;        // ajustalo según lo que necesites
+    width: 100px;       
     text-align: center;
   }
   

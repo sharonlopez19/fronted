@@ -3,28 +3,44 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-export interface Contratos {
+export interface Areas {
  
   idArea: number;
-  numDocumento: number;         
-  tipoContratoId: number;
+  nombreArea: string;         
+  jefePersonal: string;
   estado: number;
-  fechaIngreso: string;
-  fechaFinal: string;
-  documento: string;
 }
 @Injectable({
   providedIn: 'root'
 })
 export class AreaService {
+  private apiUrl = 'http://localhost:8000/api/area';
+  constructor(private http:HttpClient) { }
+  obtenerAreas(): Observable<any> {
+    return this.http.get<any>(this.apiUrl).pipe(
+      map(res => {
+        console.log('Respuesta del backend:', res); 
+        return res.areas;
+      })
+      
+    );
+  }
+  obtenerAreaId(id:number){
+    return this.http.get<any>(`http://localhost:8000/api/area/${id}`);
+  }
+  eliminarAreaId(id:number){
+    return this.http.delete<any>(`http://localhost:8000/api/area/${id}`);
+  }
+  agregarArea(area: any) {
+    return this.http.post<any>('http://localhost:8000/api/area', area);
+
+  }
   
-  nacionalidadId?: number | null;
-  epsCodigo?: string | null;
-  generoId?: number | null;
-  tipoDocumentoId?: number | null;
-  estadoCivilId?: number | null;
-  pensionesCodigo?: string | null;
-  rol?: number | null;
+  obtenerNombre(nombre: string): Observable<any> {
+    return this.http.get(`http://localhost:8000/api/area-nombre/${nombre}`);
+  }
   
-  constructor() { }
+  actualizarAreaParcial(id: number, formData: FormData) {
+    return this.http.post(`http://localhost:8000/api/area/${id}`, formData);
+  }
 }

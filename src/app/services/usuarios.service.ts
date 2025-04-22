@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-// o desde donde tengas el modelo
+
 export interface Usuarios {
   numDocumento: number;
   primerNombre: string;
@@ -22,7 +22,7 @@ export interface Usuarios {
   pensionesCodigo?: string | null;
   rol?: number | null;
   usersId: number | null;
-  // Agrega más campos si los necesitas en el frontend
+
 }
 
 @Injectable({
@@ -36,7 +36,7 @@ export class UsuariosService {
   obtenerUsuarios(): Observable<any> {
     return this.http.get<any>(this.apiUrl).pipe(
       map(res => {
-        console.log('Respuesta del backend:', res); // 👈 esto
+        console.log('Respuesta del backend:', res); 
         return res.usuario;
       })
     );
@@ -49,7 +49,7 @@ export class UsuariosService {
   
   obtenerNacionalidades(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/nacionalidad').pipe(
-      map(res => res.Nacionalidad) // 👈 Esto extrae el array
+      map(res => res.Nacionalidad) 
     );
   }
   actualizarUsuarioParcial(id: number, datos: Partial<Usuarios>): Observable<any> {
@@ -69,25 +69,25 @@ export class UsuariosService {
   
   obtenerGeneros(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/genero').pipe(
-      map(res => res.genero) // 👈 Ajusta según la estructura real
+      map(res => res.genero) 
     );
   }
   
   obtenerTiposDocumento(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/tipodocumento').pipe(
-      map(res => res.tipodocumento) // 👈 Ajusta según la estructura real
+      map(res => res.tipodocumento) 
     );
   }
   
   obtenerEstadosCiviles(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/estadocivil').pipe(
-      map(res => res.estadocivil) // 👈 Ajusta según la estructura real
+      map(res => res.estadocivil) 
     );
   }
   
   obtenerEps(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/epss').pipe(
-      map(res => res.eps) // debe coincidir con la estructura del JSON
+      map(res => res.eps) 
     );
   }
   
@@ -98,7 +98,7 @@ export class UsuariosService {
   }
   obtenerRoles(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/rols').pipe(
-      map(res => res.rol) // 👈 asegurate que la clave sea correcta
+      map(res => res.rol) 
     );
   }
   verificarExistenciaUsuario(email: string, documento: number): Observable<boolean> {

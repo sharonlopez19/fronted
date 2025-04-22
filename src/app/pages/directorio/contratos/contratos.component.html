@@ -52,12 +52,12 @@
               "
             >
               <td>{{ contrato.numDocumento }}</td>
-              <!-- Mostrar nombre del tipo de contrato -->
+            
               <td>{{ getNombreTipoContrato(contrato.tipoContratoId) }}</td>
 
 
               <!-- Mostrar estado legible -->
-              <!-- Estado con color y nombre -->
+              
               <td>
                 <span [ngClass]="getClaseEstado(contrato.estado)" class="estado-badge">
                   {{getNombreEstado(contrato.estado)}}

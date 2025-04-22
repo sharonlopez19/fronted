@@ -11,6 +11,7 @@ export interface Contratos {
   fechaIngreso: string;
   fechaFinal: string;
   documento: string;
+  areaId: number;
 }
   
 
@@ -26,7 +27,7 @@ export class ContratosService {
   obtenerContratos(): Observable<any> {
     return this.http.get<any>(this.apiUrl).pipe(
       map(res => {
-        console.log('Respuesta del backend:', res); // 👈 esto
+        console.log('Respuesta del backend:', res); 
         return res.contrato;
       })
     );
@@ -37,17 +38,21 @@ export class ContratosService {
   }
   obtenerTiposContrato(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/tipocontrato').pipe(
-      map(res => res.tipocontrato) // 👈 coincide con la respuesta del backend
+      map(res => res.tipocontrato) 
     );
   }
   
-  
+  obtenerAreas():Observable<any[]>{
+    return this.http.get<any>('http://localhost:8000/api/area').pipe(
+      map(res => res.area)
+    );
+  }
   obtenerNacionalidades(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/nacionalidad').pipe(
-      map(res => res.Nacionalidad) // 👈 Esto extrae el array
+      map(res => res.Nacionalidad) 
     );
   }
- // contratos.service.ts
+ 
 actualizarContratoParcial(id: number, formData: FormData) {
   return this.http.post(`http://localhost:8000/api/contrato/${id}/actualizar`, formData);
 }
@@ -56,7 +61,7 @@ actualizarContratoParcial(id: number, formData: FormData) {
   
   obtenerEps(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/epss').pipe(
-      map(res => res.Eps) // 👈 Ajusta según la estructura real
+      map(res => res.Eps) 
     );
   }
   eliminarContrato(id: number): Observable<any> {
@@ -72,25 +77,25 @@ actualizarContratoParcial(id: number, formData: FormData) {
   
   obtenerGeneros(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/genero').pipe(
-      map(res => res.Genero) // 👈 Ajusta según la estructura real
+      map(res => res.Genero) 
     );
   }
   
   obtenerTiposDocumento(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/tipodocumento').pipe(
-      map(res => res.TipoDocumento) // 👈 Ajusta según la estructura real
+      map(res => res.TipoDocumento) 
     );
   }
   
   obtenerEstadosCiviles(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/estadocivil').pipe(
-      map(res => res.EstadoCivil) // 👈 Ajusta según la estructura real
+      map(res => res.EstadoCivil) 
     );
   }
   
   obtenerPensiones(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/pensiones').pipe(
-      map(res => res.Pensiones) // 👈 Ajusta según la estructura real
+      map(res => res.Pensiones) 
     );
   }
 }

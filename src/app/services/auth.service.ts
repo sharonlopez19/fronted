@@ -47,7 +47,7 @@ eliminarUser(id: number): Observable<any> {
 }
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
-    return !!token; // ❌ si no hay token, devuelve false
+    return !!token; // si no hay token, devuelve false
   }
   verificarExistenciaUsuario(email: string): Observable<boolean> {
       return this.http.get<any>(`http://localhost:8000/api/verificar-user`, {
