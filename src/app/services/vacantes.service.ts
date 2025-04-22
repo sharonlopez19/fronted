@@ -20,7 +20,7 @@ export interface Vacante {
 export class VacantesService {
 
   // Reemplaza esta URL con la URL base de tu API de vacantes
-  private apiUrl = 'http://localhost:8000/api/vacantesuser'; // Ejemplo: 'http://localhost:3000/api/vacantes'
+  private apiUrl = 'http://localhost:8000/api/vacantesuser'; 
 
   constructor(private http: HttpClient) { }
 
