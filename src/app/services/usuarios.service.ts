@@ -14,14 +14,14 @@ export interface Usuarios {
   direccion: string;
   password:string;
   password_confirmation: string,
-  nacionalidadId?: number | null;
-  epsCodigo?: string | null;
-  generoId?: number | null;
-  tipoDocumentoId?: number | null;
-  estadoCivilId?: number | null;
-  pensionesCodigo?: string | null;
-  rol?: number | null;
-  usersId: number | null;
+  nacionalidadId?: number;
+  epsCodigo?: string;
+  generoId?: number;
+  tipoDocumentoId?: number;
+  estadoCivilId?: number ;
+  pensionesCodigo?: string;
+  rol: number;
+  usersId: number;
 
 }
 
@@ -46,7 +46,9 @@ export class UsuariosService {
 
     return this.http.post<any>('http://localhost:8000/api/usuarios', usuario);
   }
-  
+  obtenerRol(id: number): Observable<any> {
+    return this.http.get<any>(`http://localhost:8000/api/rols/${id}`);
+  } 
   obtenerNacionalidades(): Observable<any[]> {
     return this.http.get<any>('http://localhost:8000/api/nacionalidad').pipe(
       map(res => res.Nacionalidad) 

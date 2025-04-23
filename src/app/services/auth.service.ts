@@ -38,13 +38,13 @@ export class AuthService {
   }
 
   logout(): void {
-  localStorage.removeItem('token');
-  sessionStorage.clear(); // Limpia cualquier dato de sesión
-  this.http.post(`${this.apiUrl}/logout`, {}).subscribe(); // Notifica al backend si es necesario
-}
-eliminarUser(id: number): Observable<any> {
-  return this.http.delete<any>(`http://localhost:8000/api/login/${id}`);
-}
+    localStorage.removeItem('token');
+    sessionStorage.clear(); // Limpia cualquier dato de sesión
+    this.http.post(`${this.apiUrl}/logout`, {}).subscribe(); // Notifica al backend si es necesario
+  }
+  eliminarUser(id: number): Observable<any> {
+    return this.http.delete<any>(`http://localhost:8000/api/login/${id}`);
+  }
   isAuthenticated(): boolean {
     const token = localStorage.getItem('token');
     return !!token; // si no hay token, devuelve false
@@ -55,5 +55,10 @@ eliminarUser(id: number): Observable<any> {
       }).pipe(
         tap(res => res)
       );
-    }
+  }
+  actualizarRol(idUsuario: number, nuevoRol: number) {
+    return this.http.patch(`${this.apiUrl}/rols/${idUsuario}`, { rol: nuevoRol });
+  }
+  
+  
 }

@@ -1,16 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../../services/auth.service';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TrazabilidadService, Trazabilidad } from 'src/app/services/trazabilidad.service';
 import Swal from 'sweetalert2';
 import { MenuComponent } from '../../menu/menu.component';
 import { Observable } from 'rxjs';
+import { FilterNamePipe } from 'src/app/shared/filter-name.pipe';
+styleUrls: ['./trazabilidad.component.scss']
 
 @Component({
   selector: 'app-trazabilidad',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, MenuComponent],
+  imports: [CommonModule,FilterNamePipe, FormsModule, NgxPaginationModule, MenuComponent],
   templateUrl: './trazabilidad.component.html',
   styleUrls: ['./trazabilidad.component.scss']
 })
@@ -19,10 +22,17 @@ export class TrazabilidadComponent implements OnInit {
   filtro: string = '';
   currentPage = 1;
   itemsPerPage = 5;
+  totalPages=5;
+  usuario:any={};
 
-  constructor(private trazabilidadService: TrazabilidadService) {}
+  constructor(private trazabilidadService: TrazabilidadService, private authService: AuthService) {}
 
   ngOnInit(): void {
+    const userFromLocal = localStorage.getItem('usuario');
+    if (userFromLocal) {
+      this.usuario = JSON.parse(userFromLocal);
+      console.log('usuario logueado:', this.usuario);
+    }
     this.cargarTrazabilidad();
   }
 
@@ -36,7 +46,10 @@ export class TrazabilidadComponent implements OnInit {
       }
     });
   }
-
+  
+  
+  
+  
   confirmDelete(id: number): void {
     Swal.fire({
       title: '¿Está seguro?',
@@ -65,6 +78,11 @@ export class TrazabilidadComponent implements OnInit {
       t.numDocumento.toString().includes(this.filtro) ||
       t.usuarionuevo.toLowerCase().includes(this.filtro.toLowerCase())
     );
+  }
+  cambiarPagina(pagina: number): void {
+    if (pagina >= 1 && pagina <= this.itemsPerPage) {
+      this.currentPage = pagina;
+    }
   }
   
 }

@@ -19,6 +19,7 @@ import { FilterNombre } from './filter-nombre';
 })
 export class UsuariosComponent implements OnInit {
   usuarios: Usuarios[] = [];
+  
   filtroNombre: string ="";
   currentPage = 1;
   itemsPerPage = 5;
@@ -29,7 +30,14 @@ export class UsuariosComponent implements OnInit {
   estadosCiviles: any[] = [];
   pensiones: any[] = [];
   totalPages=5;
-  roles: any[] = [];
+  roles: any[] = [
+    { idRol: 1, nombreRol: 'Administrador' },
+    { idRol: 2, nombreRol: 'Jefe de personal' },
+    { idRol: 3, nombreRol: 'Empleado' },
+    { idRol: 4, nombreRol: 'Recursos Humanos' },
+    { idRol: 5, nombreRol: 'Externo' },
+    { idRol: 7, nombreRol: 'Para borrar nuevo MODEL' }
+  ];
 
 
   usuarioSeleccionado: Usuarios = {
@@ -44,17 +52,17 @@ export class UsuariosComponent implements OnInit {
     password_confirmation:"",
     direccion: '',
     numDocumento: 0,
-    nacionalidadId: null,
-    epsCodigo: null,
-    generoId: null,
-    tipoDocumentoId: null,
-    estadoCivilId: null,
-    pensionesCodigo: null,
-    rol:null,
+    nacionalidadId: 0,
+    epsCodigo: "",
+    generoId: 0,
+    tipoDocumentoId: 0,
+    estadoCivilId: 0,
+    pensionesCodigo: "",
+    rol:0,
     usersId: 0
   };
-
-  usuario: any = {}; // usuario logueado desde localStorage
+  
+  usuario: any = {};
   nuevoUsuario: any = {};
   constructor(private usuariosService: UsuariosService,private authService: AuthService) {}
 
@@ -64,14 +72,19 @@ export class UsuariosComponent implements OnInit {
       this.usuario = JSON.parse(userFromLocal);
       console.log('Usuario logueado:', this.usuario);
     }
+  
     this.usuariosService.obtenerUsuarios().subscribe({
       next: (data) => {
-        this.usuarios = data; // 👈 ahora es un solo objeto
-        console.log('Usuario cargado:', this.usuarios);
-      }
+        this.usuarios = data;
+        console.log('Usuarios cargados:', this.usuarios);
+      },
+      error: (err) => console.error('Error al cargar usuarios', err)
     });
+  
     this.cargarForaneas();
+    
   }
+  
   
   abrirModalAgregar(): void {
     this.nuevoUsuario = {
@@ -118,8 +131,8 @@ export class UsuariosComponent implements OnInit {
   cargarUsuarios(): void {
     this.usuariosService.obtenerUsuarios().subscribe({
       next: (data) => {
-        this.usuarios = data;
-        console.log('Usuarios cargados:', this.usuarios);
+        const usuarios2 = data;
+        console.log('Usuarios cargados:', usuarios2);
       },
       error: (err) => {
         console.error('Error al cargar usuarios', err);
@@ -151,12 +164,12 @@ export class UsuariosComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         
-        // 1. Eliminar el user (tabla users)
+        
         
         if (usuario.usersId !== null) {
           this.authService.eliminarUser(usuario.usersId).subscribe({
             next: () => {
-              // 2. Luego eliminar el usuario (tabla usuarios)
+              
               this.usuariosService.eliminarUsuario(usuario.numDocumento).subscribe({
                 next: () => {
                   Swal.fire({
@@ -165,7 +178,7 @@ export class UsuariosComponent implements OnInit {
                     icon: 'success',
                     confirmButtonText: 'Aceptar'
                   }).then(() => {
-                    this.cargarUsuarios(); // o location.reload();
+                    this.cargarUsuarios(); 
                   });
                 },
                 error: (err) => {
@@ -187,7 +200,45 @@ export class UsuariosComponent implements OnInit {
       }
     });
   }
+ 
+    
   
+  rolesPorUsuario: { [userId: number]: string } = {};
+
+cargarRolesPorUsuarios(id: number): void {
+  this.usuariosService.obtenerUsuario(id).subscribe({
+    next: (usuario) => {
+      console.log(usuario);
+    },
+    error: (err) => {
+      console.error('Error al obtener el usuario:', err);
+      this.rolesPorUsuario[id] = 'Sin rol';
+    }
+  });
+}
+
+  
+  
+
+  
+  
+
+  cambiarRoles(usuario: any) {
+    const nuevoRol = prompt('Ingrese el nuevo ID de rol para este usuario:', usuario.rol);
+    const idRol = parseInt(nuevoRol || '', 10);
+    
+    if (!isNaN(idRol)) {
+      this.authService.actualizarRol(usuario.userId, idRol).subscribe({
+        next: () => {
+          Swal.fire('Actualizado', 'rol actualizado con éxito.', 'success');
+          this.cargarUsuarios();
+        },
+        error: () => {
+          Swal.fire('Error', 'No se pudo actualizar el rol.', 'error');
+        }
+      });
+    }
+  }
   
   
   get usuariosPaginados(): Usuarios[] {
@@ -202,7 +253,7 @@ export class UsuariosComponent implements OnInit {
   }
   agregarUsuario(): void {
     const { email, numDocumento, password, repetirPassword, rol } = this.nuevoUsuario;
-  
+    
     if (password !== repetirPassword) {
       Swal.fire('Error', 'Las contraseñas no coinciden.', 'error');
       return;

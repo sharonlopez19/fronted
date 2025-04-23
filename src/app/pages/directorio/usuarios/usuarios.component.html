@@ -36,6 +36,7 @@
               <th>Correo</th>
               <th>Dirección</th>
               <th>N° Documento</th>
+             
               <th>Acciones</th>
             </tr>
           </thead>
@@ -54,7 +55,23 @@
               <td>{{ usuarios.email }}</td>
               <td>{{ usuarios.direccion }}</td>
               <td>{{ usuarios.numDocumento }}</td>
+              
+
+
+
+              
+              
+
+              
+
               <td>
+                <button
+                  class="btn btn-warning btn-acciones"
+                  (click)="cambiarRoles(usuarios)"
+                  *ngIf="[1, 4].includes(usuario?.rol)"
+                >
+                  <i class="fas fa-user-shield"></i>
+                </button>
                 <button
                   class="btn btn-link btn-acciones editar"
                   data-bs-toggle="modal"
@@ -73,6 +90,21 @@
             </tr>
           </tbody>
         </table>
+        <!-- <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>ID Rol</th>
+              <th>Nombre del Rol</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rol of roles">
+              <td>{{ rol.idRol }}</td>
+              <td>{{ rol.nombreRol }}</td>
+            </tr>
+          </tbody>
+        </table> -->
+        
         <nav class="mt-3 d-flex justify-content-center">
           <ul class="pagination">
             <li class="page-item" [class.disabled]="currentPage === 1">
@@ -128,9 +160,17 @@
                 <p class="mb-2">
                   <strong>N° Documento:</strong> {{ usuarios.numDocumento }}
                 </p>
+                
               </div>
 
               <div class="card-footer d-flex justify-content-end gap-2">
+                <button
+                  class="btn btn-warning btn-acciones"
+                  (click)="cambiarRoles(usuarios)"
+                  *ngIf="[1, 4].includes(usuario?.rol)"
+                >
+                  <i class="fas fa-user-shield"></i>
+                </button>
                 <button
                   class="btn btn-outline-primary btn-sm"
                   data-bs-toggle="modal"
@@ -171,9 +211,8 @@
             ></button>
           </div>
           <form (ngSubmit)="agregarUsuario()" #formAgregar="ngForm">
-            <div class="modal-body" >
+            <div class="modal-body">
               <div class="row">
-                
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Primer Nombre</label>
                   <input
@@ -244,7 +283,11 @@
                     name="email"
                     required
                   />
-                  <input type="hidden" [(ngModel)]="nuevoUsuario.email_confirmation" name="email_confirmation">
+                  <input
+                    type="hidden"
+                    [(ngModel)]="nuevoUsuario.email_confirmation"
+                    name="email_confirmation"
+                  />
                 </div>
                 <div class="col-md-4 mb-3">
                   <label class="form-label">Dirección</label>
@@ -276,7 +319,10 @@
                     <option [ngValue]="null">
                       Seleccione una nacionalidad
                     </option>
-                    <option *ngFor="let n of nacionalidades" [value]="n.idNacionalidad">
+                    <option
+                      *ngFor="let n of nacionalidades"
+                      [value]="n.idNacionalidad"
+                    >
                       {{ n.nombre }}
                     </option>
                   </select>
@@ -332,8 +378,6 @@
                     </option>
                   </select>
                 </div>
-
-                
 
                 <!-- Estado Civil -->
                 <div class="col-md-4 mb-3">
@@ -481,6 +525,20 @@
           name="direccion"
           required
         />
+      </div> <!-- Rol -->
+      <div class="mb-3">
+        <label class="form-label">Rol</label>
+        <select
+          class="form-control"
+          [(ngModel)]="usuarioSeleccionado.rol"
+          name="rol"
+          required
+        >
+          <option [ngValue]="null">Seleccione un rol</option>
+          <option *ngFor="let r of roles" [value]="r.idRol">
+            {{ r.nombreRol }}
+          </option>
+        </select>
       </div>
     </ng-template>
   </div>
