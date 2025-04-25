@@ -21,8 +21,10 @@ import { PostulacionesComponent } from './pages/vacantes copy/postulaciones/post
 import { GestionComponent } from './pages/vacantes copy/gestion/gestion.component';
 import { MisPostulacionesComponent } from './pages/mis-postulaciones/mis-postulaciones.component'; 
 import { FormIncapacidadesComponent } from './pages/form-incapacidades/form-incapacidades.component';
+import { FormHorasComponent } from './pages/form-horas/form-horas.component';
 
 import { AuthGuard } from './guards/auth.guard';
+
 
 
 export const routes: Routes = [
@@ -48,6 +50,7 @@ export const routes: Routes = [
       { path: 'notificaciones-admin', component: NotificacionesAdminComponent },
       { path: 'formvacaciones', component: FormvacacionesComponent },
       { path: 'form-incapacidades', component: FormIncapacidadesComponent},
+      { path: 'form-horas', component: FormHorasComponent},
       { path: 'directorio/area', component: AreaComponent },
       { path: 'directorio/usuarios', component: UsuariosComponent },
       { path: 'directorio/contratos', component: ContratosComponent },
