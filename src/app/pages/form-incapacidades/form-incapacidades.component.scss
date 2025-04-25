@@ -83,16 +83,16 @@
     overflow: hidden; /* Ocultamos el scroll interno del contenedor morado */
   }
   
-  .formulario-vacaciones {
+  .formulario-incapacidades{
     width: 70%;
     display: flex;
     flex-direction: column;
-    background-color: #202940; /* Fondo oscuro similar al header */
+    background-color: #1e213100; /* Fondo oscuro similar al header */
     border-radius: 8px;
     padding: 20px;
   }
   
-  .formulario-vacaciones h2 {
+  .formulario-incapacidades h2 {
     position: sticky;
     top: 0;
     background-color: #3b83f615; /* Fondo transparente */
@@ -105,7 +105,7 @@
     padding: 10px;
   }
   
-  .vacaciones-form {
+  .incapacidades-form {
     width: 100%;
     max-width: none;
     padding: 20px;
@@ -291,3 +291,39 @@
       }
     }
   }
+  
+  
+  /* form-incapacidades.component.scss */
+
+/* ... Tus otros estilos para el contenedor del formulario, título, etc. ... */
+
+/* Estilos generales para los campos de formulario (inputs y textarea) */
+/* Asegura que estos estilos se apliquen al textarea con la clase 'form-control-match' */
+.formulario-incapacidades .form-group .form-control-match {
+  width: 100%; // Hace que el textarea ocupe todo el ancho disponible
+  padding: 8px 12px; // Espaciado interno
+ 
+  border-radius: 4px; // Bordes redondeados
+  box-sizing: border-box; // Incluye padding y border en el tamaño
+  background-color: #333645;
+  color: #eee; // Color del texto dentro del textarea (ajusta el color si es necesario)
+  font-size: 1em; // Tamaño de fuente
+  line-height: 1.5; // Altura de línea
+
+  /* Estilo al enfocar (hacer clic en el campo) */
+  &:focus {
+    outline: none; // Elimina el contorno por defecto
+    border-color: #007bff; // Cambia el color del borde al enfocar
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); // Añade una sombra al enfocar
+  }
+}
+
+/* Estilos específicos para el textarea (si necesitas ajustes adicionales) */
+/* Apunta directamente al textarea con la clase 'form-control-match' */
+.formulario-incapacidades .form-group textarea.form-control-match {
+   min-height: 100px; // Altura mínima del área de texto (ajusta según necesites)
+   resize: vertical; // Permite al usuario redimensionar solo verticalmente
+   /* Si no quieres que se pueda redimensionar: resize: none; */
+}
+
+/* ... El resto de tus estilos ... */

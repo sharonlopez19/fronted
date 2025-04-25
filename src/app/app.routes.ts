@@ -20,9 +20,10 @@ import { CategoriaVacantesComponent } from './pages/vacantes copy/categoria-vaca
 import { PostulacionesComponent } from './pages/vacantes copy/postulaciones/postulaciones.component';
 import { GestionComponent } from './pages/vacantes copy/gestion/gestion.component';
 import { MisPostulacionesComponent } from './pages/mis-postulaciones/mis-postulaciones.component'; 
-
+import { FormIncapacidadesComponent } from './pages/form-incapacidades/form-incapacidades.component';
 
 import { AuthGuard } from './guards/auth.guard';
+
 
 export const routes: Routes = [
   // Ruta para login
@@ -46,6 +47,7 @@ export const routes: Routes = [
       { path: 'notificaciones', component: NotificacionesComponent },
       { path: 'notificaciones-admin', component: NotificacionesAdminComponent },
       { path: 'formvacaciones', component: FormvacacionesComponent },
+      { path: 'form-incapacidades', component: FormIncapacidadesComponent},
       { path: 'directorio/area', component: AreaComponent },
       { path: 'directorio/usuarios', component: UsuariosComponent },
       { path: 'directorio/contratos', component: ContratosComponent },
