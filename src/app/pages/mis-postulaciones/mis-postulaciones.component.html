@@ -16,7 +16,7 @@
     </div>
 
     <!-- Validación de rol -->
-    <div *ngIf="[1, 4].includes(usuario['rol']); else sinPermiso">
+    <div *ngIf="[1, 3].includes(usuario['rol']); else sinPermiso">
       <!-- Este es el contenido visible si el rol está permitido -->
       <table class="table table-striped table-bordered table-hover">
         <thead class="table-dark">
