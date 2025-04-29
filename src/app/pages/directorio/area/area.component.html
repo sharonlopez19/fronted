@@ -37,7 +37,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let area of areas | filterNombre: filtroNombre; let i = index">
+            <tr *ngFor="let area of areas
+            | filterNombre : filtroNombre
+            | paginate
+              : { itemsPerPage: itemsPerPage, currentPage: currentPage };
+          let i = index">
               <td>{{ area.nombreArea }}</td>
               <td>{{ area.jefePersonal }}</td>
               <td>
@@ -65,6 +69,35 @@
             </tr>
           </tbody>
         </table>
+        <nav class="mt-3 d-flex justify-content-center">
+          <ul class="pagination">
+            <li class="page-item" [class.disabled]="currentPage === 1">
+              <button
+                class="page-link"
+                (click)="cambiarPagina(currentPage - 1)"
+              >
+                Anterior
+              </button>
+            </li>
+            <li
+              class="page-item"
+              *ngFor="let page of [].constructor(totalPages); let i = index"
+              [class.active]="currentPage === i + 1"
+            >
+              <button class="page-link" (click)="cambiarPagina(i + 1)">
+                {{ i + 1 }}
+              </button>
+            </li>
+            <li class="page-item" [class.disabled]="currentPage === totalPages">
+              <button
+                class="page-link"
+                (click)="cambiarPagina(currentPage + 1)"
+              >
+                Siguiente
+              </button>
+            </li>
+          </ul>
+        </nav>
       </div>
 
       <!-- Modal Agregar Área -->

@@ -39,6 +39,7 @@ export class AreaComponent {
     this.areaService.obtenerAreas().subscribe({
       next: (data) => {
         this.areas = data; 
+        this.totalPages = Math.ceil(this.areas.length / this.itemsPerPage);
         console.log('area cargada:', this.areas);
       }
     });

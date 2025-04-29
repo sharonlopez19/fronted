@@ -46,6 +46,9 @@ export class UsuariosService {
 
     return this.http.post<any>('http://localhost:8000/api/usuarios', usuario);
   }
+  obtenerUsersId(id: number): Observable<any> {
+    return this.http.get<any>(`http://localhost:8000/api/auth/${id}`);
+  }
   obtenerRol(id: number): Observable<any> {
     return this.http.get<any>(`http://localhost:8000/api/rols/${id}`);
   } 
@@ -103,6 +106,9 @@ export class UsuariosService {
       map(res => res.rol) 
     );
   }
+  obtenerRolId(id: number): Observable<any> {
+    return this.http.get<any>(`http://localhost:8000/api/rols/${id}`);
+  }
   verificarExistenciaUsuario(email: string, documento: number): Observable<boolean> {
     return this.http.get<{ existe: boolean }>('http://localhost:8000/api/verificar-usuario', {
       params: { email, documento }
@@ -110,6 +116,14 @@ export class UsuariosService {
       map(res => res.existe)
     );
   }
+  actualizarRol(userId: number, nuevoRol: number,correo:string): Observable<any> {
+    return this.http.patch(`http://localhost:8000/api/auth/rol/${userId}`, { rol: nuevoRol,email:correo });
+  }
+  actualizarRolId(userId: number, nuevoRol: number): Observable<any> {
+    return this.http.patch(`http://localhost:8000/api/auth/rol/${userId}`, { rol: nuevoRol });
+  }
+  
+  
   
   
     

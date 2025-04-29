@@ -48,7 +48,9 @@
           <tbody>
             <tr
               *ngFor="
-                let contrato of contratos | filterNombre : filtroNombre;
+                let contrato of contratos | filterNombre : filtroNombre
+                | paginate
+                    : { itemsPerPage: itemsPerPage, currentPage: currentPage };
                 let i = index
               "
             >
@@ -115,6 +117,7 @@
                 Anterior
               </button>
             </li>
+            
             <li
               class="page-item"
               *ngFor="let page of [].constructor(totalPages); let i = index"

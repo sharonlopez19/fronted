@@ -31,6 +31,7 @@ export class TrazabilidadComponent implements OnInit {
     const userFromLocal = localStorage.getItem('usuario');
     if (userFromLocal) {
       this.usuario = JSON.parse(userFromLocal);
+      this.totalPages = Math.ceil(this.trazabilidad.length / this.itemsPerPage);
       console.log('usuario logueado:', this.usuario);
     }
     this.cargarTrazabilidad();
@@ -40,6 +41,7 @@ export class TrazabilidadComponent implements OnInit {
     this.trazabilidadService.obtenerTrazabilidad().subscribe({
       next: (data) => {
         this.trazabilidad = data;
+        this.totalPages = Math.ceil(this.trazabilidad.length / this.itemsPerPage);
       },
       error: (err) => {
         console.error('Error al cargar trazabilidad', err);

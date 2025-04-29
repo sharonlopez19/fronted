@@ -12,7 +12,6 @@ import { FilterNombre } from './filter-nombre';
 declare var bootstrap: any;
 
 
-
 @Component({
   selector: 'app-contratos',
   standalone: true,
@@ -59,11 +58,13 @@ export class ContratosComponent implements OnInit{
     }
     this.contratosService.obtenerContratos().subscribe({
       next: (data) => {
-        this.contratos = data; // 👈 ahora es un solo objeto
+        this.contratos = data; 
+        this.totalPages = Math.ceil(this.contratos.length / this.itemsPerPage);
         console.log('contrato cargado:', this.contratos);
       }
     });
     this.obtenerTiposContrato();
+    
   }
   obtenerTiposContrato(): void {
     this.contratosService.obtenerTiposContrato().subscribe({
