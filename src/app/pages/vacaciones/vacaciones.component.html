@@ -2,169 +2,148 @@
 
 <div class="layout">
   <div class="contenido-principal">
-    <div class="card">
-      <div class="card-header header-vacaciones d-flex justify-content-between align-items-center">
-        <h3 class="m-0 text-hover">Vacaciones</h3>
-        <button class="btn btn-light btn-sm agregar-btn" (click)="agregarVacacion()">
-          <i class="fas fa-plus-circle"></i> Agregar
-        </button>
-      </div>
-      <div class="card-body">
-
-        <div *ngIf="isLargeScreen">
-          <table class="table text-center">
-            <thead>
-              <tr>
-                <th>Nombre</th> <th *ngFor="let header of columnHeaders">{{ header.label }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let vacacion of vacaciones">
-                <td>{{ vacacion.nombre }}</td> <td *ngFor="let header of columnHeaders">
-                  <ng-container *ngIf="header.key !== 'accion'">
-                    <ng-container *ngIf="header.key === 'estado'; else normalValue">
-                       <span class="badge" [ngClass]="getEstadoBadgeClass(vacacion.estado)">{{ vacacion.estado }}</span>
-                    </ng-container>
-                    <ng-template #normalValue>
-                      {{ getDataPropertyValue(vacacion, header.key) }}
-                    </ng-template>
-                  </ng-container>
-                  <ng-container *ngIf="header.key === 'accion'">
-                    <button class="btn btn-link btn-acciones editar me-1" (click)="editarVacacion(vacacion)">
-                      <i class="fas fa-edit"></i>
-                    </button>
-                    <button class="btn btn-link btn-acciones eliminar" (click)="eliminarVacacion(vacacion.id)">
-                      <i class="fas fa-trash-alt"></i>
-                    </button>
-                  </ng-container>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div *ngIf="!isLargeScreen" class="accordion-container-simple">
-          <div *ngFor="let vacacion of vacaciones; let i = index" class="accordion-item-simple">
-            <div class="accordion-header-simple" (click)="toggleAccordion(vacacion)">
-              <div class="accordion-title-simple">{{ vacacion.nombre }}</div>
-              <span class="accordion-icon-simple">
-                  <i class="fas" [ngClass]="{'fa-chevron-down': !vacacion.isExpanded, 'fa-chevron-up': vacacion.isExpanded}"></i>
-              </span>
-            </div>
-
-            <div [class.expanded]="vacacion.isExpanded" class="accordion-body-simple">
-              <div *ngFor="let header of columnHeaders" class="accordion-row-simple">
-                 <div class="row-label-simple">{{ header.label }}:</div>
-                     <div class="row-value-simple">
-                         <ng-container *ngIf="header.key !== 'accion'; else accordionActions">
-                              <ng-container *ngIf="header.key === 'estado'; else simpleNormalValue">
-                                 <span class="badge" [ngClass]="getEstadoBadgeClass(vacacion.estado)">{{ vacacion.estado }}</span>
-                             </ng-container>
-                             <ng-template #simpleNormalValue>
-                                {{ getDataPropertyValue(vacacion, header.key) }}
-                             </ng-template>
-                         </ng-container>
-                         <ng-template #accordionActions>
-                             <button class="btn btn-link btn-acciones editar me-1" (click)="$event.stopPropagation(); editarVacacion(vacacion)">
-                               <i class="fas fa-edit"></i>
-                             </button>
-                             <button class="btn btn-link btn-acciones eliminar" (click)="$event.stopPropagation(); eliminarVacacion(vacacion.id)">
-                               <i class="fas fa-trash-alt"></i>
-                             </button>
-                         </ng-template>
-                     </div>
-                 </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="text-end">
-          <button class="btn btn-primary" (click)="generarReporte()">Generar Reporte</button>
-        </div>
-
-      </div>
+    <div class="header-horas d-flex justify-content-between align-items-center">
+      <h3>Vacaciones</h3>
+      <button class="btn btn-light btn-sm agregar-btn" data-bs-toggle="modal" data-bs-target="#agregarVacacionesModal"
+        *ngIf="[1, 4].includes(usuario?.rol)">
+        <i class="fas fa-plus-circle"></i> Agregar
+      </button>
     </div>
-  </div>
 
-  <div id="editModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
+    <div *ngIf="[1, 4].includes(usuario?.rol); else sinPermiso">
+      <div class="mb-3">
+        <input type="text" class="form-control text-white border-0 py-2" placeholder="Buscar por nombre o documento..." style="
+        background-color: #1d2233;
+        color: white;
+        border: 1px solid #7a86a1;
+      "
+          [(ngModel)]="filtroNombre" />
+      </div>
+
+      <!-- Tabla -->
+      <div class="table-responsive d-none d-md-block">
+        <table class="table table-striped table-bordered table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Empleado</th>
+              <th>Fecha Inicio</th>
+              <th>Fecha Fin</th>
+              <th>Días</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let vac of vacaciones | filterNombre: filtroNombre ; let i = index">
+              <td>{{ vac.usuarioNombre }}</td>
+              <td>{{ vac.fechaInicio }}</td>
+              <td>{{ vac.fechaFin }}</td>
+              <td>{{ vac.dias }}</td>
+              <td>{{ vac.estado }}</td>
+              <td>
+                <button class="btn btn-info btn-sm" >
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#editarVacacionesModal"
+                  >
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-danger btn-sm" >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Modal Agregar Vacaciones -->
+      <!-- <div class="modal fade" id="agregarVacacionesModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
+            <form (ngSubmit)="" #formVac="ngForm">
               <div class="modal-header">
-                  <h5 class="modal-title">Editar Vacación</h5>
-                  <button type="button" class="btn-close" (click)="cerrarModalEditar()"></button>
+                <h5 class="modal-title">Agregar Vacaciones</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
               </div>
               <div class="modal-body">
-                  <div class="mb-3">
-                      <label for="nombreEdit" class="form-label">Nombre</label>
-                      <input type="text" class="form-control" id="nombreEdit" [(ngModel)]="vacacionEditada.nombre">
-                  </div>
-                  <div class="mb-3">
-                      <label for="cargoEdit" class="form-label">Cargo</label>
-                      <input type="text" class="form-control" id="cargoEdit" [(ngModel)]="vacacionEditada.cargo">
-                  </div>
-                  <div class="mb-3">
-                      <label for="estadoEdit" class="form-label">Estado</label>
-                      <select class="form-control" id="estadoEdit" [(ngModel)]="vacacionEditada.estado">
-                          <option value="Completado">Completado</option>
-                          <option value="Rechazado">Rechazado</option>
-                          <option value="Pendiente">Pendiente</option>
-                      </select>
-                  </div>
-                  <div class="mb-3">
-                      <label for="fechaInicioEdit" class="form-label">Fecha Inicio</label>
-                      <input type="text" class="form-control" id="fechaInicioEdit" [(ngModel)]="vacacionEditada.fechaInicio">
-                  </div>
-                  <div class="mb-3">
-                      <label for="fechaFinEdit" class="form-label">Fecha Fin</label>
-                      <input type="text" class="form-control" id="fechaFinEdit" [(ngModel)]="vacacionEditada.fechaFin">
-                  </div>
+                <div class="mb-3">
+                  <label class="form-label">Empleado</label>
+                  <select class="form-control" [(ngModel)]="nuevaVacacion.usuarioId" name="usuarioId" required>
+                    <option [ngValue]="null">Seleccione un empleado</option>
+                    <option *ngFor="let u of usuarios" [value]="u.idUsuario">{{ u.nombreCompleto }}</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Fecha Inicio</label>
+                  <input type="date" class="form-control" [(ngModel)]="nuevaVacacion.fechaInicio" name="fechaInicio" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Fecha Fin</label>
+                  <input type="date" class="form-control" [(ngModel)]="nuevaVacacion.fechaFin" name="fechaFin" required />
+                </div>
+                <div class="mb-3">
+                  <label class="form-label">Días</label>
+                  <input type="number" class="form-control" [(ngModel)]="nuevaVacacion.dias" name="dias" required />
+                </div>
               </div>
               <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" (click)="cerrarModalEditar()">Cerrar</button>
-                  <button type="button" class="btn btn-primary" (click)="guardarEdicion()">Guardar cambios</button>
+                <button type="submit" class="btn btn-primary" [disabled]="formVac.invalid">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
               </div>
+            </form>
           </div>
-      </div>
-  </div>
+        </div>
+      </div> -->
 
-  <div id="agregarModal" class="modal" tabindex="-1" role="dialog" *ngIf="mostrarAgregarModal">
-     <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title">Agregar Vacación</h5>
-                  <button type="button" class="btn-close" (click)="cerrarAgregarModal()"></button>
+      <!-- Tarjetas responsive -->
+      <!-- <div class="d-md-none">
+        <div class="row">
+          <div class="col-12 mb-3" *ngFor="let vac of vacaciones">
+            <div class="card">
+              <div class="card-body">
+                <p><strong>Empleado:</strong> {{ vac.usuarioNombre }}</p>
+                <p><strong>Inicio:</strong> {{ vac.fechaInicio }}</p>
+                <p><strong>Fin:</strong> {{ vac.fechaFin }}</p>
+                <p><strong>Días:</strong> {{ vac.dias }}</p>
+                <p><strong>Estado:</strong> {{ vac.estado }}</p>
               </div>
-              <div class="modal-body">
-                  <div class="mb-3">
-                      <label for="nombreAgregar" class="form-label">Nombre</label>
-                      <input type="text" class="form-control" id="nombreAgregar" [(ngModel)]="nuevaVacacion.nombre">
-                  </div>
-                  <div class="mb-3">
-                      <label for="cargoAgregar" class="form-label">Cargo</label>
-                      <input type="text" class="form-control" id="cargoAgregar" [(ngModel)]="nuevaVacacion.cargo">
-                  </div>
-                  <div class="mb-3">
-                      <label for="estadoAgregar" class="form-label">Estado</label>
-                      <select class="form-control" id="estadoAgregar" [(ngModel)]="nuevaVacacion.estado">
-                          <option value="Pendiente">Pendiente</option>
-                          <option value="Completado">Completado</option>
-                          <option value="Rechazado">Rechazado</option>
-                      </select>
-                  </div>
-                  <div class="mb-3">
-                      <label for="fechaInicioAgregar" class="form-label">Fecha Inicio</label>
-                      <input type="text" class="form-control" id="fechaInicioAgregar" [(ngModel)]="nuevaVacacion.fechaInicio">
-                  </div>
-                  <div class="mb-3">
-                      <label for="fechaFinAgregar" class="form-label">Fecha Fin</label>
-                      <input type="text" class="form-control" id="fechaFinAgregar" [(ngModel)]="nuevaVacacion.fechaFin">
-                  </div>
+              <div class="card-footer d-flex justify-content-end gap-2">
+                <button class="btn btn-info btn-sm" (click)="verDetallesVacaciones(vac)">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editarVacacionesModal"
+                  (click)="editarVacaciones(vac)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button class="btn btn-outline-danger btn-sm" (click)="eliminarVacaciones(i)">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
               </div>
-              <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" (click)="cerrarAgregarModal()">Cerrar</button>
-                  <button type="button" class="btn btn-primary" (click)="guardarNuevaVacacion()">Guardar</button>
-              </div>
+            </div>
           </div>
-      </div>
+        </div>
+      </div> -->
+
+      <!-- Paginación -->
+      <nav class="mt-3 d-flex justify-content-center">
+        <ul class="pagination">
+          <li class="page-item" [class.disabled]="currentPage === 1">
+            <button class="page-link" (click)="cambiarPagina(currentPage - 1)">Anterior</button>
+          </li>
+          <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index"
+            [class.active]="currentPage === i + 1">
+            <button class="page-link" (click)="cambiarPagina(i + 1)">{{ i + 1 }}</button>
+          </li>
+          <li class="page-item" [class.disabled]="currentPage === totalPages">
+            <button class="page-link" (click)="cambiarPagina(currentPage + 1)">Siguiente</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <ng-template #sinPermiso>
+      <div class="alert alert-warning">No tienes permiso para ver esta información.</div>
+    </ng-template>
   </div>
 </div>
